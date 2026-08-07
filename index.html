@@ -321,21 +321,22 @@
 <!-- アプリ説明モーダル -->
 <div id="helpModal" class="modal-overlay">
     <div class="modal-card">
-        <h2>アプリの使い方ガイド</h2>
+        <h2>使い方ガイド</h2>
         
-        <h3>1. 基本機能</h3>
-        <ul>
-            <li><strong>手入力検索:</strong> JANコード（完全一致）または商品名（部分一致）を入力して「検索」を押します。</li>
-            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動で照会します。</li>
-            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると文字を一括消去できます。</li>
-        </ul>
-
-        <h3>2. スプレッドシートの貼り付け登録</h3>
-        <p>データを取り込む最も簡単・確実に動作する方法です。</p>
+        <h3>1. スプレッドシートの貼り付け登録（最初に行ってください）</h3>
+        <p>商品データを取り込むための操作手順です。</p>
         <ul>
             <li>Googleスプレッドシートを開き、全選択（Ctrl+A / Cmd+A）してコピー（Ctrl+C / Cmd+C）します。</li>
             <li>「データ登録」の枠にそのまま貼り付けて「データを保存して取り込む」を押します。</li>
             <li>保存されたデータはお使いのスマホに自動記憶されるため、次回起動時もそのまま使えます。</li>
+        </ul>
+
+        <h3>2. 商品データの照会</h3>
+        <p>登録されたデータから商品を検索・確認します。</p>
+        <ul>
+            <li><strong>手入力検索:</strong> JANコード（完全一致）または商品名（部分一致）を入力して「検索」を押します。</li>
+            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動で照会します。</li>
+            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると、入力した文字を一括消去できます。</li>
         </ul>
 
         <h3>3. URL連携機能（任意）</h3>
@@ -343,7 +344,8 @@
             <li>個人アカウントでWeb公開したCSV URLを入力して連携することも可能です。</li>
         </ul>
 
-        <h3>4. 推奨するスプレッドシートの列構造</h3>
+        <h3>4. スプレッドシートの列構造【必須】</h3>
+        <p style="color: #d9534f; font-weight: bold; margin-bottom: 6px;">※以下の列順序を必ず守って作成してください。</p>
         <ul>
             <li><strong>A列:</strong> JANコード</li>
             <li><strong>B列:</strong> 商品名称</li>
@@ -417,8 +419,6 @@
         updateItemCountDisplay();
         
         document.getElementById('resultCard').classList.remove('active');
-        
-        // 取り込み完了時に全商品一覧を自動表示
         showAllDataListAuto();
         
         alert(`データを正常に取り込みました！（全 ${masterData.length} 件）`);
@@ -435,7 +435,6 @@
             const sep = line.includes('\t') ? '\t' : ',';
             const cols = line.split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
 
-            // ヘッダー行の自動判定・スキップ
             if (i === 0 && (cols[0].includes('JAN') || cols[1].includes('名称') || cols[1].includes('名前') || cols[0].includes('名称'))) {
                 continue;
             }
