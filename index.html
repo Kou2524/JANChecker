@@ -11,7 +11,6 @@
         h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
         .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
         
-        /* --- 入力欄とクリアボタンの位置関係設定 --- */
         .input-wrapper {
             position: relative;
             flex: 1;
@@ -21,7 +20,7 @@
         .input-wrapper input {
             width: 100%;
             padding: 12px;
-            padding-right: 36px; /* 右端のクリアボタン用に余白を確保 */
+            padding-right: 36px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -29,7 +28,6 @@
         }
         .input-wrapper input:focus { border-color: #007aff; }
 
-        /* 丸にバツマークのクリアボタン */
         .clear-btn {
             position: absolute;
             right: 10px;
@@ -40,7 +38,7 @@
             color: white;
             font-size: 12px;
             font-weight: bold;
-            display: none; /* 初期状態は非表示 */
+            display: none;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -48,7 +46,6 @@
         }
         .clear-btn:active { background-color: #999; }
 
-        /* 上下矢印（スピンボタン）の非表示 */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -70,7 +67,6 @@
         .detail-value { font-weight: bold; font-size: 1.1rem; color: #111; }
         .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; }
 
-        /* 全データ一覧用スタイル */
         .all-data-section {
             margin-top: 30px;
             border-top: 2px solid #e9ecef;
@@ -128,7 +124,7 @@
     
     <div class="search-box">
         <div class="input-wrapper">
-            <input type="text" id="janInput" placeholder="JANコードを入力" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
+            <input type="text" id="janInput" placeholder="JANコードまたは商品名" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
             <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
         </div>
         <button id="searchBtn" onclick="searchJAN()">検索</button>
@@ -163,23 +159,24 @@
             });
     };
 
-    // CSV解析処理
+    // CSV解析処理（JANコードなしの商品もすべて読み込むよう修正）
     function parseCSV(text) {
         const lines = text.split('\n');
         for (let i = 1; i < lines.length; i++) {
             const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-            if (cols.length >= 4 && cols[0]) {
+            // JANコードまたは商品名が存在する行をすべて取り込む
+            if (cols.length >= 2 && (cols[0] || cols[1])) {
                 masterData.push({
-                    jan: cols[0],
-                    name: cols[1],
-                    price: cols[2],
-                    tax: cols[3]
+                    jan: cols[0] ? cols[0] : '-',
+                    name: cols[1] || '',
+                    price: cols[2] || '',
+                    tax: cols[3] || ''
                 });
             }
         }
     }
 
-    // 入力状況に応じてクリアボタンの表示・非表示を切り替え
+    // クリアボタン表示切り替え
     function toggleClearBtn() {
         const input = document.getElementById('janInput');
         const clearBtn = document.getElementById('clearBtn');
@@ -190,31 +187,38 @@
         }
     }
 
-    // 入力文字を全消去する処理
+    // 入力全消去
     function clearInput() {
         const input = document.getElementById('janInput');
         input.value = '';
         toggleClearBtn();
-        input.focus(); // 入力欄にカーソルを戻す
+        input.focus();
     }
 
-    // 検索処理
+    // 検索処理（JANコード完全一致、または商品名部分一致）
     function searchJAN() {
         const inputVal = document.getElementById('janInput').value.trim();
         const card = document.getElementById('resultCard');
         
         if (!inputVal) {
-            alert('JANコードを入力してください');
+            alert('JANコードまたは商品名を入力してください');
             return;
         }
 
-        const item = masterData.find(d => d.jan === inputVal);
+        const item = masterData.find(d => 
+            (d.jan !== '-' && d.jan === inputVal) || 
+            (d.name && d.name.includes(inputVal))
+        );
 
         if (item) {
-            const priceFormatted = Number(item.price).toLocaleString();
+            const priceFormatted = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
             card.innerHTML = `
                 <span class="status-badge success">✅ 該当あり</span>
                 <div class="item-name">${item.name}</div>
+                <div class="detail-row">
+                    <span>JANコード</span>
+                    <span class="detail-value">${item.jan}</span>
+                </div>
                 <div class="detail-row">
                     <span>単価（税抜）</span>
                     <span class="detail-value">¥${priceFormatted}</span>
@@ -236,12 +240,10 @@
         document.getElementById('toggleAllBtn').innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
     }
 
-    // Enterキーでも検索実行
     document.getElementById('janInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') searchJAN();
     });
 
-    // 全データ一覧を表示・非表示にする関数
     function toggleAllData() {
         const listContainer = document.getElementById('allDataList');
         const btn = document.getElementById('toggleAllBtn');
@@ -258,7 +260,6 @@
         }
     }
 
-    // 全データ表示用のHTMLテーブルを作成する関数
     function createDataTable() {
         const listContainer = document.getElementById('allDataList');
         
