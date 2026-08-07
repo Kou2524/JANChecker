@@ -3,16 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JANコード検索アプリ</title>
+    <title>商品登録チェック</title>
     <!-- バーコードスキャン用ライブラリ -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         * { box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 15px; }
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
         
-        /* 設定エリア（常時表示） */
+        /* ヘッダーエリア（タイトル中央配置 ＆ 右端にはてなボタン） */
+        .header-area {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 1.4rem; text-align: center; color: #333; margin: 0; }
+        
+        .help-btn {
+            position: absolute;
+            right: 0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #007aff;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .help-btn:active { background-color: #0056b3; }
+
+        /* 常時表示の設定エリア */
         .config-section {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
@@ -102,28 +130,70 @@
         button#scanBtn { background-color: #34c759; color: white; }
         button#scanBtn:active { background-color: #28a745; }
 
-        /* カメラモーダル表示 */
-        #scannerModal {
+        /* モーダル共通スタイル（カメラ＆説明用） */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85);
+            background-color: rgba(0,0,0,0.7);
             z-index: 1000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 15px;
         }
-        #scannerModal.active { display: flex; }
+        .modal-overlay.active { display: flex; }
+        
         #reader { width: 100%; max-width: 450px; background: white; border-radius: 12px; overflow: hidden; }
-        #closeScannerBtn {
+        
+        .modal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .modal-card h2 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #007aff;
+            padding-bottom: 8px;
+        }
+        .modal-card h3 {
+            font-size: 0.95rem;
             margin-top: 15px;
-            padding: 12px 28px;
+            margin-bottom: 6px;
+            color: #007aff;
+        }
+        .modal-card p, .modal-card ul {
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.5;
+            margin: 0 0 10px 0;
+            padding-left: 15px;
+        }
+        .modal-card ul { padding-left: 20px; }
+        .modal-card code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .close-modal-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
             background-color: #ff3b30;
             color: white;
             border: none;
-            border-radius: 20px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -184,7 +254,10 @@
 <body>
 
 <div class="container">
-    <h1>📦 JANコード検索</h1>
+    <div class="header-area">
+        <h1>商品登録チェック</h1>
+        <div class="help-btn" onclick="openHelpModal()">?</div>
+    </div>
     
     <!-- 常時表示の設定エリア -->
     <div class="config-section">
@@ -222,9 +295,41 @@
 </div>
 
 <!-- カメラスキャンモーダル -->
-<div id="scannerModal">
+<div id="scannerModal" class="modal-overlay">
     <div id="reader"></div>
-    <button id="closeScannerBtn" onclick="stopScanner()">閉じる</button>
+    <button class="close-modal-btn" style="max-width:450px;" onclick="stopScanner()">閉じる</button>
+</div>
+
+<!-- アプリ説明モーダル -->
+<div id="helpModal" class="modal-overlay">
+    <div class="modal-card">
+        <h2>アプリの使い方ガイド</h2>
+        
+        <h3>1. 基本機能</h3>
+        <ul>
+            <li><strong>手入力検索:</strong> JANコード（完全一致）または商品名（部分一致）を入力して「検索」を押します。</li>
+            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動でスキャン＆照会します。</li>
+            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると一発で文字を消せます。</li>
+        </ul>
+
+        <h3>2. スプレッドシート連携（独自データの読み込み）</h3>
+        <p>上部の「データ連携設定」にGoogleスプレッドシートのCSV URLを入力すると、現場や店舗ごとのデータを読み込めます。</p>
+        <ul>
+            <li>Googleスプレッドシートの「ファイル」→「共有」→「Webに公開」を選択します。</li>
+            <li>形式を「カンマ区切り値 (.csv)」に変更して「公開」を押し、発行されたURLを貼り付けます。</li>
+            <li>「保存して再読み込み」を押すと、お使いの端末にURLが保存され、次回以降も自動読み込みされます。</li>
+        </ul>
+
+        <h3>3. スプレッドシートの推奨列構造</h3>
+        <ul>
+            <li><strong>A列:</strong> JANコード</li>
+            <li><strong>B列:</strong> 商品名称</li>
+            <li><strong>C列:</strong> 単価（数字）</li>
+            <li><strong>D列:</strong> 消費税率（数字）</li>
+        </ul>
+
+        <button class="close-modal-btn" onclick="closeHelpModal()">閉じる</button>
+    </div>
 </div>
 
 <script>
@@ -236,7 +341,7 @@
         const savedUrl = localStorage.getItem('custom_csv_url');
         const urlToFetch = savedUrl ? savedUrl : DEFAULT_CSV_URL;
         document.getElementById('csvUrlInput').value = urlToFetch;
-        toggleUrlClearBtn(); // URLのクリアボタン表示確認
+        toggleUrlClearBtn();
         
         loadCSVData(urlToFetch);
     };
@@ -285,6 +390,14 @@
         if (!listContainer.classList.contains('active')) {
             btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
         }
+    }
+
+    /* --- 説明モーダル制御 --- */
+    function openHelpModal() {
+        document.getElementById('helpModal').classList.add('active');
+    }
+    function closeHelpModal() {
+        document.getElementById('helpModal').classList.remove('active');
     }
 
     /* --- スキャン機能 --- */
@@ -347,7 +460,7 @@
         }
     }
 
-    /* --- URL入力欄のクリア機能 --- */
+    /* --- クリアボタン処理 --- */
     function toggleUrlClearBtn() {
         const input = document.getElementById('csvUrlInput');
         const clearBtn = document.getElementById('urlClearBtn');
@@ -365,7 +478,6 @@
         input.focus();
     }
 
-    /* --- JAN入力欄のクリア機能 --- */
     function toggleClearBtn() {
         const input = document.getElementById('janInput');
         const clearBtn = document.getElementById('clearBtn');
