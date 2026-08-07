@@ -166,7 +166,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.85);
             z-index: 1000;
             flex-direction: column;
             align-items: center;
@@ -177,6 +177,17 @@
         
         #reader { width: 100%; max-width: 450px; background: white; border-radius: 12px; overflow: hidden; }
         
+        .scan-tips {
+            color: white;
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.4;
+            background: rgba(255,255,255,0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
         .modal-card {
             background: white;
             border-radius: 12px;
@@ -193,7 +204,7 @@
         .modal-card ul { padding-left: 20px; }
 
         .close-modal-btn {
-            margin-top: 15px;
+            margin-top: 12px;
             width: 100%;
             padding: 10px;
             background-color: #ff3b30;
@@ -315,6 +326,7 @@
 <!-- カメラスキャンモーダル -->
 <div id="scannerModal" class="modal-overlay">
     <div id="reader"></div>
+    <div class="scan-tips">💡 バーコードを横枠に合わせ、15〜20cmほど離すとスキャンしやすくなります</div>
     <button class="close-modal-btn" style="max-width:450px;" onclick="stopScanner()">閉じる</button>
 </div>
 
@@ -360,9 +372,7 @@
     let masterData = [];
     let html5QrcodeScanner = null;
 
-    // 起動時は常に初期状態（データ0件）
     window.onload = function() {
-        // 以前保存されていたLocalStorageをすべて消去
         localStorage.removeItem('custom_pasted_data');
         localStorage.removeItem('custom_csv_url');
         updateItemCountDisplay();
@@ -501,15 +511,30 @@
     function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
     function closeHelpModal() { document.getElementById('helpModal').classList.remove('active'); }
 
-    /* --- スキャン機能 --- */
+    /* --- 高精度スキャン機能（ネイティブAPI＋高フレームレート） --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
         if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
 
-        html5QrcodeScanner = new Html5Qrcode("reader");
+        // OS内蔵のバーコード検出エンジン（BarcodeDetector）を優先使用
+        const html5QrcodeConfig = {
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+            }
+        };
+
+        html5QrcodeScanner = new Html5Qrcode("reader", html5QrcodeConfig);
+        
         const scanConfig = {
-            fps: 15,
-            qrbox: { width: 260, height: 130 },
+            fps: 25, // 毎秒25フレームで処理し瞬時にピントを捕捉
+            qrbox: function(viewfinderWidth, viewfinderHeight) {
+                // 枠サイズを画面に合わせて最適化（1次元バーコード用横長枠）
+                const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                return {
+                    width: Math.floor(minEdge * 0.85),
+                    height: Math.floor(minEdge * 0.35)
+                };
+            },
             formatsToSupport: [
                 Html5QrcodeSupportedFormats.EAN_13,
                 Html5QrcodeSupportedFormats.EAN_8,
