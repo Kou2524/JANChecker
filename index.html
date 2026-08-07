@@ -501,43 +501,67 @@
 
     /* --- スキャン機能（高解像度化・読み取り安定仕様） --- */
     function startScanner() {
-        document.getElementById('scannerModal').classList.add('active');
-        
-        if (html5QrcodeScanner) {
-            try { html5QrcodeScanner.clear(); } catch(e){}
-        }
+    document.getElementById('scannerModal').classList.add('active');
 
-        html5QrcodeScanner = new Html5Qrcode("reader");
-        
-        // 高解像度（HD画質）でカメラを読み込んで細いバーコードの潰れを防ぐ
-        const cameraConstraints = {
-            facingMode: "environment",
-            width: { min: 640, ideal: 1280, max: 1920 },
-            height: { min: 480, ideal: 720, max: 1080 }
-        };
-
-        const scanConfig = {
-            fps: 15,
-            qrbox: { width: 280, height: 120 }, // JANコード用横長固定枠
-            formatsToSupport: [
-                Html5QrcodeSupportedFormats.EAN_13,
-                Html5QrcodeSupportedFormats.EAN_8,
-                Html5QrcodeSupportedFormats.UPC_A,
-                Html5QrcodeSupportedFormats.UPC_E
-            ]
-        };
-
-        html5QrcodeScanner.start(
-            cameraConstraints,
-            scanConfig,
-            onScanSuccess,
-            onScanFailure
-        ).catch(err => {
-            console.error("Camera start error:", err);
-            alert("カメラの起動に失敗しました。\nSafari/Chromeのカメラ許可設定をご確認ください。");
-            stopScanner();
-        });
+    if (html5QrcodeScanner) {
+        try {
+            html5QrcodeScanner.clear();
+        } catch (e) {}
     }
+
+    html5QrcodeScanner = new Html5Qrcode("reader");
+
+    // iPhone Safariとの互換性を優先
+    const cameraConfig = {
+        facingMode: "environment"
+    };
+
+    const scanConfig = {
+        fps: 10,
+        qrbox: {
+            width: 280,
+            height: 120
+        },
+        aspectRatio: 1.777778,
+        formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.UPC_A,
+            Html5QrcodeSupportedFormats.UPC_E
+        ]
+    };
+
+    html5QrcodeScanner.start(
+        cameraConfig,
+        scanConfig,
+        onScanSuccess,
+        onScanFailure
+    )
+    .then(() => {
+        console.log("カメラ起動成功");
+
+        // iPhone Safari向け
+        const video = document.querySelector("#reader video");
+
+        if (video) {
+            video.setAttribute("playsinline", "true");
+            video.setAttribute("webkit-playsinline", "true");
+            video.setAttribute("autoplay", "true");
+            video.muted = true;
+        }
+    })
+    .catch(err => {
+        console.error("Camera start error:", err);
+
+        alert(
+            "カメラの起動に失敗しました。\n\n" +
+            "エラー内容:\n" +
+            String(err)
+        );
+
+        stopScanner();
+    });
+}
 
     function onScanSuccess(decodedText) {
         document.getElementById('janInput').value = decodedText;
