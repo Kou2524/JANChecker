@@ -176,17 +176,6 @@
         .modal-overlay.active { display: flex; }
         
         #reader { width: 100%; max-width: 450px; background: white; border-radius: 12px; overflow: hidden; }
-        
-        .scan-tips {
-            color: white;
-            font-size: 12px;
-            margin-top: 10px;
-            text-align: center;
-            line-height: 1.4;
-            background: rgba(255,255,255,0.15);
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
 
         .modal-card {
             background: white;
@@ -326,7 +315,6 @@
 <!-- カメラスキャンモーダル -->
 <div id="scannerModal" class="modal-overlay">
     <div id="reader"></div>
-    <div class="scan-tips">💡 バーコードを横枠に合わせ、15〜20cmほど離すとスキャンしやすくなります</div>
     <button class="close-modal-btn" style="max-width:450px;" onclick="stopScanner()">閉じる</button>
 </div>
 
@@ -511,12 +499,11 @@
     function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
     function closeHelpModal() { document.getElementById('helpModal').classList.remove('active'); }
 
-    /* --- 高精度スキャン機能（ネイティブAPI＋高フレームレート） --- */
+    /* --- 自動ピント合わせ（連続オートフォーカス）付きスキャン機能 --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
         if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
 
-        // OS内蔵のバーコード検出エンジン（BarcodeDetector）を優先使用
         const html5QrcodeConfig = {
             experimentalFeatures: {
                 useBarCodeDetectorIfSupported: true
@@ -526,9 +513,8 @@
         html5QrcodeScanner = new Html5Qrcode("reader", html5QrcodeConfig);
         
         const scanConfig = {
-            fps: 25, // 毎秒25フレームで処理し瞬時にピントを捕捉
+            fps: 25,
             qrbox: function(viewfinderWidth, viewfinderHeight) {
-                // 枠サイズを画面に合わせて最適化（1次元バーコード用横長枠）
                 const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
                 return {
                     width: Math.floor(minEdge * 0.85),
@@ -548,7 +534,25 @@
             scanConfig,
             onScanSuccess,
             onScanFailure
-        ).catch(err => {
+        ).then(() => {
+            // カメラ起動後、連続オートフォーカス（focusMode: 'continuous'）を要求
+            try {
+                const videoElement = document.querySelector("#reader video");
+                if (videoElement && videoElement.srcObject) {
+                    const track = videoElement.srcObject.getVideoTracks()[0];
+                    if (track && typeof track.applyConstraints === "function") {
+                        const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+                        if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
+                            track.applyConstraints({
+                                advanced: [{ focusMode: "continuous" }]
+                            });
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log("Autofocus constraint not supported", e);
+            }
+        }).catch(err => {
             alert("カメラの起動に失敗しました。カメラアクセス許可をご確認ください。");
             stopScanner();
         });
