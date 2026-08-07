@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JANコード検索アプリ</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
+        .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+        input { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; outline: none; }
+        input:focus { border-color: #007aff; }
+        button { padding: 12px 16px; font-size: 16px; background-color: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:active { background-color: #0056b3; }
+        .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; }
+        .result-card.active { display: block; }
+        .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .item-name { font-size: 1.2rem; font-weight: bold; color: #212529; margin-bottom: 12px; word-break: break-all; }
+        .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 8px; margin-top: 8px; font-size: 14px; color: #495057; }
+        .detail-value { font-weight: bold; font-size: 1.1rem; color: #111; }
+        .loading { text-align: center; color: #6c757d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📦 JANコード検索</h1>
+    
+    <div class="search-box">
+        <input type="number" id="janInput" placeholder="JANコードを入力" pattern="[0-9]*" inputmode="numeric">
+        <button onclick="searchJAN()">検索</button>
+    </div>
+
+    <div id="loading" class="loading">データ読み込み中...</div>
+    <div id="resultCard" class="result-card"></div>
+</div>
+
+<script>
+    let masterData = [];
+
+    // CSVファイルを自動読み込み
+    window.onload = function() {
+        fetch('data.csv')
+            .then(response => {
+                if (!response.ok) throw new Error('data.csv が見つかりません');
+                return response.text();
+            })
+            .then(text => {
+                parseCSV(text);
+                document.getElementById('loading').style.display = 'none';
+            })
+            .catch(err => {
+                document.getElementById('loading').innerText = 'エラー: ' + err.message;
+            });
+    };
+
+    // CSV解析処理
+    function parseCSV(text) {
+        const lines = text.split('\n');
+        for (let i = 1; i < lines.length; i++) {
+            const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+            if (cols.length >= 4 && cols[0]) {
+                masterData.push({
+                    jan: cols[0],
+                    name: cols[1],
+                    price: cols[2],
+                    tax: cols[3]
+                });
+            }
+        }
+    }
+
+    // 検索処理
+    function searchJAN() {
+        const inputVal = document.getElementById('janInput').value.trim();
+        const card = document.getElementById('resultCard');
+        
+        if (!inputVal) {
+            alert('JANコードを入力してください');
+            return;
+        }
+
+        const item = masterData.find(d => d.jan === inputVal);
+
+        if (item) {
+            const priceFormatted = Number(item.price).toLocaleString();
+            card.innerHTML = `
+                <span class="status-badge success">✅ 該当あり</span>
+                <div class="item-name">${item.name}</div>
+                <div class="detail-row">
+                    <span>単価（税抜）</span>
+                    <span class="detail-value">¥${priceFormatted}</span>
+                </div>
+                <div class="detail-row">
+                    <span>消費税率</span>
+                    <span class="detail-value">${item.tax}%</span>
+                </div>
+            `;
+        } else {
+            card.innerHTML = `
+                <span class="status-badge error">❌ 未登録</span>
+                <div>該当する商品が見つかりませんでした。</div>
+            `;
+        }
+        card.classList.add('active');
+    }
+
+    // Enterキーでも検索実行
+    document.getElementById('janInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') searchJAN();
+    });
+</script>
+
+</body>
+</html>
