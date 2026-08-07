@@ -131,14 +131,27 @@
             cursor: pointer;
         }
 
-        .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; margin-bottom: 20px; }
-        .result-card.active { display: block; }
-        .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
+        /* 検索結果エリア */
+        #resultCard { display: none; margin-bottom: 20px; }
+        #resultCard.active { display: block; }
+        
+        .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 12px; }
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
-        .item-name { font-size: 1.2rem; font-weight: bold; color: #212529; margin-bottom: 12px; word-break: break-all; }
-        .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 8px; margin-top: 8px; font-size: 14px; color: #495057; }
-        .detail-value { font-weight: bold; font-size: 1.1rem; color: #111; }
+
+        /* 複数検索結果用カードデザイン */
+        .result-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+        .result-item:last-child { margin-bottom: 0; }
+        .item-name { font-size: 1.1rem; font-weight: bold; color: #212529; margin-bottom: 8px; word-break: break-all; }
+        .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 6px; margin-top: 6px; font-size: 13px; color: #495057; }
+        .detail-value { font-weight: bold; font-size: 1rem; color: #111; }
+        
         .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; }
 
         .all-data-section {
@@ -201,7 +214,7 @@
     </div>
 
     <div id="loading" class="loading">データ読み込み中...</div>
-    <div id="resultCard" class="result-card"></div>
+    <div id="resultCard"></div>
 
     <div class="all-data-section">
         <button id="toggleAllBtn" onclick="toggleAllData()">全商品一覧を表示（全 <span id="itemCount">0</span> 件）</button>
@@ -240,8 +253,6 @@
             .then(text => {
                 parseCSV(text);
                 document.getElementById('loading').style.display = 'none';
-                
-                // 件数を更新し、ボタンの表示も同期
                 updateItemCountDisplay();
             })
             .catch(err => {
@@ -265,7 +276,6 @@
         }
     }
 
-    // 件数表示とボタンテキストを更新する関数
     function updateItemCountDisplay() {
         const countSpan = document.getElementById('itemCount');
         if (countSpan) countSpan.innerText = masterData.length;
@@ -318,7 +328,7 @@
     }
 
     function onScanFailure(error) {
-        // スキャン試行中の不一致エラーは無視
+        // スキャン試行中の不一致は無視
     }
 
     function stopScanner() {
@@ -380,6 +390,7 @@
         input.focus();
     }
 
+    /* --- 複数件対応・検索処理 --- */
     function searchJAN() {
         const inputVal = document.getElementById('janInput').value.trim();
         const card = document.getElementById('resultCard');
@@ -389,33 +400,42 @@
             return;
         }
 
-        const item = masterData.find(d => 
+        // 入力値が含まれるデータをすべて抽出（部分一致）
+        const results = masterData.filter(d => 
             (d.jan !== '-' && d.jan === inputVal) || 
-            (d.name && d.name.includes(inputVal))
+            (d.name && d.name.toLowerCase().includes(inputVal.toLowerCase()))
         );
 
-        if (item) {
-            const priceFormatted = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
-            card.innerHTML = `
-                <span class="status-badge success">✅ 該当あり</span>
-                <div class="item-name">${item.name}</div>
-                <div class="detail-row">
-                    <span>JANコード</span>
-                    <span class="detail-value">${item.jan}</span>
-                </div>
-                <div class="detail-row">
-                    <span>単価（税抜）</span>
-                    <span class="detail-value">¥${priceFormatted}</span>
-                </div>
-                <div class="detail-row">
-                    <span>消費税率</span>
-                    <span class="detail-value">${item.tax}%</span>
-                </div>
-            `;
+        if (results.length > 0) {
+            let html = `<span class="status-badge success">✅ 該当あり（${results.length}件見つかりました）</span>`;
+            
+            // 該当する商品を上から順にカード形式で生成
+            results.forEach(item => {
+                const priceFormatted = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
+                html += `
+                    <div class="result-item">
+                        <div class="item-name">${item.name}</div>
+                        <div class="detail-row">
+                            <span>JANコード</span>
+                            <span class="detail-value">${item.jan}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>単価（税抜）</span>
+                            <span class="detail-value">¥${priceFormatted}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>消費税率</span>
+                            <span class="detail-value">${item.tax}%</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            card.innerHTML = html;
         } else {
             card.innerHTML = `
                 <span class="status-badge error">❌ 未登録</span>
-                <div>該当する商品が見つかりませんでした。</div>
+                <div class="result-item">該当する商品が見つかりませんでした。</div>
             `;
         }
         card.classList.add('active');
@@ -436,7 +456,6 @@
             listContainer.classList.remove('active');
             btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
         } else {
-            // 常に最新データでテーブルを再構築
             createDataTable();
             listContainer.classList.add('active');
             btn.innerText = `一覧を閉じる`;
