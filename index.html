@@ -12,9 +12,9 @@
         .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
         input { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; outline: none; }
         input:focus { border-color: #007aff; }
-        button { padding: 12px 16px; font-size: 16px; background-color: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        button:active { background-color: #0056b3; }
-        .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; }
+        button#searchBtn { padding: 12px 16px; font-size: 16px; background-color: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button#searchBtn:active { background-color: #0056b3; }
+        .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; margin-bottom: 20px; /* 余白追加 */ }
         .result-card.active { display: block; }
         .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
         .success { background: #d4edda; color: #155724; }
@@ -22,7 +22,58 @@
         .item-name { font-size: 1.2rem; font-weight: bold; color: #212529; margin-bottom: 12px; word-break: break-all; }
         .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 8px; margin-top: 8px; font-size: 14px; color: #495057; }
         .detail-value { font-weight: bold; font-size: 1.1rem; color: #111; }
-        .loading { text-align: center; color: #6c757d; font-size: 14px; }
+        .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; }
+
+        /* --- 追加部分: 全データ一覧用スタイル --- */
+        .all-data-section {
+            margin-top: 30px;
+            border-top: 2px solid #e9ecef;
+            padding-top: 20px;
+            text-align: center;
+        }
+        button#toggleAllBtn {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #allDataList {
+            display: none; /* 初期は非表示 */
+            margin-top: 20px;
+            text-align: left;
+            max-height: 400px; /* スクロール可能に */
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        #allDataList.active {
+            display: block;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        table.data-table th, table.data-table td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        table.data-table th {
+            background-color: #f8f9fa;
+            position: sticky; /* 見出しを固定 */
+            top: 0;
+            z-index: 1;
+        }
+        table.data-table tr:last-child td {
+            border-bottom: none;
+        }
+        /* 単価と税率は右寄せ */
+        .text-right {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -32,11 +83,20 @@
     
     <div class="search-box">
         <input type="number" id="janInput" placeholder="JANコードを入力" pattern="[0-9]*" inputmode="numeric">
-        <button onclick="searchJAN()">検索</button>
+        <button id="searchBtn" onclick="searchJAN()">検索</button>
     </div>
 
     <div id="loading" class="loading">データ読み込み中...</div>
     <div id="resultCard" class="result-card"></div>
+
+    <!-- --- 追加部分: 全データ一覧エリア --- -->
+    <div class="all-data-section">
+        <button id="toggleAllBtn" onclick="toggleAllData()">全商品一覧を表示（全 <span id="itemCount">0</span> 件）</button>
+        
+        <div id="allDataList">
+            <!-- ここにJavaScriptでテーブルが作られます -->
+        </div>
+    </div>
 </div>
 
 <script>
@@ -52,6 +112,9 @@
             .then(text => {
                 parseCSV(text);
                 document.getElementById('loading').style.display = 'none';
+                
+                // 追加部分: 読み込み完了後に件数を表示
+                document.getElementById('itemCount').innerText = masterData.length;
             })
             .catch(err => {
                 document.getElementById('loading').innerText = 'エラー: ' + err.message;
@@ -107,12 +170,70 @@
             `;
         }
         card.classList.add('active');
+        
+        // 検索したら、一覧表示が開いていれば閉じる（見やすくするため）
+        document.getElementById('allDataList').classList.remove('active');
+        document.getElementById('toggleAllBtn').innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
     }
 
     // Enterキーでも検索実行
     document.getElementById('janInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') searchJAN();
     });
+
+    /* --- 追加部分: 全データ一覧を表示・非表示にする関数 --- */
+    function toggleAllData() {
+        const listContainer = document.getElementById('allDataList');
+        const btn = document.getElementById('toggleAllBtn');
+
+        if (listContainer.classList.contains('active')) {
+            // 開いている場合：閉じる
+            listContainer.classList.remove('active');
+            btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
+        } else {
+            // 閉じている場合：表を作って開く
+            if (listContainer.innerHTML.trim() === "") {
+                // まだ表が作られていない場合のみ、表を作成する（動作軽量化のため）
+                createDataTable();
+            }
+            listContainer.classList.add('active');
+            btn.innerText = `一覧を閉じる`;
+        }
+    }
+
+    /* --- 追加部分: 全データ表示用のHTMLテーブルを作成する関数 --- */
+    function createDataTable() {
+        const listContainer = document.getElementById('allDataList');
+        
+        // テーブルのHTMLを作成
+        let tableHtml = `<table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>JANコード</th>
+                                    <th>名称</th>
+                                    <th class="text-right">単価</th>
+                                    <th class="text-right">税%</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+        // 全データをループして行を追加
+        masterData.forEach(item => {
+            // 単価が数値なら桁区切りカンマを入れる
+            const price = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
+            
+            tableHtml += `<tr>
+                            <td>${item.jan}</td>
+                            <td>${item.name}</td>
+                            <td class="text-right">¥${price}</td>
+                            <td class="text-right">${item.tax}%</td>
+                          </tr>`;
+        });
+
+        tableHtml += `</tbody></table>`;
+        
+        listContainer.innerHTML = tableHtml;
+    }
 </script>
 
 </body>
