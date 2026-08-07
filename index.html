@@ -4,12 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JANコード検索アプリ</title>
+    <!-- バーコードスキャン用ライブラリ -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 15px; }
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
-        .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+        
+        /* 設定アコーディオン */
+        .config-section {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+        }
+        .config-header {
+            font-size: 13px;
+            color: #6c757d;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        .config-body {
+            display: none;
+            margin-top: 10px;
+        }
+        .config-body.active {
+            display: block;
+        }
+        .config-body input {
+            width: 100%;
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .config-body button {
+            width: 100%;
+            padding: 8px;
+            font-size: 12px;
+            background-color: #495057;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
         
         .input-wrapper {
             position: relative;
@@ -46,17 +92,52 @@
         }
         .clear-btn:active { background-color: #999; }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        /* ボタン群スタイル */
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
+        .btn-group button {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button#searchBtn { background-color: #007aff; color: white; }
+        button#searchBtn:active { background-color: #0056b3; }
+        button#scanBtn { background-color: #34c759; color: white; }
+        button#scanBtn:active { background-color: #28a745; }
+
+        /* カメラモーダル表示 */
+        #scannerModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #scannerModal.active { display: flex; }
+        #reader { width: 100%; max-width: 400px; background: white; border-radius: 12px; overflow: hidden; }
+        #closeScannerBtn {
+            margin-top: 15px;
+            padding: 10px 24px;
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        button#searchBtn { padding: 12px 16px; font-size: 16px; background-color: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        button#searchBtn:active { background-color: #0056b3; }
         .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; margin-bottom: 20px; }
         .result-card.active { display: block; }
         .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 8px; }
@@ -91,30 +172,11 @@
             border: 1px solid #dee2e6;
             border-radius: 8px;
         }
-        #allDataList.active {
-            display: block;
-        }
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-        table.data-table th, table.data-table td {
-            padding: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        table.data-table th {
-            background-color: #f8f9fa;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        table.data-table tr:last-child td {
-            border-bottom: none;
-        }
-        .text-right {
-            text-align: right;
-        }
+        #allDataList.active { display: block; }
+        table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        table.data-table th, table.data-table td { padding: 8px; border-bottom: 1px solid #eee; }
+        table.data-table th { background-color: #f8f9fa; position: sticky; top: 0; z-index: 1; }
+        .text-right { text-align: right; }
     </style>
 </head>
 <body>
@@ -122,12 +184,30 @@
 <div class="container">
     <h1>📦 JANコード検索</h1>
     
+    <!-- データ元設定アコーディオン -->
+    <div class="config-section">
+        <div class="config-header" onclick="toggleConfig()">
+            <span>⚙️ データ連携設定 (CSV / スプレッドシート)</span>
+            <span id="configArrow">▼</span>
+        </div>
+        <div id="configBody" class="config-body">
+            <input type="text" id="csvUrlInput" placeholder="スプレッドシートのWeb公開CSV URLを入力">
+            <button onclick="saveAndLoadUrl()">保存して再読み込み</button>
+        </div>
+    </div>
+
+    <!-- 検索フォーム -->
     <div class="search-box">
         <div class="input-wrapper">
             <input type="text" id="janInput" placeholder="JANコードまたは商品名" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
             <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
         </div>
-        <button id="searchBtn" onclick="searchJAN()">検索</button>
+    </div>
+
+    <!-- 操作ボタン群 -->
+    <div class="btn-group">
+        <button id="searchBtn" onclick="searchJAN()">🔍 検索</button>
+        <button id="scanBtn" onclick="startScanner()">📷 スキャン</button>
     </div>
 
     <div id="loading" class="loading">データ読み込み中...</div>
@@ -139,14 +219,32 @@
     </div>
 </div>
 
+<!-- カメラスキャン用モーダル -->
+<div id="scannerModal">
+    <div id="reader"></div>
+    <button id="closeScannerBtn" onclick="stopScanner()">閉じる</button>
+</div>
+
 <script>
     let masterData = [];
+    let html5QrcodeScanner = null;
+    const DEFAULT_CSV_URL = 'data.csv';
 
-    // CSVファイルを自動読み込み
     window.onload = function() {
-        fetch('data.csv')
+        const savedUrl = localStorage.getItem('custom_csv_url');
+        const urlToFetch = savedUrl ? savedUrl : DEFAULT_CSV_URL;
+        document.getElementById('csvUrlInput').value = urlToFetch;
+        
+        loadCSVData(urlToFetch);
+    };
+
+    function loadCSVData(url) {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').innerText = 'データ読み込み中...';
+        
+        fetch(url)
             .then(response => {
-                if (!response.ok) throw new Error('data.csv が見つかりません');
+                if (!response.ok) throw new Error('データが取得できません。URLを確認してください。');
                 return response.text();
             })
             .then(text => {
@@ -157,14 +255,13 @@
             .catch(err => {
                 document.getElementById('loading').innerText = 'エラー: ' + err.message;
             });
-    };
+    }
 
-    // CSV解析処理（JANコードなしの商品もすべて読み込むよう修正）
     function parseCSV(text) {
+        masterData = [];
         const lines = text.split('\n');
         for (let i = 1; i < lines.length; i++) {
             const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-            // JANコードまたは商品名が存在する行をすべて取り込む
             if (cols.length >= 2 && (cols[0] || cols[1])) {
                 masterData.push({
                     jan: cols[0] ? cols[0] : '-',
@@ -176,7 +273,80 @@
         }
     }
 
-    // クリアボタン表示切り替え
+    /* --- カメラスキャン制御 --- */
+    function startScanner() {
+        document.getElementById('scannerModal').classList.add('active');
+        
+        html5QrcodeScanner = new Html5Qrcode("reader");
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 150 },
+            formatsToSupport: [
+                Html5QrcodeSupportedFormats.EAN_13,
+                Html5QrcodeSupportedFormats.EAN_8,
+                Html5QrcodeSupportedFormats.UPC_A,
+                Html5QrcodeSupportedFormats.UPC_E
+            ]
+        };
+
+        // 背面カメラ優先で起動
+        html5QrcodeScanner.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess
+        ).catch(err => {
+            alert("カメラの起動に失敗しました。カメラのアクセス許可を確認してください。");
+            stopScanner();
+        });
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        // スキャン成功時の処理
+        document.getElementById('janInput').value = decodedText;
+        toggleClearBtn();
+        stopScanner();
+        searchJAN(); // 自動検索実行
+    }
+
+    function stopScanner() {
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.stop().then(() => {
+                html5QrcodeScanner.clear();
+                document.getElementById('scannerModal').classList.remove('active');
+            }).catch(err => {
+                document.getElementById('scannerModal').classList.remove('active');
+            });
+        } else {
+            document.getElementById('scannerModal').classList.remove('active');
+        }
+    }
+
+    function saveAndLoadUrl() {
+        const inputUrl = document.getElementById('csvUrlInput').value.trim();
+        if (!inputUrl) {
+            localStorage.removeItem('custom_csv_url');
+            loadCSVData(DEFAULT_CSV_URL);
+        } else {
+            localStorage.setItem('custom_csv_url', inputUrl);
+            loadCSVData(inputUrl);
+        }
+        document.getElementById('allDataList').innerHTML = '';
+        document.getElementById('allDataList').classList.remove('active');
+        toggleConfig();
+    }
+
+    function toggleConfig() {
+        const body = document.getElementById('configBody');
+        const arrow = document.getElementById('configArrow');
+        if (body.classList.contains('active')) {
+            body.classList.remove('active');
+            arrow.innerText = '▼';
+        } else {
+            body.classList.add('active');
+            arrow.innerText = '▲';
+        }
+    }
+
     function toggleClearBtn() {
         const input = document.getElementById('janInput');
         const clearBtn = document.getElementById('clearBtn');
@@ -187,7 +357,6 @@
         }
     }
 
-    // 入力全消去
     function clearInput() {
         const input = document.getElementById('janInput');
         input.value = '';
@@ -195,7 +364,6 @@
         input.focus();
     }
 
-    // 検索処理（JANコード完全一致、または商品名部分一致）
     function searchJAN() {
         const inputVal = document.getElementById('janInput').value.trim();
         const card = document.getElementById('resultCard');
