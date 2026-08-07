@@ -378,7 +378,22 @@
         }
     };
 
-    /* --- テキスト貼り付けデータ保存・解析処理（JAN無し自動修正ロジック付き） --- */
+    /* --- 単価・税率表示補正ヘルパー --- */
+    function formatPrice(val) {
+        if (val === undefined || val === null || val === "" || val === "-") return "-";
+        if (!isNaN(val) && val !== "") {
+            return "¥" + Number(val).toLocaleString();
+        }
+        return "¥" + val;
+    }
+
+    function formatTax(val) {
+        if (val === undefined || val === null || val === "" || val === "-") return "-";
+        const str = val.toString().trim();
+        return str.endsWith("%") ? str : str + "%";
+    }
+
+    /* --- テキスト貼り付けデータ保存・解析処理 --- */
     function savePastedData() {
         const text = document.getElementById('pasteInput').value.trim();
         if (!text) {
@@ -421,20 +436,17 @@
                 let price = '';
                 let tax = '';
 
-                // 先頭列（cols[0]）が半角数字のみの場合 ➔ JANコードが存在する標準パターン
                 if (/^\d+$/.test(cols[0])) {
                     jan = cols[0];
                     name = cols[1] || '';
                     price = cols[2] || '';
                     tax = cols[3] || '';
                 } else if (cols[0] === '' && cols[1]) {
-                    // 先頭列が空文字で2列目に名称があるパターン
                     jan = '-';
                     name = cols[1] || '';
                     price = cols[2] || '';
                     tax = cols[3] || '';
                 } else {
-                    // 先頭列が数字以外（JANが空欄のままコピーされ、先頭に商品名が来ているパターン）
                     jan = '-';
                     name = cols[0] || '';
                     price = cols[1] || '';
@@ -615,7 +627,6 @@
             let html = `<span class="status-badge success">✅ 該当あり（${results.length}件見つかりました）</span>`;
             
             results.forEach(item => {
-                const priceFormatted = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
                 html += `
                     <div class="result-item">
                         <div class="item-name">${item.name}</div>
@@ -625,11 +636,11 @@
                         </div>
                         <div class="detail-row">
                             <span>単価（税抜）</span>
-                            <span class="detail-value">¥${priceFormatted}</span>
+                            <span class="detail-value">${formatPrice(item.price)}</span>
                         </div>
                         <div class="detail-row">
                             <span>消費税率</span>
-                            <span class="detail-value">${item.tax}%</span>
+                            <span class="detail-value">${formatTax(item.tax)}</span>
                         </div>
                     </div>
                 `;
@@ -681,13 +692,11 @@
                             <tbody>`;
 
         masterData.forEach(item => {
-            const price = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
-            
             tableHtml += `<tr>
                             <td>${item.jan}</td>
                             <td>${item.name}</td>
-                            <td class="text-right">¥${price}</td>
-                            <td class="text-right">${item.tax}%</td>
+                            <td class="text-right">${formatPrice(item.price)}</td>
+                            <td class="text-right">${formatTax(item.tax)}</td>
                           </tr>`;
         });
 
