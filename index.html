@@ -323,12 +323,11 @@
     <div class="modal-card">
         <h2>使い方ガイド</h2>
         
-        <h3>1. スプレッドシートの貼り付け登録（最初に行ってください）</h3>
+        <h3>1. スプレッドシートの貼り付け登録</h3>
         <p>商品データを取り込むための操作手順です。</p>
         <ul>
             <li>Googleスプレッドシートを開き、全選択（Ctrl+A / Cmd+A）してコピー（Ctrl+C / Cmd+C）します。</li>
             <li>「データ登録」の枠にそのまま貼り付けて「データを保存して取り込む」を押します。</li>
-            <li>保存されたデータはお使いのスマホに自動記憶されるため、次回起動時もそのまま使えます。</li>
         </ul>
 
         <h3>2. 商品データの照会</h3>
@@ -361,23 +360,12 @@
     let masterData = [];
     let html5QrcodeScanner = null;
 
+    // 起動時は常に初期状態（データ0件）
     window.onload = function() {
-        const savedPastedData = localStorage.getItem('custom_pasted_data');
-        const savedUrl = localStorage.getItem('custom_csv_url');
-
-        if (savedPastedData) {
-            document.getElementById('pasteInput').value = savedPastedData;
-            togglePasteClearBtn();
-            parseTextData(savedPastedData);
-            updateItemCountDisplay();
-        } else if (savedUrl) {
-            document.getElementById('csvUrlInput').value = savedUrl;
-            toggleUrlClearBtn();
-            document.getElementById('urlArea').style.display = 'block';
-            loadCSVData(savedUrl);
-        } else {
-            updateItemCountDisplay();
-        }
+        // 以前保存されていたLocalStorageをすべて消去
+        localStorage.removeItem('custom_pasted_data');
+        localStorage.removeItem('custom_csv_url');
+        updateItemCountDisplay();
     };
 
     /* --- 単価・税率表示補正ヘルパー --- */
@@ -404,16 +392,13 @@
         btn.innerText = `一覧を閉じる`;
     }
 
-    /* --- テキスト貼り付けデータ保存・解析処理 --- */
+    /* --- テキスト貼り付けデータ解析処理 --- */
     function savePastedData() {
         const text = document.getElementById('pasteInput').value.trim();
         if (!text) {
             alert('スプレッドシートのデータを貼り付けてください。');
             return;
         }
-
-        localStorage.setItem('custom_pasted_data', text);
-        localStorage.removeItem('custom_csv_url');
         
         parseTextData(text);
         updateItemCountDisplay();
@@ -600,15 +585,12 @@
 
     function saveAndLoadUrl() {
         const inputUrl = document.getElementById('csvUrlInput').value.trim();
-        localStorage.removeItem('custom_pasted_data');
         if (!inputUrl) {
-            localStorage.removeItem('custom_csv_url');
             masterData = [];
             updateItemCountDisplay();
             document.getElementById('allDataList').innerHTML = '';
             document.getElementById('allDataList').classList.remove('active');
         } else {
-            localStorage.setItem('custom_csv_url', inputUrl);
             loadCSVData(inputUrl);
         }
     }
