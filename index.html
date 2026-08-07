@@ -1,3 +1,12 @@
+ご要望内容に合わせて、以下の修正を行いました。
+修正点
+ * デザイン・アイコンの調整
+   * 設定欄の見出し：⚙️ データ連携設定 (CSV / スプレッドシート) ➔ データ連携設定 (スプレッドシート)
+   * ボタン：🔍 検索 / 📷 スキャン ➔ 検索 / スキャン （絵文字を削除）
+ * 件数表示の連動・自動反映
+   * URLの保存・読み込みに成功した際、ボタンテキストおよび件数表示欄（例: 全商品一覧を表示（全 855 件））が、読み込んだスプレッドシートの実際のデータ件数にリアルタイムで変動・自動更新されるように修正しました。
+修正済みの全コード（index.html）
+GitHub上の index.html を以下のコードで**丸ごと上書きして保存（Commit changes）**してください。
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -179,7 +188,7 @@
     
     <div class="config-section">
         <div class="config-header" onclick="toggleConfig()">
-            <span>⚙️ データ連携設定 (CSV / スプレッドシート)</span>
+            <span>データ連携設定 (スプレッドシート)</span>
             <span id="configArrow">▼</span>
         </div>
         <div id="configBody" class="config-body">
@@ -196,8 +205,8 @@
     </div>
 
     <div class="btn-group">
-        <button id="searchBtn" onclick="searchJAN()">🔍 検索</button>
-        <button id="scanBtn" onclick="startScanner()">📷 スキャン</button>
+        <button id="searchBtn" onclick="searchJAN()">検索</button>
+        <button id="scanBtn" onclick="startScanner()">スキャン</button>
     </div>
 
     <div id="loading" class="loading">データ読み込み中...</div>
@@ -240,7 +249,9 @@
             .then(text => {
                 parseCSV(text);
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('itemCount').innerText = masterData.length;
+                
+                // 件数を更新し、ボタンの表示も同期
+                updateItemCountDisplay();
             })
             .catch(err => {
                 document.getElementById('loading').innerText = 'エラー: ' + err.message;
@@ -263,11 +274,22 @@
         }
     }
 
-    /* --- iOS(Safari)互換性を重視したカメラ起動制御 --- */
+    // 件数表示とボタンテキストを更新する関数
+    function updateItemCountDisplay() {
+        const countSpan = document.getElementById('itemCount');
+        if (countSpan) countSpan.innerText = masterData.length;
+        
+        const listContainer = document.getElementById('allDataList');
+        const btn = document.getElementById('toggleAllBtn');
+        if (!listContainer.classList.contains('active')) {
+            btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
+        }
+    }
+
+    /* --- スキャン機能 --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
         
-        // 既存のインスタンスがあれば破棄
         if (html5QrcodeScanner) {
             try { html5QrcodeScanner.clear(); } catch(e){}
         }
@@ -276,7 +298,7 @@
         
         const scanConfig = {
             fps: 15,
-            qrbox: { width: 260, height: 130 }, // 横長スキャン枠
+            qrbox: { width: 260, height: 130 },
             formatsToSupport: [
                 Html5QrcodeSupportedFormats.EAN_13,
                 Html5QrcodeSupportedFormats.EAN_8,
@@ -285,7 +307,6 @@
             ]
         };
 
-        // iPhone Safariが最も安定して起動する標準設定（背面カメラ指定）
         html5QrcodeScanner.start(
             { facingMode: "environment" },
             scanConfig,
@@ -306,7 +327,7 @@
     }
 
     function onScanFailure(error) {
-        // スキャン試行中の不一致エラーは無視して継続
+        // スキャン試行中の不一致エラーは無視
     }
 
     function stopScanner() {
@@ -424,9 +445,8 @@
             listContainer.classList.remove('active');
             btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
         } else {
-            if (!listContainer.querySelector('table')) {
-                createDataTable();
-            }
+            // 常に最新データでテーブルを再構築
+            createDataTable();
             listContainer.classList.add('active');
             btn.innerText = `一覧を閉じる`;
         }
@@ -465,3 +485,4 @@
 
 </body>
 </html>
+
