@@ -33,9 +33,7 @@
             display: none;
             margin-top: 10px;
         }
-        .config-body.active {
-            display: block;
-        }
+        .config-body.active { display: block; }
         .config-body input {
             width: 100%;
             padding: 8px;
@@ -92,12 +90,7 @@
         }
         .clear-btn:active { background-color: #999; }
 
-        /* ボタン群スタイル */
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
+        .btn-group { display: flex; gap: 8px; margin-bottom: 20px; }
         .btn-group button {
             flex: 1;
             padding: 12px;
@@ -122,13 +115,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
         #scannerModal.active { display: flex; }
-        #reader { width: 100%; max-width: 400px; background: white; border-radius: 12px; overflow: hidden; }
+        #reader { width: 100%; max-width: 450px; background: white; border-radius: 12px; overflow: hidden; }
         #closeScannerBtn {
             margin-top: 15px;
-            padding: 10px 24px;
+            padding: 12px 28px;
             background-color: #ff3b30;
             color: white;
             border: none;
@@ -184,10 +177,9 @@
 <div class="container">
     <h1>📦 JANコード検索</h1>
     
-    <!-- データ元設定アコーディオン -->
     <div class="config-section">
         <div class="config-header" onclick="toggleConfig()">
-            <span>データ連携設定 (スプレッドシート)</span>
+            <span>⚙️ データ連携設定 (CSV / スプレッドシート)</span>
             <span id="configArrow">▼</span>
         </div>
         <div id="configBody" class="config-body">
@@ -196,7 +188,6 @@
         </div>
     </div>
 
-    <!-- 検索フォーム -->
     <div class="search-box">
         <div class="input-wrapper">
             <input type="text" id="janInput" placeholder="JANコードまたは商品名" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
@@ -204,10 +195,9 @@
         </div>
     </div>
 
-    <!-- 操作ボタン群 -->
     <div class="btn-group">
-        <button id="searchBtn" onclick="searchJAN()">検索</button>
-        <button id="scanBtn" onclick="startScanner()">スマホでスキャン</button>
+        <button id="searchBtn" onclick="searchJAN()">🔍 検索</button>
+        <button id="scanBtn" onclick="startScanner()">📷 スキャン</button>
     </div>
 
     <div id="loading" class="loading">データ読み込み中...</div>
@@ -219,7 +209,7 @@
     </div>
 </div>
 
-<!-- カメラスキャン用モーダル -->
+<!-- カメラスキャンモーダル -->
 <div id="scannerModal">
     <div id="reader"></div>
     <button id="closeScannerBtn" onclick="stopScanner()">閉じる</button>
@@ -273,14 +263,23 @@
         }
     }
 
-    /* --- カメラスキャン制御 --- */
+    /* --- 高精度バーコードスキャン制御 --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
         
-        html5QrcodeScanner = new Html5Qrcode("reader");
-        const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 150 },
+        // スマホ内蔵の高速検出機能を有効化する設定を追加
+        const html5QrcodeConfig = {
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+            }
+        };
+
+        html5QrcodeScanner = new Html5Qrcode("reader", html5QrcodeConfig);
+        
+        const scanConfig = {
+            fps: 20, // 秒間20フレームにアップ
+            qrbox: { width: 280, height: 120 }, // JANコードに合わせた横長枠
+            aspectRatio: 1.0,
             formatsToSupport: [
                 Html5QrcodeSupportedFormats.EAN_13,
                 Html5QrcodeSupportedFormats.EAN_8,
@@ -289,23 +288,28 @@
             ]
         };
 
-        // 背面カメラ優先で起動
+        // 高解像度（フルHD）指定でピントを合わせやすくする
+        const cameraConfig = {
+            facingMode: "environment",
+            width: { min: 640, ideal: 1280, max: 1920 },
+            height: { min: 480, ideal: 720, max: 1080 }
+        };
+
         html5QrcodeScanner.start(
-            { facingMode: "environment" },
-            config,
+            cameraConfig,
+            scanConfig,
             onScanSuccess
         ).catch(err => {
-            alert("カメラの起動に失敗しました。カメラのアクセス許可を確認してください。");
+            alert("カメラ起動に失敗しました。カメラ権限またはHTTPS接続を確認してください。");
             stopScanner();
         });
     }
 
     function onScanSuccess(decodedText, decodedResult) {
-        // スキャン成功時の処理
         document.getElementById('janInput').value = decodedText;
         toggleClearBtn();
         stopScanner();
-        searchJAN(); // 自動検索実行
+        searchJAN();
     }
 
     function stopScanner() {
