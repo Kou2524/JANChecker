@@ -10,8 +10,54 @@
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
         .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
-        input { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; outline: none; }
-        input:focus { border-color: #007aff; }
+        
+        /* --- 入力欄とクリアボタンの位置関係設定 --- */
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 36px; /* 右端のクリアボタン用に余白を確保 */
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        .input-wrapper input:focus { border-color: #007aff; }
+
+        /* 丸にバツマークのクリアボタン */
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ccc;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            display: none; /* 初期状態は非表示 */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .clear-btn:active { background-color: #999; }
+
+        /* 上下矢印（スピンボタン）の非表示 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
         button#searchBtn { padding: 12px 16px; font-size: 16px; background-color: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         button#searchBtn:active { background-color: #0056b3; }
         .result-card { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 16px; display: none; margin-bottom: 20px; }
@@ -81,7 +127,10 @@
     <h1>📦 JANコード検索</h1>
     
     <div class="search-box">
-        <input type="text" id="janInput" placeholder="JANコードを入力" pattern="[0-9]*" inputmode="numeric">
+        <div class="input-wrapper">
+            <input type="text" id="janInput" placeholder="JANコードを入力" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
+            <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
+        </div>
         <button id="searchBtn" onclick="searchJAN()">検索</button>
     </div>
 
@@ -128,6 +177,25 @@
                 });
             }
         }
+    }
+
+    // 入力状況に応じてクリアボタンの表示・非表示を切り替え
+    function toggleClearBtn() {
+        const input = document.getElementById('janInput');
+        const clearBtn = document.getElementById('clearBtn');
+        if (input.value.length > 0) {
+            clearBtn.style.display = 'flex';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+    }
+
+    // 入力文字を全消去する処理
+    function clearInput() {
+        const input = document.getElementById('janInput');
+        input.value = '';
+        toggleClearBtn();
+        input.focus(); // 入力欄にカーソルを戻す
     }
 
     // 検索処理
@@ -182,7 +250,6 @@
             listContainer.classList.remove('active');
             btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
         } else {
-            // テーブル（table要素）が存在しない場合のみ生成するロジックに変更
             if (!listContainer.querySelector('table')) {
                 createDataTable();
             }
