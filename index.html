@@ -263,23 +263,20 @@
         }
     }
 
-    /* --- 高精度バーコードスキャン制御 --- */
+    /* --- iOS(Safari)互換性を重視したカメラ起動制御 --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
         
-        // スマホ内蔵の高速検出機能を有効化する設定を追加
-        const html5QrcodeConfig = {
-            experimentalFeatures: {
-                useBarCodeDetectorIfSupported: true
-            }
-        };
+        // 既存のインスタンスがあれば破棄
+        if (html5QrcodeScanner) {
+            try { html5QrcodeScanner.clear(); } catch(e){}
+        }
 
-        html5QrcodeScanner = new Html5Qrcode("reader", html5QrcodeConfig);
+        html5QrcodeScanner = new Html5Qrcode("reader");
         
         const scanConfig = {
-            fps: 20, // 秒間20フレームにアップ
-            qrbox: { width: 280, height: 120 }, // JANコードに合わせた横長枠
-            aspectRatio: 1.0,
+            fps: 15,
+            qrbox: { width: 260, height: 130 }, // 横長スキャン枠
             formatsToSupport: [
                 Html5QrcodeSupportedFormats.EAN_13,
                 Html5QrcodeSupportedFormats.EAN_8,
@@ -288,19 +285,15 @@
             ]
         };
 
-        // 高解像度（フルHD）指定でピントを合わせやすくする
-        const cameraConfig = {
-            facingMode: "environment",
-            width: { min: 640, ideal: 1280, max: 1920 },
-            height: { min: 480, ideal: 720, max: 1080 }
-        };
-
+        // iPhone Safariが最も安定して起動する標準設定（背面カメラ指定）
         html5QrcodeScanner.start(
-            cameraConfig,
+            { facingMode: "environment" },
             scanConfig,
-            onScanSuccess
+            onScanSuccess,
+            onScanFailure
         ).catch(err => {
-            alert("カメラ起動に失敗しました。カメラ権限またはHTTPS接続を確認してください。");
+            console.error("Camera start error:", err);
+            alert("カメラの起動に失敗しました。\nSafariの設定で「カメラ」へのアクセスが許可されているかご確認ください。");
             stopScanner();
         });
     }
@@ -312,8 +305,12 @@
         searchJAN();
     }
 
+    function onScanFailure(error) {
+        // スキャン試行中の不一致エラーは無視して継続
+    }
+
     function stopScanner() {
-        if (html5QrcodeScanner) {
+        if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
             html5QrcodeScanner.stop().then(() => {
                 html5QrcodeScanner.clear();
                 document.getElementById('scannerModal').classList.remove('active');
@@ -321,6 +318,9 @@
                 document.getElementById('scannerModal').classList.remove('active');
             });
         } else {
+            if (html5QrcodeScanner) {
+                try { html5QrcodeScanner.clear(); } catch(e){}
+            }
             document.getElementById('scannerModal').classList.remove('active');
         }
     }
