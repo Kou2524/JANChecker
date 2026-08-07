@@ -139,7 +139,6 @@
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
 
-        /* 複数検索結果用カードデザイン */
         .result-item {
             background: #f8f9fa;
             border: 1px solid #e9ecef;
@@ -203,7 +202,8 @@
 
     <div class="search-box">
         <div class="input-wrapper">
-            <input type="text" id="janInput" placeholder="JANコードまたは商品名" pattern="[0-9]*" inputmode="numeric" oninput="toggleClearBtn()">
+            <!-- 各OS標準キーボード（文字・日本語・英語・数字切替可能）を起動する標準text設定 -->
+            <input type="text" id="janInput" placeholder="JANコードまたは商品名" oninput="toggleClearBtn()">
             <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
         </div>
     </div>
@@ -400,7 +400,6 @@
             return;
         }
 
-        // 入力値が含まれるデータをすべて抽出（部分一致）
         const results = masterData.filter(d => 
             (d.jan !== '-' && d.jan === inputVal) || 
             (d.name && d.name.toLowerCase().includes(inputVal.toLowerCase()))
@@ -409,7 +408,6 @@
         if (results.length > 0) {
             let html = `<span class="status-badge success">✅ 該当あり（${results.length}件見つかりました）</span>`;
             
-            // 該当する商品を上から順にカード形式で生成
             results.forEach(item => {
                 const priceFormatted = !isNaN(item.price) && item.price !== "" ? Number(item.price).toLocaleString() : item.price;
                 html += `
