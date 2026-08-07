@@ -393,6 +393,15 @@
         return str.endsWith("%") ? str : str + "%";
     }
 
+    /* --- 全商品一覧を自動展開表示する関数 --- */
+    function showAllDataListAuto() {
+        createDataTable();
+        const listContainer = document.getElementById('allDataList');
+        const btn = document.getElementById('toggleAllBtn');
+        listContainer.classList.add('active');
+        btn.innerText = `一覧を閉じる`;
+    }
+
     /* --- テキスト貼り付けデータ保存・解析処理 --- */
     function savePastedData() {
         const text = document.getElementById('pasteInput').value.trim();
@@ -408,8 +417,9 @@
         updateItemCountDisplay();
         
         document.getElementById('resultCard').classList.remove('active');
-        document.getElementById('allDataList').innerHTML = '';
-        document.getElementById('allDataList').classList.remove('active');
+        
+        // 取り込み完了時に全商品一覧を自動表示
+        showAllDataListAuto();
         
         alert(`データを正常に取り込みました！（全 ${masterData.length} 件）`);
     }
@@ -489,6 +499,7 @@
         parseTextData(text);
         document.getElementById('loading').style.display = 'none';
         updateItemCountDisplay();
+        showAllDataListAuto();
     }
 
     function updateItemCountDisplay() {
@@ -595,12 +606,12 @@
             localStorage.removeItem('custom_csv_url');
             masterData = [];
             updateItemCountDisplay();
+            document.getElementById('allDataList').innerHTML = '';
+            document.getElementById('allDataList').classList.remove('active');
         } else {
             localStorage.setItem('custom_csv_url', inputUrl);
             loadCSVData(inputUrl);
         }
-        document.getElementById('allDataList').innerHTML = '';
-        document.getElementById('allDataList').classList.remove('active');
     }
 
     function toggleUrlArea() {
