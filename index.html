@@ -193,7 +193,7 @@
         .modal-card ul { padding-left: 20px; }
 
         .close-modal-btn {
-            margin-top: 12px;
+            margin-top: 15px;
             width: 100%;
             padding: 10px;
             background-color: #ff3b30;
@@ -499,28 +499,26 @@
     function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
     function closeHelpModal() { document.getElementById('helpModal').classList.remove('active'); }
 
-    /* --- 自動ピント合わせ（連続オートフォーカス）付きスキャン機能 --- */
+    /* --- スキャン機能（高解像度化・読み取り安定仕様） --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
-        if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
+        
+        if (html5QrcodeScanner) {
+            try { html5QrcodeScanner.clear(); } catch(e){}
+        }
 
-        const html5QrcodeConfig = {
-            experimentalFeatures: {
-                useBarCodeDetectorIfSupported: true
-            }
+        html5QrcodeScanner = new Html5Qrcode("reader");
+        
+        // 高解像度（HD画質）でカメラを読み込んで細いバーコードの潰れを防ぐ
+        const cameraConstraints = {
+            facingMode: "environment",
+            width: { min: 640, ideal: 1280, max: 1920 },
+            height: { min: 480, ideal: 720, max: 1080 }
         };
 
-        html5QrcodeScanner = new Html5Qrcode("reader", html5QrcodeConfig);
-        
         const scanConfig = {
-            fps: 25,
-            qrbox: function(viewfinderWidth, viewfinderHeight) {
-                const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                return {
-                    width: Math.floor(minEdge * 0.85),
-                    height: Math.floor(minEdge * 0.35)
-                };
-            },
+            fps: 15,
+            qrbox: { width: 280, height: 120 }, // JANコード用横長固定枠
             formatsToSupport: [
                 Html5QrcodeSupportedFormats.EAN_13,
                 Html5QrcodeSupportedFormats.EAN_8,
@@ -530,30 +528,13 @@
         };
 
         html5QrcodeScanner.start(
-            { facingMode: "environment" },
+            cameraConstraints,
             scanConfig,
             onScanSuccess,
             onScanFailure
-        ).then(() => {
-            // カメラ起動後、連続オートフォーカス（focusMode: 'continuous'）を要求
-            try {
-                const videoElement = document.querySelector("#reader video");
-                if (videoElement && videoElement.srcObject) {
-                    const track = videoElement.srcObject.getVideoTracks()[0];
-                    if (track && typeof track.applyConstraints === "function") {
-                        const capabilities = track.getCapabilities ? track.getCapabilities() : {};
-                        if (capabilities.focusMode && capabilities.focusMode.includes("continuous")) {
-                            track.applyConstraints({
-                                advanced: [{ focusMode: "continuous" }]
-                            });
-                        }
-                    }
-                }
-            } catch (e) {
-                console.log("Autofocus constraint not supported", e);
-            }
-        }).catch(err => {
-            alert("カメラの起動に失敗しました。カメラアクセス許可をご確認ください。");
+        ).catch(err => {
+            console.error("Camera start error:", err);
+            alert("カメラの起動に失敗しました。\nSafari/Chromeのカメラ許可設定をご確認ください。");
             stopScanner();
         });
     }
@@ -564,7 +545,10 @@
         stopScanner();
         searchJAN();
     }
-    function onScanFailure(error) {}
+    
+    function onScanFailure(error) {
+        // スキャン試行中の不一致は無視
+    }
 
     function stopScanner() {
         if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
