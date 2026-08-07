@@ -40,7 +40,7 @@
         }
         .help-btn:active { background-color: #0056b3; }
 
-        /* 常時表示の設定エリア */
+        /* 設定エリア（常時表示） */
         .config-section {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
@@ -53,23 +53,55 @@
             color: #6c757d;
             font-weight: bold;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .config-body {
-            display: block;
+
+        /* 貼り付けフォーム用テキストエリア */
+        .paste-wrapper {
+            position: relative;
+            margin-bottom: 8px;
         }
+        textarea#pasteInput {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            padding-right: 36px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+        }
+        textarea#pasteInput:focus { border-color: #007aff; }
+
         .config-body button {
             width: 100%;
             padding: 10px;
             font-size: 13px;
-            background-color: #495057;
+            background-color: #007aff;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 8px;
         }
-        .config-body button:active { background-color: #343a40; }
+        .config-body button:active { background-color: #0056b3; }
+
+        /* アコーディオン（URL設定用） */
+        .sub-config {
+            margin-top: 10px;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+        .sub-config-title {
+            font-size: 11px;
+            color: #8e8e93;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
         .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
         
@@ -88,10 +120,10 @@
             border-radius: 8px;
             outline: none;
         }
-        .config-body .input-wrapper input {
-            padding: 8px 36px 8px 8px;
-            font-size: 12px;
-            border-radius: 6px;
+        .sub-config .input-wrapper input {
+            padding: 6px 36px 6px 6px;
+            font-size: 11px;
+            border-radius: 4px;
         }
         .input-wrapper input:focus { border-color: #007aff; }
 
@@ -112,6 +144,7 @@
             user-select: none;
         }
         .clear-btn:active { background-color: #999; }
+        .paste-clear-btn { top: 10px; }
 
         .btn-group { display: flex; gap: 8px; margin-bottom: 20px; }
         .btn-group button {
@@ -154,26 +187,9 @@
             overflow-y: auto;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .modal-card h2 {
-            font-size: 1.2rem;
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
-            border-bottom: 2px solid #007aff;
-            padding-bottom: 8px;
-        }
-        .modal-card h3 {
-            font-size: 0.95rem;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            color: #007aff;
-        }
-        .modal-card p, .modal-card ul {
-            font-size: 13px;
-            color: #495057;
-            line-height: 1.5;
-            margin: 0 0 10px 0;
-        }
+        .modal-card h2 { font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; color: #333; border-bottom: 2px solid #007aff; padding-bottom: 8px; }
+        .modal-card h3 { font-size: 0.95rem; margin-top: 15px; margin-bottom: 6px; color: #007aff; }
+        .modal-card p, .modal-card ul { font-size: 13px; color: #495057; line-height: 1.5; margin: 0 0 10px 0; }
         .modal-card ul { padding-left: 20px; }
 
         .close-modal-btn {
@@ -209,7 +225,7 @@
         .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 6px; margin-top: 6px; font-size: 13px; color: #495057; }
         .detail-value { font-weight: bold; font-size: 1rem; color: #111; }
         
-        .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; }
+        .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; display: none; }
 
         .all-data-section {
             margin-top: 30px;
@@ -253,14 +269,25 @@
     <!-- 常時表示の設定エリア -->
     <div class="config-section">
         <div class="config-header">
-            <span>データ連携設定 (スプレッドシート)</span>
+            <span>データ登録 (スプレッドシートデータ貼り付け)</span>
         </div>
         <div class="config-body">
-            <div class="input-wrapper">
-                <input type="text" id="csvUrlInput" placeholder="スプレッドシートのWeb公開CSV URLを入力" oninput="toggleUrlClearBtn()">
-                <span id="urlClearBtn" class="clear-btn" onclick="clearUrlInput()">✕</span>
+            <div class="paste-wrapper">
+                <textarea id="pasteInput" placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください" oninput="togglePasteClearBtn()"></textarea>
+                <span id="pasteClearBtn" class="clear-btn paste-clear-btn" onclick="clearPasteInput()">✕</span>
             </div>
-            <button onclick="saveAndLoadUrl()">保存して再読み込み</button>
+            <button onclick="savePastedData()">データを保存して取り込む</button>
+            
+            <div class="sub-config">
+                <div class="sub-config-title" onclick="toggleUrlArea()">▼ URL連携（Web公開CSV）を使用する場合</div>
+                <div id="urlArea" style="display:none; margin-top:8px;">
+                    <div class="input-wrapper">
+                        <input type="text" id="csvUrlInput" placeholder="CSV URLを入力" oninput="toggleUrlClearBtn()">
+                        <span id="urlClearBtn" class="clear-btn" onclick="clearUrlInput()">✕</span>
+                    </div>
+                    <button style="margin-top:6px; background-color:#6c757d;" onclick="saveAndLoadUrl()">URLで再読み込み</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -299,19 +326,24 @@
         <h3>1. 基本機能</h3>
         <ul>
             <li><strong>手入力検索:</strong> JANコード（完全一致）または商品名（部分一致）を入力して「検索」を押します。</li>
-            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動でスキャン＆照会します。</li>
-            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると一発で文字を消せます。</li>
+            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動で照会します。</li>
+            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると文字を一括消去できます。</li>
         </ul>
 
-        <h3>2. スプレッドシート連携（独自データの読み込み）</h3>
-        <p>上部の「データ連携設定」にGoogleスプレッドシートのCSV URLを入力すると、現場や店舗ごとのデータを読み込めます。</p>
+        <h3>2. スプレッドシートの貼り付け登録</h3>
+        <p>データを取り込む最も簡単・確実に動作する方法です。</p>
         <ul>
-            <li>Googleスプレッドシートの「ファイル」→「共有」→「Webに公開」を選択します。</li>
-            <li>形式を「カンマ区切り値 (.csv)」に変更して「公開」を押し、発行されたURLを貼り付けます。</li>
-            <li>「保存して再読み込み」を押すと、お使いの端末にURLが保存され、次回以降も自動読み込みされます。</li>
+            <li>Googleスプレッドシートを開き、全選択（Ctrl+A / Cmd+A）してコピー（Ctrl+C / Cmd+C）します。</li>
+            <li>「データ登録」の枠にそのまま貼り付けて「データを保存して取り込む」を押します。</li>
+            <li>保存されたデータはお使いのスマホに自動記憶されるため、次回起動時もそのまま使えます。</li>
         </ul>
 
-        <h3>3. スプレッドシートの推奨列構造</h3>
+        <h3>3. URL連携機能（任意）</h3>
+        <ul>
+            <li>個人アカウントでWeb公開したCSV URLを入力して連携することも可能です。</li>
+        </ul>
+
+        <h3>4. 推奨するスプレッドシートの列構造</h3>
         <ul>
             <li><strong>A列:</strong> JANコード</li>
             <li><strong>B列:</strong> 商品名称</li>
@@ -326,60 +358,63 @@
 <script>
     let masterData = [];
     let html5QrcodeScanner = null;
-    const DEFAULT_CSV_URL = 'data.csv';
 
     window.onload = function() {
+        const savedPastedData = localStorage.getItem('custom_pasted_data');
         const savedUrl = localStorage.getItem('custom_csv_url');
-        const urlToFetch = savedUrl ? savedUrl : DEFAULT_CSV_URL;
-        document.getElementById('csvUrlInput').value = urlToFetch;
-        toggleUrlClearBtn();
-        
-        loadCSVData(urlToFetch);
+
+        if (savedPastedData) {
+            document.getElementById('pasteInput').value = savedPastedData;
+            togglePasteClearBtn();
+            parseTextData(savedPastedData);
+            updateItemCountDisplay();
+        } else if (savedUrl) {
+            document.getElementById('csvUrlInput').value = savedUrl;
+            toggleUrlClearBtn();
+            document.getElementById('urlArea').style.display = 'block';
+            loadCSVData(savedUrl);
+        } else {
+            // 初期データ（data.csv）は読み込まず0件で開始
+            updateItemCountDisplay();
+        }
     };
 
-    /* --- CORSエラー回避機能付きのデータ取得処理 --- */
-    function loadCSVData(url) {
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('loading').innerText = 'データ読み込み中...';
+    /* --- テキスト貼り付けデータ保存・解析処理 --- */
+    function savePastedData() {
+        const text = document.getElementById('pasteInput').value.trim();
+        if (!text) {
+            alert('スプレッドシートのデータを貼り付けてください。');
+            return;
+        }
+
+        localStorage.setItem('custom_pasted_data', text);
+        localStorage.removeItem('custom_csv_url');
         
-        // 1. 通常の直接アクセスを試行
-        fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error('HTTPエラー: ' + response.status);
-                return response.text();
-            })
-            .then(text => {
-                handleLoadedCSV(text);
-            })
-            .catch(err => {
-                console.warn('Direct fetch failed. Retrying with CORS proxy...', err);
-                // 2. Failed to fetch発生時、CORS回避プロキシサービスを経由して自動再試行
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                fetch(proxyUrl)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Proxy HTTPエラー: ' + response.status);
-                        return response.text();
-                    })
-                    .then(text => {
-                        handleLoadedCSV(text);
-                    })
-                    .catch(proxyErr => {
-                        document.getElementById('loading').innerText = 'エラー: スプレッドシートの読み込みに失敗しました。URLおよびWeb公開設定をご確認ください。';
-                    });
-            });
-    }
-
-    function handleLoadedCSV(text) {
-        parseCSV(text);
-        document.getElementById('loading').style.display = 'none';
+        parseTextData(text);
         updateItemCountDisplay();
+        
+        document.getElementById('resultCard').classList.remove('active');
+        document.getElementById('allDataList').innerHTML = '';
+        document.getElementById('allDataList').classList.remove('active');
+        
+        alert(`データを正常に取り込みました！（全 ${masterData.length} 件）`);
     }
 
-    function parseCSV(text) {
+    function parseTextData(text) {
         masterData = [];
-        const lines = text.split('\n');
-        for (let i = 1; i < lines.length; i++) {
-            const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+        const lines = text.split(/\r?\n/);
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const sep = line.includes('\t') ? '\t' : ',';
+            const cols = line.split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
+
+            if (i === 0 && (cols[0].includes('JAN') || cols[1].includes('名称') || cols[1].includes('名前'))) {
+                continue;
+            }
+
             if (cols.length >= 2 && (cols[0] || cols[1])) {
                 masterData.push({
                     jan: cols[0] ? cols[0] : '-',
@@ -389,6 +424,37 @@
                 });
             }
         }
+    }
+
+    /* --- URL経由のデータ取得処理 --- */
+    function loadCSVData(url) {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').innerText = 'データ読み込み中...';
+        
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error('HTTPエラー: ' + response.status);
+                return response.text();
+            })
+            .then(text => { handleLoadedCSV(text); })
+            .catch(err => {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                fetch(proxyUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Proxyエラー: ' + response.status);
+                        return response.text();
+                    })
+                    .then(text => { handleLoadedCSV(text); })
+                    .catch(() => {
+                        document.getElementById('loading').innerText = 'エラー: スプレッドシートのURL読み込みに失敗しました。';
+                    });
+            });
+    }
+
+    function handleLoadedCSV(text) {
+        parseTextData(text);
+        document.getElementById('loading').style.display = 'none';
+        updateItemCountDisplay();
     }
 
     function updateItemCountDisplay() {
@@ -402,24 +468,16 @@
         }
     }
 
-    /* --- 説明モーダル制御 --- */
-    function openHelpModal() {
-        document.getElementById('helpModal').classList.add('active');
-    }
-    function closeHelpModal() {
-        document.getElementById('helpModal').classList.remove('active');
-    }
+    /* --- モーダル制御 --- */
+    function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
+    function closeHelpModal() { document.getElementById('helpModal').classList.remove('active'); }
 
     /* --- スキャン機能 --- */
     function startScanner() {
         document.getElementById('scannerModal').classList.add('active');
-        
-        if (html5QrcodeScanner) {
-            try { html5QrcodeScanner.clear(); } catch(e){}
-        }
+        if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
 
         html5QrcodeScanner = new Html5Qrcode("reader");
-        
         const scanConfig = {
             fps: 15,
             qrbox: { width: 260, height: 130 },
@@ -437,79 +495,72 @@
             onScanSuccess,
             onScanFailure
         ).catch(err => {
-            console.error("Camera start error:", err);
-            alert("カメラの起動に失敗しました。\nSafariの設定で「カメラ」へのアクセスが許可されているかご確認ください。");
+            alert("カメラの起動に失敗しました。カメラアクセス許可をご確認ください。");
             stopScanner();
         });
     }
 
-    function onScanSuccess(decodedText, decodedResult) {
+    function onScanSuccess(decodedText) {
         document.getElementById('janInput').value = decodedText;
         toggleClearBtn();
         stopScanner();
         searchJAN();
     }
-
-    function onScanFailure(error) {
-        // スキャン試行中の不一致は無視
-    }
+    function onScanFailure(error) {}
 
     function stopScanner() {
         if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
             html5QrcodeScanner.stop().then(() => {
                 html5QrcodeScanner.clear();
                 document.getElementById('scannerModal').classList.remove('active');
-            }).catch(err => {
-                document.getElementById('scannerModal').classList.remove('active');
-            });
+            }).catch(() => { document.getElementById('scannerModal').classList.remove('active'); });
         } else {
-            if (html5QrcodeScanner) {
-                try { html5QrcodeScanner.clear(); } catch(e){}
-            }
+            if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
             document.getElementById('scannerModal').classList.remove('active');
         }
     }
 
-    /* --- クリアボタン処理 --- */
-    function toggleUrlClearBtn() {
-        const input = document.getElementById('csvUrlInput');
-        const clearBtn = document.getElementById('urlClearBtn');
-        if (input.value.length > 0) {
-            clearBtn.style.display = 'flex';
-        } else {
-            clearBtn.style.display = 'none';
-        }
+    /* --- 各種入力欄クリア機能 --- */
+    function togglePasteClearBtn() {
+        const input = document.getElementById('pasteInput');
+        const btn = document.getElementById('pasteClearBtn');
+        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
+    }
+    function clearPasteInput() {
+        document.getElementById('pasteInput').value = '';
+        togglePasteClearBtn();
+        document.getElementById('pasteInput').focus();
     }
 
-    function clearUrlInput() {
+    function toggleUrlClearBtn() {
         const input = document.getElementById('csvUrlInput');
-        input.value = '';
+        const btn = document.getElementById('urlClearBtn');
+        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
+    }
+    function clearUrlInput() {
+        document.getElementById('csvUrlInput').value = '';
         toggleUrlClearBtn();
-        input.focus();
+        document.getElementById('csvUrlInput').focus();
     }
 
     function toggleClearBtn() {
         const input = document.getElementById('janInput');
-        const clearBtn = document.getElementById('clearBtn');
-        if (input.value.length > 0) {
-            clearBtn.style.display = 'flex';
-        } else {
-            clearBtn.style.display = 'none';
-        }
+        const btn = document.getElementById('clearBtn');
+        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
     }
-
     function clearInput() {
-        const input = document.getElementById('janInput');
-        input.value = '';
+        document.getElementById('janInput').value = '';
         toggleClearBtn();
-        input.focus();
+        document.getElementById('janInput').focus();
     }
 
     function saveAndLoadUrl() {
         const inputUrl = document.getElementById('csvUrlInput').value.trim();
+        localStorage.removeItem('custom_pasted_data');
         if (!inputUrl) {
             localStorage.removeItem('custom_csv_url');
-            loadCSVData(DEFAULT_CSV_URL);
+            masterData = [];
+            updateItemCountDisplay();
         } else {
             localStorage.setItem('custom_csv_url', inputUrl);
             loadCSVData(inputUrl);
@@ -518,7 +569,12 @@
         document.getElementById('allDataList').classList.remove('active');
     }
 
-    /* --- 複数件対応・検索処理 --- */
+    function toggleUrlArea() {
+        const area = document.getElementById('urlArea');
+        area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    }
+
+    /* --- 検索処理 --- */
     function searchJAN() {
         const inputVal = document.getElementById('janInput').value.trim();
         const card = document.getElementById('resultCard');
