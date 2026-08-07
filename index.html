@@ -279,7 +279,7 @@
             <button onclick="savePastedData()">データを保存して取り込む</button>
             
             <div class="sub-config">
-                <div class="sub-config-title" onclick="toggleUrlArea()">▼ URL連携（Web公開CSV）を使用する場合</div>
+                <div class="sub-config-title" onclick="toggleUrlArea()">▼ URL連携（Web公開CSV）を使用する場合は開く</div>
                 <div id="urlArea" style="display:none; margin-top:8px;">
                     <div class="input-wrapper">
                         <input type="text" id="csvUrlInput" placeholder="CSV URLを入力" oninput="toggleUrlClearBtn()">
@@ -374,12 +374,11 @@
             document.getElementById('urlArea').style.display = 'block';
             loadCSVData(savedUrl);
         } else {
-            // 初期データ（data.csv）は読み込まず0件で開始
             updateItemCountDisplay();
         }
     };
 
-    /* --- テキスト貼り付けデータ保存・解析処理 --- */
+    /* --- テキスト貼り付けデータ保存・解析処理（JAN無し自動修正ロジック付き） --- */
     function savePastedData() {
         const text = document.getElementById('pasteInput').value.trim();
         if (!text) {
@@ -411,17 +410,40 @@
             const sep = line.includes('\t') ? '\t' : ',';
             const cols = line.split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
 
-            if (i === 0 && (cols[0].includes('JAN') || cols[1].includes('名称') || cols[1].includes('名前'))) {
+            // ヘッダー行の自動判定・スキップ
+            if (i === 0 && (cols[0].includes('JAN') || cols[1].includes('名称') || cols[1].includes('名前') || cols[0].includes('名称'))) {
                 continue;
             }
 
-            if (cols.length >= 2 && (cols[0] || cols[1])) {
-                masterData.push({
-                    jan: cols[0] ? cols[0] : '-',
-                    name: cols[1] || '',
-                    price: cols[2] || '',
-                    tax: cols[3] || ''
-                });
+            if (cols.length >= 1) {
+                let jan = '-';
+                let name = '';
+                let price = '';
+                let tax = '';
+
+                // 先頭列（cols[0]）が半角数字のみの場合 ➔ JANコードが存在する標準パターン
+                if (/^\d+$/.test(cols[0])) {
+                    jan = cols[0];
+                    name = cols[1] || '';
+                    price = cols[2] || '';
+                    tax = cols[3] || '';
+                } else if (cols[0] === '' && cols[1]) {
+                    // 先頭列が空文字で2列目に名称があるパターン
+                    jan = '-';
+                    name = cols[1] || '';
+                    price = cols[2] || '';
+                    tax = cols[3] || '';
+                } else {
+                    // 先頭列が数字以外（JANが空欄のままコピーされ、先頭に商品名が来ているパターン）
+                    jan = '-';
+                    name = cols[0] || '';
+                    price = cols[1] || '';
+                    tax = cols[2] || '';
+                }
+
+                if (name || jan !== '-') {
+                    masterData.push({ jan, name, price, tax });
+                }
             }
         }
     }
