@@ -12,49 +12,40 @@
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         h1 { font-size: 1.4rem; text-align: center; color: #333; margin-top: 0; }
         
-        /* 設定アコーディオン */
+        /* 設定エリア（常時表示） */
         .config-section {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 8px;
-            padding: 10px 12px;
+            padding: 12px;
             margin-bottom: 20px;
         }
         .config-header {
             font-size: 13px;
             color: #6c757d;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             font-weight: bold;
+            margin-bottom: 10px;
         }
         .config-body {
-            display: none;
-            margin-top: 10px;
-        }
-        .config-body.active { display: block; }
-        .config-body input {
-            width: 100%;
-            padding: 8px;
-            font-size: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 8px;
+            display: block;
         }
         .config-body button {
             width: 100%;
-            padding: 8px;
-            font-size: 12px;
+            padding: 10px;
+            font-size: 13px;
             background-color: #495057;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
         }
+        .config-body button:active { background-color: #343a40; }
 
         .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
         
+        /* 入力欄＋クリアボタン共通ラッパー */
         .input-wrapper {
             position: relative;
             flex: 1;
@@ -65,13 +56,19 @@
             width: 100%;
             padding: 12px;
             padding-right: 36px;
-            font-size: 16px;
+            font-size: 15px;
             border: 1px solid #ccc;
             border-radius: 8px;
             outline: none;
         }
+        .config-body .input-wrapper input {
+            padding: 8px 36px 8px 8px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
         .input-wrapper input:focus { border-color: #007aff; }
 
+        /* クリア（✕）ボタン共通スタイル */
         .clear-btn {
             position: absolute;
             right: 10px;
@@ -189,20 +186,22 @@
 <div class="container">
     <h1>📦 JANコード検索</h1>
     
+    <!-- 常時表示の設定エリア -->
     <div class="config-section">
-        <div class="config-header" onclick="toggleConfig()">
+        <div class="config-header">
             <span>データ連携設定 (スプレッドシート)</span>
-            <span id="configArrow">▼</span>
         </div>
-        <div id="configBody" class="config-body">
-            <input type="text" id="csvUrlInput" placeholder="スプレッドシートのWeb公開CSV URLを入力">
+        <div class="config-body">
+            <div class="input-wrapper">
+                <input type="text" id="csvUrlInput" placeholder="スプレッドシートのWeb公開CSV URLを入力" oninput="toggleUrlClearBtn()">
+                <span id="urlClearBtn" class="clear-btn" onclick="clearUrlInput()">✕</span>
+            </div>
             <button onclick="saveAndLoadUrl()">保存して再読み込み</button>
         </div>
     </div>
 
     <div class="search-box">
         <div class="input-wrapper">
-            <!-- 各OS標準キーボード（文字・日本語・英語・数字切替可能）を起動する標準text設定 -->
             <input type="text" id="janInput" placeholder="JANコードまたは商品名" oninput="toggleClearBtn()">
             <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
         </div>
@@ -237,6 +236,7 @@
         const savedUrl = localStorage.getItem('custom_csv_url');
         const urlToFetch = savedUrl ? savedUrl : DEFAULT_CSV_URL;
         document.getElementById('csvUrlInput').value = urlToFetch;
+        toggleUrlClearBtn(); // URLのクリアボタン表示確認
         
         loadCSVData(urlToFetch);
     };
@@ -347,32 +347,25 @@
         }
     }
 
-    function saveAndLoadUrl() {
-        const inputUrl = document.getElementById('csvUrlInput').value.trim();
-        if (!inputUrl) {
-            localStorage.removeItem('custom_csv_url');
-            loadCSVData(DEFAULT_CSV_URL);
+    /* --- URL入力欄のクリア機能 --- */
+    function toggleUrlClearBtn() {
+        const input = document.getElementById('csvUrlInput');
+        const clearBtn = document.getElementById('urlClearBtn');
+        if (input.value.length > 0) {
+            clearBtn.style.display = 'flex';
         } else {
-            localStorage.setItem('custom_csv_url', inputUrl);
-            loadCSVData(inputUrl);
-        }
-        document.getElementById('allDataList').innerHTML = '';
-        document.getElementById('allDataList').classList.remove('active');
-        toggleConfig();
-    }
-
-    function toggleConfig() {
-        const body = document.getElementById('configBody');
-        const arrow = document.getElementById('configArrow');
-        if (body.classList.contains('active')) {
-            body.classList.remove('active');
-            arrow.innerText = '▼';
-        } else {
-            body.classList.add('active');
-            arrow.innerText = '▲';
+            clearBtn.style.display = 'none';
         }
     }
 
+    function clearUrlInput() {
+        const input = document.getElementById('csvUrlInput');
+        input.value = '';
+        toggleUrlClearBtn();
+        input.focus();
+    }
+
+    /* --- JAN入力欄のクリア機能 --- */
     function toggleClearBtn() {
         const input = document.getElementById('janInput');
         const clearBtn = document.getElementById('clearBtn');
@@ -388,6 +381,19 @@
         input.value = '';
         toggleClearBtn();
         input.focus();
+    }
+
+    function saveAndLoadUrl() {
+        const inputUrl = document.getElementById('csvUrlInput').value.trim();
+        if (!inputUrl) {
+            localStorage.removeItem('custom_csv_url');
+            loadCSVData(DEFAULT_CSV_URL);
+        } else {
+            localStorage.setItem('custom_csv_url', inputUrl);
+            loadCSVData(inputUrl);
+        }
+        document.getElementById('allDataList').innerHTML = '';
+        document.getElementById('allDataList').classList.remove('active');
     }
 
     /* --- 複数件対応・検索処理 --- */
