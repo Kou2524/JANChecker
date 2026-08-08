@@ -134,33 +134,22 @@
 
             transition:
                 background-color 0.2s ease,
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
+                border-color 0.2s ease;
         }
 
         textarea#pasteInput:focus {
             border-color: #007aff;
         }
 
-
-        /*
-         * データ貼り付け済み
-         *
-         * 中身が見えづらくても
-         * 「ちゃんと入っている」ことを
-         * 背景色で分かるようにする
-         */
         textarea#pasteInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
-            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
         }
 
         textarea#pasteInput.has-value:focus {
             background-color: #e9ecef;
             border-color: #8e8e93;
         }
-
 
         .config-body button {
             width: 100%;
@@ -244,10 +233,6 @@
             border-radius: 4px;
         }
 
-
-        /*
-         * URL入力済み
-         */
         #csvUrlInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
@@ -257,7 +242,6 @@
             background-color: #e9ecef;
             border-color: #8e8e93;
         }
-
 
         .clear-btn {
             position: absolute;
@@ -417,7 +401,7 @@
 
 
         /* ========================================
-           検索候補
+           候補選択
         ======================================== */
 
         .candidate-list {
@@ -575,11 +559,6 @@
         .text-right {
             text-align: right;
         }
-
-
-        /* ========================================
-           確認済みグレーアウト
-        ======================================== */
 
         table.data-table tr.checked-row td {
             background-color: #e5e5ea;
@@ -749,7 +728,7 @@
 
 
         /* ========================================
-           フラッシュボタン
+           フラッシュ
         ======================================== */
 
         .torch-btn {
@@ -787,10 +766,6 @@
             display: flex;
         }
 
-
-        /*
-         * ピクトグラム部分
-         */
         .torch-icon-wrapper {
             position: relative;
 
@@ -807,40 +782,12 @@
             height: 27px;
 
             color: white;
-
-            transition:
-                color 0.15s ease,
-                opacity 0.15s ease;
-        }
-
-        .torch-icon path,
-        .torch-icon line {
-            vector-effect: non-scaling-stroke;
-        }
-
-
-        /*
-         * ライトOFF
-         *
-         * 白い懐中電灯
-         * = 押すとON
-         */
-        .torch-btn.torch-ready {
-            background-color: rgba(0,0,0,0.62);
         }
 
         .torch-btn.torch-ready .torch-icon {
             color: white;
         }
 
-
-        /*
-         * ライトON
-         *
-         * グレーの懐中電灯
-         * + 斜線
-         * = 押すとOFF
-         */
         .torch-btn.torch-active {
             background-color: rgba(70,70,75,0.78);
         }
@@ -849,10 +796,6 @@
             color: #aeb0b5;
         }
 
-
-        /*
-         * ON中の斜線
-         */
         .torch-btn.torch-active .torch-icon-wrapper::after {
             content: "";
 
@@ -869,11 +812,6 @@
             border-radius: 3px;
 
             transform: rotate(-45deg);
-
-            transform-origin: center;
-
-            box-shadow:
-                0 0 1px rgba(0,0,0,0.4);
         }
 
 
@@ -982,10 +920,6 @@
 
 <div class="container">
 
-    <!-- ========================================
-         ヘッダー
-    ========================================= -->
-
     <div class="header-area">
 
         <h1>
@@ -1032,10 +966,7 @@
 
             </div>
 
-
-            <button
-                onclick="savePastedData()"
-            >
+            <button onclick="savePastedData()">
                 データを保存して取り込む
             </button>
 
@@ -1072,7 +1003,6 @@
                         </span>
 
                     </div>
-
 
                     <button
                         style="
@@ -1148,12 +1078,11 @@
     </div>
 
 
-    <!-- 検索結果 -->
     <div id="resultCard"></div>
 
 
     <!-- ========================================
-         未確認一覧
+         商品一覧
     ========================================= -->
 
     <div class="all-data-section">
@@ -1171,7 +1100,7 @@
 
 
     <!-- ========================================
-         確認済み一覧
+         確認済み
     ========================================= -->
 
     <div
@@ -1191,7 +1120,7 @@
 
 
 <!-- ========================================
-     スキャナーモーダル
+     スキャナー
 ========================================= -->
 
 <div
@@ -1204,25 +1133,16 @@
         <div id="reader"></div>
 
 
-        <!-- ========================================
-             フラッシュボタン
-        ========================================= -->
-
         <button
             id="torchBtn"
             class="torch-btn"
             type="button"
             onclick="toggleTorch()"
             aria-label="フラッシュをオン"
-            title="フラッシュ"
         >
 
             <span class="torch-icon-wrapper">
 
-                <!--
-                    外部ライブラリ不要の
-                    懐中電灯ピクトグラム
-                -->
                 <svg
                     class="torch-icon"
                     viewBox="0 0 24 24"
@@ -1231,7 +1151,6 @@
                     aria-hidden="true"
                 >
 
-                    <!-- ライトヘッド -->
                     <path
                         d="M7.5 3.5H16.5L15 8H9L7.5 3.5Z"
                         stroke="currentColor"
@@ -1239,7 +1158,6 @@
                         stroke-linejoin="round"
                     />
 
-                    <!-- 本体 -->
                     <path
                         d="M9 8H15V19.2C15 20.2 14.2 21 13.2 21H10.8C9.8 21 9 20.2 9 19.2V8Z"
                         stroke="currentColor"
@@ -1247,7 +1165,6 @@
                         stroke-linejoin="round"
                     />
 
-                    <!-- スイッチ -->
                     <line
                         x1="11"
                         y1="12"
@@ -1258,7 +1175,6 @@
                         stroke-linecap="round"
                     />
 
-                    <!-- 光 -->
                     <line
                         x1="5"
                         y1="2"
@@ -1296,7 +1212,6 @@
         </button>
 
 
-        <!-- 読み取りガイド -->
         <div class="scan-guide">
             <div class="scan-line"></div>
         </div>
@@ -1323,7 +1238,7 @@
 
 
 <!-- ========================================
-     使い方ガイド
+     ヘルプ
 ========================================= -->
 
 <div
@@ -1343,11 +1258,7 @@
         </h3>
 
         <p>
-            最初に、照合したい商品データをGoogleスプレッドシートなどで準備します。
-        </p>
-
-        <p>
-            列は次の順番で作成してください。
+            照合する商品データをGoogleスプレッドシートなどで準備します。
         </p>
 
         <ul>
@@ -1358,191 +1269,97 @@
         </ul>
 
         <div class="guide-note">
-            JANコードがない商品はA列を空欄にしてください。商品名称・単価・税率は通常どおりB～D列へ入力します。
+            JANコードがない商品はA列を空欄にしてください。
         </div>
 
 
         <h3>
-            2. スプレッドシートの内容をコピーする
+            2. スプレッドシートを取り込む
         </h3>
 
         <ol>
-
-            <li>
-                商品データを入力したスプレッドシートを開きます。
-            </li>
-
-            <li>
-                JANコード・名称・単価・税率を含む商品データの表を選択します。
-            </li>
-
-            <li>
-                Windowsの場合は「Ctrl + C」、Macの場合は「Command + C」でコピーします。
-            </li>
-
-            <li>
-                このアプリに戻ります。
-            </li>
-
-            <li>
-                画面上部の「データ登録」の入力欄をタップします。
-            </li>
-
-            <li>
-                コピーしたスプレッドシートの内容をそのまま貼り付けます。
-            </li>
-
-            <li>
-                貼り付けが成功すると、入力欄の背景が薄いグレーに変わります。
-            </li>
-
-            <li>
-                「データを保存して取り込む」を押します。
-            </li>
-
+            <li>商品データが入力された表を選択します。</li>
+            <li>WindowsはCtrl+C、MacはCommand+Cでコピーします。</li>
+            <li>このアプリの「データ登録」欄へ貼り付けます。</li>
+            <li>貼り付けに成功すると入力欄が薄いグレーになります。</li>
+            <li>「データを保存して取り込む」を押します。</li>
         </ol>
-
-        <div class="guide-note">
-            スプレッドシートを大量に貼り付けた場合、入力欄の表示位置によっては文字が見えないことがあります。背景が薄いグレーになっていれば、データは入力されています。
-        </div>
 
 
         <h3>
             3. バーコードで確認する
         </h3>
 
-        <ol>
-
-            <li>
-                「スキャン」を押します。
-            </li>
-
-            <li>
-                スマートフォンの背面カメラが起動します。
-            </li>
-
-            <li>
-                商品のバーコードを画面中央の白い枠に合わせます。
-            </li>
-
-            <li>
-                JANコードを正常に読み取ると、自動的に商品を検索します。
-            </li>
-
-        </ol>
-
         <p>
-            同じJANコードの商品が1件だけ登録されている場合は、その商品がそのまま「該当あり」として表示されます。
+            「スキャン」を押し、商品のバーコードを白い枠の中へ合わせます。
         </p>
 
         <p>
-            同じJANコードで名称などが異なる商品が複数登録されている場合は候補が表示されます。実際に確認している商品をタップしてください。
+            JANコードは完全一致で検索されます。
+        </p>
+
+        <p>
+            同じJANコードの商品が複数登録されている場合は候補が表示されるため、該当商品を選択してください。
         </p>
 
 
         <h3>
-            4. 暗い場所でスキャンする
+            4. 商品名で検索する
         </h3>
 
         <p>
-            使用している端末とカメラがライト制御に対応している場合、スキャン画面の右上に懐中電灯マークのボタンが表示されます。
+            商品名は部分一致で検索できます。
         </p>
 
         <p>
-            白い懐中電灯マークをタップするとライトが点灯します。
-        </p>
-
-        <p>
-            ライト点灯中は、懐中電灯マークがグレーになり、斜線が表示されます。もう一度タップすると消灯します。
-        </p>
-
-        <p>
-            スキャン画面を閉じた場合や、バーコード読み取り後にスキャン画面が自動的に閉じた場合も、ライトは自動的にOFFになります。
-        </p>
-
-
-        <h3>
-            5. JANコードを手入力する
-        </h3>
-
-        <p>
-            バーコードを読み取れない場合は、検索欄にJANコードを直接入力して「検索」を押すこともできます。
-        </p>
-
-        <p>
-            同じJANコードの商品が複数ある場合は、スキャン時と同様に候補から商品を選択します。
-        </p>
-
-
-        <h3>
-            6. 商品名から確認する
-        </h3>
-
-        <p>
-            JANコードがない商品や、商品名から探したい場合は、検索欄に商品名の一部を入力して「検索」を押します。
-        </p>
-
-        <p>
-            商品名は部分一致で検索されます。
-        </p>
-
-        <p>
-            条件に一致した商品が候補として表示されるので、実際に確認している商品をタップしてください。
+            文字だけでなく数字も商品名検索に使用できます。
         </p>
 
         <div class="guide-note">
-            商品名検索では、検索にヒットしただけでは確認済みになりません。候補の商品をタップした時点で確認済みになります。
+            例：「20」と検索すると、「恐竜2006」「宇宙小戦争2021」のように商品名へ「20」を含む商品が候補として表示されます。ただし、JANコードが「20」の商品が実際に登録されている場合はJANコードの完全一致を優先します。
         </div>
 
-
-        <h3>
-            7. 「該当あり」と確認済みについて
-        </h3>
-
         <p>
-            商品を確定すると、検索欄の下に「該当あり」と商品情報が表示されます。
-        </p>
-
-        <p>
-            同時に、その商品は未確認の商品一覧から除外され、「確認済み」に移動します。
-        </p>
-
-        <p>
-            確認済みの商品はグレー表示になるため、未確認の商品との違いを視覚的に確認できます。
+            商品名検索で候補が表示された場合は、実際に確認している商品をタップしてください。タップした商品だけが確認済みになります。
         </p>
 
 
         <h3>
-            8. 商品一覧の開閉
+            5. 確認済みについて
         </h3>
 
         <p>
-            「全商品一覧を表示」を押すと、未確認の商品一覧と確認済みの商品一覧がまとめて表示されます。
+            確定した商品は未確認一覧から確認済み一覧へ移動します。
         </p>
 
         <p>
-            「一覧を閉じる」を押すと、未確認一覧だけでなく「確認済み」の見出し・件数・一覧もすべて閉じます。
-        </p>
-
-        <p>
-            一覧を開いた状態で商品を確認した場合は開いたまま、閉じた状態で確認した場合は閉じたままになります。
-        </p>
-
-        <p>
-            すべての商品を確認すると、未確認の商品一覧には「未確認の商品はありません」と表示されます。
+            確認済みの商品はグレー表示になります。
         </p>
 
 
         <h3>
-            9. URL連携について
+            6. 一覧の開閉
         </h3>
 
         <p>
-            GoogleスプレッドシートなどをWeb公開CSVとして利用している場合は、「URL連携」を開いてCSV URLから商品データを読み込むこともできます。
+            「全商品一覧を表示」で未確認と確認済みの両方を表示します。
         </p>
 
         <p>
-            URLが入力されている場合は、URL入力欄も薄いグレーに変わります。
+            「一覧を閉じる」で両方まとめて閉じます。
+        </p>
+
+
+        <h3>
+            7. 暗い場所でスキャンする
+        </h3>
+
+        <p>
+            対応端末ではスキャン画面右上に懐中電灯ボタンが表示されます。
+        </p>
+
+        <p>
+            タップするとライトが点灯し、もう一度タップすると消灯します。
         </p>
 
 
@@ -1561,35 +1378,29 @@
 <script>
 
 /* ========================================
-   商品データ
+   データ
 ======================================== */
 
 let masterData = [];
-
 let checkedItems = [];
 
 
 /* ========================================
-   Quagga状態
+   Quagga
 ======================================== */
 
 let scannerRunning = false;
-
 let lastDetectedCode = null;
-
 let detectionCount = 0;
-
 let detectionLocked = false;
 
 
 /* ========================================
-   フラッシュ状態
+   フラッシュ
 ======================================== */
 
 let torchTrack = null;
-
 let torchSupported = false;
-
 let torchEnabled = false;
 
 
@@ -1609,7 +1420,7 @@ window.onload = function() {
 
 
 /* ========================================
-   表示フォーマット
+   表示
 ======================================== */
 
 function formatPrice(val) {
@@ -1712,7 +1523,7 @@ function isChecked(item) {
 
 
 /* ========================================
-   貼り付けフォームの視覚状態
+   フォーム視覚状態
 ======================================== */
 
 function handlePasteInput() {
@@ -1737,25 +1548,13 @@ function updatePasteVisualState() {
 
     }
 
-
-    /*
-     * 空白だけなら未入力扱い
-     */
-    const hasValue =
-        input.value.trim().length > 0;
-
-
     input.classList.toggle(
         'has-value',
-        hasValue
+        input.value.trim().length > 0
     );
 
 }
 
-
-/* ========================================
-   URLフォームの視覚状態
-======================================== */
 
 function handleUrlInput() {
 
@@ -1779,14 +1578,9 @@ function updateUrlVisualState() {
 
     }
 
-
-    const hasValue =
-        input.value.trim().length > 0;
-
-
     input.classList.toggle(
         'has-value',
-        hasValue
+        input.value.trim().length > 0
     );
 
 }
@@ -1836,9 +1630,6 @@ function savePastedData() {
         );
 
 
-    /*
-     * データ取り込み後は一覧を開く
-     */
     document
         .getElementById(
             'allDataList'
@@ -1860,7 +1651,7 @@ function savePastedData() {
 
 
 /* ========================================
-   貼り付けデータ解析
+   データ解析
 ======================================== */
 
 function parseTextData(text) {
@@ -1909,9 +1700,6 @@ function parseTextData(text) {
                 );
 
 
-        /*
-         * ヘッダー判定
-         */
         if (
             i === 0 &&
             (
@@ -1929,11 +1717,8 @@ function parseTextData(text) {
 
 
         let jan = '-';
-
         let name = '';
-
         let price = '';
-
         let tax = '';
 
 
@@ -2013,7 +1798,7 @@ function parseTextData(text) {
 
 
 /* ========================================
-   CSV URL
+   CSV
 ======================================== */
 
 function loadCSVData(url) {
@@ -2144,7 +1929,7 @@ function handleLoadedCSV(text) {
 
 
 /* ========================================
-   メイン検索
+   ★ メイン検索
 ======================================== */
 
 function searchProduct() {
@@ -2170,17 +1955,55 @@ function searchProduct() {
 
 
     /*
-     * 数字だけならJAN
+     * =====================================
+     * STEP 1
+     *
+     * 入力内容が数字かどうかに関係なく、
+     * まずJANの「完全一致」だけ探す。
+     *
+     * JANの部分一致は絶対にしない。
+     * =====================================
+     */
+
+    const exactJANResults =
+        masterData.filter(
+            item =>
+                item.jan !== '-' &&
+                item.jan === value
+        );
+
+
+    /*
+     * JAN完全一致があった
      */
     if (
-        /^\d+$/.test(
-            value
-        )
+        exactJANResults.length > 0
     ) {
 
-        searchByJAN(
-            value
+        /*
+         * 1件なら即確定
+         */
+        if (
+            exactJANResults.length === 1
+        ) {
+
+            confirmItem(
+                exactJANResults[0]
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * 同じJANが複数
+         */
+        showCandidateSelection(
+            exactJANResults,
+            `同じJANコードの商品が${exactJANResults.length}件あります`
         );
+
 
         return;
 
@@ -2188,8 +2011,16 @@ function searchProduct() {
 
 
     /*
-     * それ以外は名前検索
+     * =====================================
+     * STEP 2
+     *
+     * JAN完全一致が存在しなかったら、
+     * 入力内容を商品名として部分検索。
+     *
+     * 数字だけでも検索可能。
+     * =====================================
      */
+
     searchByName(
         value
     );
@@ -2198,76 +2029,35 @@ function searchProduct() {
 
 
 /* ========================================
-   JAN検索
-======================================== */
-
-function searchByJAN(jan) {
-
-    const results =
-        masterData.filter(
-            item =>
-                item.jan !== '-' &&
-                item.jan === jan
-        );
-
-
-    if (
-        results.length === 0
-    ) {
-
-        showNotFound();
-
-        return;
-
-    }
-
-
-    /*
-     * 1件だけなら即確定
-     */
-    if (
-        results.length === 1
-    ) {
-
-        confirmItem(
-            results[0]
-        );
-
-        return;
-
-    }
-
-
-    /*
-     * 同一JAN複数商品
-     */
-    showCandidateSelection(
-        results,
-        `同じJANコードの商品が${results.length}件あります`
-    );
-
-}
-
-
-/* ========================================
-   名前検索
+   商品名部分検索
 ======================================== */
 
 function searchByName(value) {
 
     const normalized =
-        value.toLowerCase();
+        value
+            .toLowerCase()
+            .trim();
 
 
     const results =
         masterData.filter(
-            item =>
-                item.name &&
-                item.name
+            item => {
+
+                if (!item.name) {
+
+                    return false;
+
+                }
+
+
+                return item.name
                     .toLowerCase()
                     .includes(
                         normalized
-                    )
+                    );
+
+            }
         );
 
 
@@ -2283,7 +2073,8 @@ function searchByName(value) {
 
 
     /*
-     * 名前検索は1件でも選択式
+     * 商品名検索は
+     * 1件でも必ず選択式
      */
     showCandidateSelection(
         results,
@@ -2294,7 +2085,7 @@ function searchByName(value) {
 
 
 /* ========================================
-   候補表示
+   候補
 ======================================== */
 
 function showCandidateSelection(
@@ -2354,6 +2145,7 @@ function showCandidateSelection(
 
                     </div>
 
+
                     <div class="candidate-detail">
 
                         JAN：
@@ -2398,7 +2190,7 @@ function showCandidateSelection(
 
 
 /* ========================================
-   候補選択
+   候補確定
 ======================================== */
 
 function selectCandidate(index) {
@@ -2445,9 +2237,6 @@ function confirmItem(item) {
     );
 
 
-    /*
-     * 一覧の開閉状態は維持
-     */
     updateDisplays();
 
 }
@@ -2556,7 +2345,7 @@ function showNotFound() {
 
 
 /* ========================================
-   一覧更新
+   一覧
 ======================================== */
 
 function updateDisplays() {
@@ -2572,10 +2361,6 @@ function updateDisplays() {
 }
 
 
-/* ========================================
-   未確認取得
-======================================== */
-
 function getUncheckedItems() {
 
     return masterData.filter(
@@ -2587,10 +2372,6 @@ function getUncheckedItems() {
 
 }
 
-
-/* ========================================
-   未確認テーブル
-======================================== */
 
 function createUncheckedTable() {
 
@@ -2629,10 +2410,6 @@ function createUncheckedTable() {
 }
 
 
-/* ========================================
-   確認済みテーブル
-======================================== */
-
 function createCheckedTable() {
 
     const container =
@@ -2661,10 +2438,6 @@ function createCheckedTable() {
 
 }
 
-
-/* ========================================
-   確認済みセクション
-======================================== */
 
 function updateCheckedSection() {
 
@@ -2696,9 +2469,6 @@ function updateCheckedSection() {
         checkedItems.length;
 
 
-    /*
-     * 確認済みなし
-     */
     if (
         checkedItems.length === 0
     ) {
@@ -2718,9 +2488,6 @@ function updateCheckedSection() {
     }
 
 
-    /*
-     * 一覧が開いている場合だけ表示
-     */
     if (
         allList
             .classList
@@ -2755,10 +2522,6 @@ function updateCheckedSection() {
 
 }
 
-
-/* ========================================
-   テーブル生成
-======================================== */
 
 function buildTable(
     items,
@@ -2847,7 +2610,7 @@ function buildTable(
 
 
 /* ========================================
-   一覧まとめて開閉
+   一覧開閉
 ======================================== */
 
 function toggleAllData() {
@@ -2878,9 +2641,6 @@ function toggleAllData() {
             );
 
 
-    /*
-     * 閉じる
-     */
     if (
         isOpen
     ) {
@@ -2901,10 +2661,6 @@ function toggleAllData() {
 
     }
 
-
-    /*
-     * 開く
-     */
     else {
 
         allList.classList.add(
@@ -2934,10 +2690,6 @@ function toggleAllData() {
 
 }
 
-
-/* ========================================
-   一覧ボタン
-======================================== */
 
 function updateToggleButton() {
 
@@ -2996,9 +2748,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * EAN-13 / JAN-13
-     */
     if (
         code.length === 13
     ) {
@@ -3040,9 +2789,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * EAN-8
-     */
     if (
         code.length === 8
     ) {
@@ -3084,9 +2830,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * UPC-A
-     */
     if (
         code.length === 12
     ) {
@@ -3134,7 +2877,7 @@ function validateEAN(code) {
 
 
 /* ========================================
-   スキャナー開始
+   スキャナー
 ======================================== */
 
 function startScanner() {
@@ -3325,10 +3068,6 @@ function startScanner() {
                 'バーコードを枠の中央に合わせてください';
 
 
-            /*
-             * video要素生成後に
-             * フラッシュをチェック
-             */
             waitForTorchSupport();
 
         }
@@ -3355,7 +3094,7 @@ function startScanner() {
 
 
 /* ========================================
-   フラッシュ対応確認
+   フラッシュ
 ======================================== */
 
 function waitForTorchSupport(
@@ -3438,12 +3177,6 @@ function waitForTorchSupport(
 
     catch(error) {
 
-        console.warn(
-            'カメラ能力取得失敗:',
-            error
-        );
-
-
         return;
 
     }
@@ -3452,11 +3185,6 @@ function waitForTorchSupport(
     if (
         capabilities.torch !== true
     ) {
-
-        console.log(
-            'このカメラではフラッシュ制御を利用できません'
-        );
-
 
         return;
 
@@ -3479,10 +3207,6 @@ function waitForTorchSupport(
 
 }
 
-
-/* ========================================
-   フラッシュ表示
-======================================== */
 
 function updateTorchButton() {
 
@@ -3514,11 +3238,6 @@ function updateTorchButton() {
     );
 
 
-    /*
-     * 点灯中
-     *
-     * グレー + 斜線
-     */
     if (
         torchEnabled
     ) {
@@ -3538,20 +3257,8 @@ function updateTorchButton() {
             'フラッシュをオフ'
         );
 
-
-        button.setAttribute(
-            'title',
-            'フラッシュをオフ'
-        );
-
     }
 
-
-    /*
-     * 消灯中
-     *
-     * 白い懐中電灯
-     */
     else {
 
         button.classList.remove(
@@ -3569,20 +3276,10 @@ function updateTorchButton() {
             'フラッシュをオン'
         );
 
-
-        button.setAttribute(
-            'title',
-            'フラッシュをオン'
-        );
-
     }
 
 }
 
-
-/* ========================================
-   フラッシュ切り替え
-======================================== */
 
 async function toggleTorch() {
 
@@ -3636,22 +3333,12 @@ async function toggleTorch() {
 
     catch(error) {
 
-        console.error(
-            'フラッシュ切り替え失敗:',
-            error
-        );
-
-
         resetTorchState();
 
     }
 
 }
 
-
-/* ========================================
-   フラッシュ初期化
-======================================== */
 
 function resetTorchState() {
 
@@ -3683,25 +3370,13 @@ function resetTorchState() {
             'torch-active'
         );
 
-
-        button.setAttribute(
-            'aria-label',
-            'フラッシュをオン'
-        );
-
-
-        button.setAttribute(
-            'title',
-            'フラッシュ'
-        );
-
     }
 
 }
 
 
 /* ========================================
-   Quagga検出
+   スキャン検出
 ======================================== */
 
 Quagga.onDetected(
@@ -3782,14 +3457,6 @@ Quagga.onDetected(
 
         document
             .getElementById(
-                'scannerMessage'
-            )
-            .innerText =
-            '読み取り成功！';
-
-
-        document
-            .getElementById(
                 'janInput'
             )
             .value =
@@ -3826,9 +3493,6 @@ function stopScanner(
     searchAfterStop = false
 ) {
 
-    /*
-     * フラッシュを消灯
-     */
     if (
         torchTrack &&
         torchEnabled &&
@@ -3851,14 +3515,7 @@ function stopScanner(
 
         }
 
-        catch(error) {
-
-            console.warn(
-                'フラッシュ停止失敗:',
-                error
-            );
-
-        }
+        catch(error) {}
 
     }
 
@@ -3866,9 +3523,6 @@ function stopScanner(
     resetTorchState();
 
 
-    /*
-     * Quagga停止
-     */
     if (
         scannerRunning
     ) {
@@ -3879,14 +3533,7 @@ function stopScanner(
 
         }
 
-        catch(error) {
-
-            console.warn(
-                'Quagga停止失敗:',
-                error
-            );
-
-        }
+        catch(error) {}
 
     }
 
@@ -3951,7 +3598,7 @@ function stopScanner(
 
 
 /* ========================================
-   検索入力欄
+   UI
 ======================================== */
 
 function toggleClearBtn() {
@@ -3995,10 +3642,6 @@ function clearInput() {
 }
 
 
-/* ========================================
-   貼り付け欄
-======================================== */
-
 function togglePasteClearBtn() {
 
     const input =
@@ -4034,18 +3677,12 @@ function clearPasteInput() {
 
     togglePasteClearBtn();
 
-
     updatePasteVisualState();
-
 
     input.focus();
 
 }
 
-
-/* ========================================
-   URL入力欄
-======================================== */
 
 function toggleUrlClearBtn() {
 
@@ -4082,9 +3719,7 @@ function clearUrlInput() {
 
     toggleUrlClearBtn();
 
-
     updateUrlVisualState();
-
 
     input.focus();
 
@@ -4133,7 +3768,7 @@ function toggleUrlArea() {
 
 
 /* ========================================
-   Enter検索
+   Enter
 ======================================== */
 
 document
@@ -4190,7 +3825,7 @@ function closeHelpModal() {
 
 
 /* ========================================
-   Safariバックグラウンド対策
+   バックグラウンド
 ======================================== */
 
 document.addEventListener(
