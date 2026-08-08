@@ -140,6 +140,10 @@
             font-weight: bold;
         }
 
+        .config-body button:active {
+            background-color: #0056b3;
+        }
+
         .sub-config {
             margin-top: 10px;
             border-top: 1px dashed #ccc;
@@ -154,7 +158,7 @@
         }
 
         /* ================================
-           入力
+           入力欄
         ================================= */
 
         .search-box {
@@ -180,6 +184,10 @@
             outline: none;
         }
 
+        .input-wrapper input:focus {
+            border-color: #007aff;
+        }
+
         .sub-config .input-wrapper input {
             padding: 6px 36px 6px 6px;
             font-size: 11px;
@@ -189,18 +197,27 @@
         .clear-btn {
             position: absolute;
             right: 10px;
+
             width: 20px;
             height: 20px;
+
             border-radius: 50%;
             background-color: #ccc;
             color: white;
+
             font-size: 12px;
             font-weight: bold;
+
             display: none;
             align-items: center;
             justify-content: center;
+
             cursor: pointer;
             user-select: none;
+        }
+
+        .clear-btn:active {
+            background-color: #999;
         }
 
         .paste-clear-btn {
@@ -208,7 +225,7 @@
         }
 
         /* ================================
-           ボタン
+           検索・スキャンボタン
         ================================= */
 
         .btn-group {
@@ -232,9 +249,17 @@
             color: white;
         }
 
+        #searchBtn:active {
+            background-color: #0056b3;
+        }
+
         #scanBtn {
             background-color: #34c759;
             color: white;
+        }
+
+        #scanBtn:active {
+            background-color: #28a745;
         }
 
         /* ================================
@@ -287,6 +312,7 @@
             font-weight: bold;
             color: #212529;
             margin-bottom: 8px;
+            word-break: break-all;
         }
 
         .detail-row {
@@ -306,7 +332,7 @@
         }
 
         /* ================================
-           名前検索候補
+           選択候補
         ================================= */
 
         .candidate-list {
@@ -318,11 +344,17 @@
         .candidate-item {
             width: 100%;
             text-align: left;
+
             background: white;
+
             border: 1px solid #d9dde2;
             border-radius: 8px;
+
             padding: 12px;
+
             cursor: pointer;
+
+            font-family: inherit;
         }
 
         .candidate-item:active {
@@ -339,6 +371,7 @@
         .candidate-detail {
             font-size: 12px;
             color: #6c757d;
+            line-height: 1.5;
         }
 
         .candidate-checked {
@@ -346,7 +379,7 @@
         }
 
         /* ================================
-           一覧
+           商品一覧・確認済み
         ================================= */
 
         .all-data-section,
@@ -370,9 +403,13 @@
         #allDataList,
         #checkedDataList {
             margin-top: 20px;
+
             text-align: left;
+
             max-height: 400px;
+
             overflow-y: auto;
+
             border: 1px solid #dee2e6;
             border-radius: 8px;
         }
@@ -436,13 +473,19 @@
 
         .modal-overlay {
             display: none;
+
             position: fixed;
+
             inset: 0;
+
             background-color: rgba(0,0,0,0.88);
+
             z-index: 1000;
+
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
             padding: 15px;
         }
 
@@ -458,12 +501,17 @@
 
         #reader {
             position: relative;
+
             width: 100%;
             height: 55vh;
+
             min-height: 320px;
             max-height: 520px;
+
             background-color: #000;
+
             border-radius: 12px;
+
             overflow: hidden;
         }
 
@@ -481,71 +529,163 @@
 
         .scan-guide {
             position: absolute;
+
             top: 50%;
             left: 50%;
+
             transform: translate(-50%, -50%);
+
             width: 82%;
             height: 130px;
+
             border: 3px solid rgba(255,255,255,0.9);
             border-radius: 10px;
+
             z-index: 10;
+
             pointer-events: none;
-            box-shadow: 0 0 0 9999px rgba(0,0,0,0.20);
+
+            box-shadow:
+                0 0 0 9999px rgba(0,0,0,0.20);
         }
 
         .scan-line {
             position: absolute;
+
             left: 5%;
             width: 90%;
+
             height: 2px;
+
             background-color: #ff3b30;
-            box-shadow: 0 0 8px rgba(255,59,48,0.9);
+
+            box-shadow:
+                0 0 8px rgba(255,59,48,0.9);
+
             animation: scanMove 2s ease-in-out infinite;
         }
 
         @keyframes scanMove {
-            0% { top: 15%; }
-            50% { top: 85%; }
-            100% { top: 15%; }
+            0% {
+                top: 15%;
+            }
+
+            50% {
+                top: 85%;
+            }
+
+            100% {
+                top: 15%;
+            }
         }
 
         .scanner-message {
             position: absolute;
+
             left: 50%;
             bottom: 18px;
+
             transform: translateX(-50%);
+
             z-index: 20;
+
             width: 90%;
+
             text-align: center;
+
             background: rgba(0,0,0,0.6);
             color: white;
+
             border-radius: 8px;
+
             padding: 8px 10px;
+
             font-size: 13px;
         }
 
         .close-modal-btn {
             margin-top: 15px;
+
             width: 100%;
             max-width: 450px;
+
             padding: 10px;
+
             background-color: #ff3b30;
             color: white;
+
             border: none;
             border-radius: 8px;
+
             font-size: 14px;
             font-weight: bold;
+
             cursor: pointer;
         }
 
+        /* ================================
+           ヘルプ
+        ================================= */
+
         .modal-card {
             background: white;
+
             border-radius: 12px;
+
             padding: 20px;
+
             max-width: 450px;
             width: 100%;
+
             max-height: 80vh;
+
             overflow-y: auto;
+
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-card h2 {
+            font-size: 1.2rem;
+
+            margin-top: 0;
+            margin-bottom: 15px;
+
+            color: #333;
+
+            border-bottom: 2px solid #007aff;
+
+            padding-bottom: 8px;
+        }
+
+        .modal-card h3 {
+            font-size: 0.95rem;
+
+            margin-top: 18px;
+            margin-bottom: 7px;
+
+            color: #007aff;
+        }
+
+        .modal-card p,
+        .modal-card ul,
+        .modal-card ol {
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .modal-card ul,
+        .modal-card ol {
+            padding-left: 22px;
+        }
+
+        .guide-note {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #495057;
         }
 
         .loading {
@@ -563,9 +703,23 @@
 <div class="container">
 
     <div class="header-area">
-        <h1>商品登録チェック</h1>
-        <div class="help-btn" onclick="openHelpModal()">?</div>
+
+        <h1>
+            商品登録チェック
+        </h1>
+
+        <div
+            class="help-btn"
+            onclick="openHelpModal()"
+        >
+            ?
+        </div>
+
     </div>
+
+    <!-- ===============================
+         データ登録
+    ================================= -->
 
     <div class="config-section">
 
@@ -576,9 +730,10 @@
         <div class="config-body">
 
             <div class="paste-wrapper">
+
                 <textarea
                     id="pasteInput"
-                    placeholder="スプレッドシートの全セルをコピーして貼り付けてください"
+                    placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
                     oninput="togglePasteClearBtn()"
                 ></textarea>
 
@@ -586,10 +741,15 @@
                     id="pasteClearBtn"
                     class="clear-btn paste-clear-btn"
                     onclick="clearPasteInput()"
-                >✕</span>
+                >
+                    ✕
+                </span>
+
             </div>
 
-            <button onclick="savePastedData()">
+            <button
+                onclick="savePastedData()"
+            >
                 データを保存して取り込む
             </button>
 
@@ -602,7 +762,10 @@
                     ▼ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
 
-                <div id="urlArea" style="display:none; margin-top:8px;">
+                <div
+                    id="urlArea"
+                    style="display:none; margin-top:8px;"
+                >
 
                     <div class="input-wrapper">
 
@@ -617,12 +780,17 @@
                             id="urlClearBtn"
                             class="clear-btn"
                             onclick="clearUrlInput()"
-                        >✕</span>
+                        >
+                            ✕
+                        </span>
 
                     </div>
 
                     <button
-                        style="margin-top:6px; background-color:#6c757d;"
+                        style="
+                            margin-top:6px;
+                            background-color:#6c757d;
+                        "
                         onclick="saveAndLoadUrl()"
                     >
                         URLで再読み込み
@@ -633,7 +801,12 @@
             </div>
 
         </div>
+
     </div>
+
+    <!-- ===============================
+         検索
+    ================================= -->
 
     <div class="search-box">
 
@@ -650,7 +823,9 @@
                 id="clearBtn"
                 class="clear-btn"
                 onclick="clearInput()"
-            >✕</span>
+            >
+                ✕
+            </span>
 
         </div>
 
@@ -674,14 +849,17 @@
 
     </div>
 
-    <div id="loading" class="loading">
+    <div
+        id="loading"
+        class="loading"
+    >
         データ読み込み中...
     </div>
 
-    <!-- 今回検索した結果 -->
+    <!-- 検索結果 -->
     <div id="resultCard"></div>
 
-    <!-- 未確認商品 -->
+    <!-- 未確認一覧 -->
     <div class="all-data-section">
 
         <button
@@ -711,7 +889,11 @@
 
 </div>
 
-<!-- スキャナー -->
+
+<!-- ===============================
+     スキャナーモーダル
+================================= -->
+
 <div
     id="scannerModal"
     class="modal-overlay"
@@ -743,7 +925,11 @@
 
 </div>
 
-<!-- ヘルプ -->
+
+<!-- ===============================
+     使い方ガイド
+================================= -->
+
 <div
     id="helpModal"
     class="modal-overlay"
@@ -751,17 +937,173 @@
 
     <div class="modal-card">
 
-        <h2>使い方ガイド</h2>
+        <h2>
+            使い方ガイド
+        </h2>
+
+
+        <h3>
+            1. 商品データを準備する
+        </h3>
 
         <p>
-            JANコードを入力またはスキャンすると、
-            一致した商品は自動的に確認済みになります。
+            最初に、照合したい商品データをGoogleスプレッドシートなどで準備します。
         </p>
 
         <p>
-            商品名検索の場合は部分一致候補を表示します。
-            対象の商品をタップすると、その商品だけを確認済みにします。
+            列は次の順番で作成してください。
         </p>
+
+        <ul>
+            <li><strong>A列：</strong>JANコード</li>
+            <li><strong>B列：</strong>商品名称</li>
+            <li><strong>C列：</strong>単価（税抜）</li>
+            <li><strong>D列：</strong>消費税率</li>
+        </ul>
+
+        <div class="guide-note">
+            JANコードがない商品は、A列を空欄にしてB列から商品名を入力してください。
+        </div>
+
+
+        <h3>
+            2. スプレッドシートをコピーする
+        </h3>
+
+        <ol>
+            <li>
+                商品データを入力したスプレッドシートを開きます。
+            </li>
+
+            <li>
+                商品データが入っている表全体を選択します。
+            </li>
+
+            <li>
+                Windowsの場合は「Ctrl + C」、Macの場合は「Command + C」でコピーします。
+            </li>
+
+            <li>
+                このアプリに戻り、画面上部の「データ登録」の入力欄をタップします。
+            </li>
+
+            <li>
+                コピーした内容をそのまま貼り付けます。
+            </li>
+
+            <li>
+                「データを保存して取り込む」を押します。
+            </li>
+        </ol>
+
+        <p>
+            正常に取り込まれると、登録された商品が「全商品一覧」に表示されます。
+        </p>
+
+
+        <h3>
+            3. バーコードで確認する
+        </h3>
+
+        <ol>
+            <li>
+                「スキャン」を押します。
+            </li>
+
+            <li>
+                スマートフォンの背面カメラが起動します。
+            </li>
+
+            <li>
+                商品のバーコードを画面中央の枠に合わせます。
+            </li>
+
+            <li>
+                JANコードが正常に読み取られると、自動的に商品データを検索します。
+            </li>
+        </ol>
+
+        <p>
+            同じJANコードの商品が1件だけ登録されている場合は、その商品がそのまま「該当あり」として表示されます。
+        </p>
+
+        <p>
+            同じJANコードで複数の商品が登録されている場合は、候補が一覧表示されます。実際に確認している商品をタップしてください。
+        </p>
+
+
+        <h3>
+            4. JANコードを手入力して確認する
+        </h3>
+
+        <p>
+            バーコードを読み取れない場合は、検索欄にJANコードを直接入力して「検索」を押すこともできます。
+        </p>
+
+        <p>
+            同じJANコードの商品が複数登録されている場合は、バーコードスキャンと同様に候補から商品を選択します。
+        </p>
+
+
+        <h3>
+            5. 商品名から確認する
+        </h3>
+
+        <p>
+            JANコードがない商品や、商品名から探したい場合は、検索欄に商品名の一部を入力して「検索」を押します。
+        </p>
+
+        <p>
+            商品名は部分一致で検索されるため、条件に一致した商品が候補として表示されます。
+        </p>
+
+        <p>
+            候補の中から、実際に確認している商品をタップしてください。
+        </p>
+
+        <div class="guide-note">
+            商品名検索では、検索にヒットしただけでは確認済みになりません。候補の商品をタップした時点で確認済みになります。
+        </div>
+
+
+        <h3>
+            6. 「該当あり」と「確認済み」について
+        </h3>
+
+        <p>
+            商品を正常に確認すると、画面上部の検索結果に「該当あり」と商品情報が表示されます。
+        </p>
+
+        <p>
+            同時に、その商品は「全商品一覧」から除外され、画面下部の「確認済み」に移動します。
+        </p>
+
+        <p>
+            確認済みの商品が1件もない間は、「確認済み」欄は表示されません。
+        </p>
+
+
+        <h3>
+            7. 全商品一覧について
+        </h3>
+
+        <p>
+            「全商品一覧」には、まだ確認されていない商品だけが表示されます。
+        </p>
+
+        <p>
+            商品を確認するたびに一覧から商品が減っていき、すべて確認すると「未確認の商品はありません」と表示されます。
+        </p>
+
+
+        <h3>
+            8. URL連携について
+        </h3>
+
+        <p>
+            GoogleスプレッドシートなどをWeb公開CSVとして利用している場合は、「URL連携」を開いてCSV URLから商品データを読み込むこともできます。
+        </p>
+
 
         <button
             class="close-modal-btn"
@@ -774,19 +1116,15 @@
 
 </div>
 
+
 <script>
 
 /* ===================================
-   データ
+   商品データ
 =================================== */
 
 let masterData = [];
 
-/*
- * 確認済み商品
- *
- * 商品そのものを保存する。
- */
 let checkedItems = [];
 
 
@@ -795,8 +1133,11 @@ let checkedItems = [];
 =================================== */
 
 let scannerRunning = false;
+
 let lastDetectedCode = null;
+
 let detectionCount = 0;
+
 let detectionLocked = false;
 
 
@@ -805,12 +1146,14 @@ let detectionLocked = false;
 =================================== */
 
 window.onload = function() {
+
     updateDisplays();
+
 };
 
 
 /* ===================================
-   表示補助
+   表示フォーマット
 =================================== */
 
 function formatPrice(val) {
@@ -821,14 +1164,20 @@ function formatPrice(val) {
         val === "" ||
         val === "-"
     ) {
+
         return "-";
+
     }
 
     if (!isNaN(val)) {
-        return "¥" + Number(val).toLocaleString();
+
+        return "¥" +
+            Number(val).toLocaleString();
+
     }
 
     return "¥" + val;
+
 }
 
 
@@ -840,7 +1189,9 @@ function formatTax(val) {
         val === "" ||
         val === "-"
     ) {
+
         return "-";
+
     }
 
     const str =
@@ -849,47 +1200,65 @@ function formatTax(val) {
     return str.endsWith("%")
         ? str
         : str + "%";
+
 }
 
 
 function escapeHtml(value) {
 
     return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+
+        .replace(
+            /&/g,
+            '&amp;'
+        )
+
+        .replace(
+            /</g,
+            '&lt;'
+        )
+
+        .replace(
+            />/g,
+            '&gt;'
+        )
+
+        .replace(
+            /"/g,
+            '&quot;'
+        )
+
+        .replace(
+            /'/g,
+            '&#039;'
+        );
+
 }
 
 
 /* ===================================
-   商品固有キー
+   商品識別キー
 =================================== */
 
 /*
- * JANあり商品 → JAN
- * JANなし商品 → 商品名＋価格＋税率
- *
- * JANなし商品でも重複防止できるようにする。
+ * 同一JAN・別商品にも対応するため、
+ * JANだけではなく商品名・価格・税率まで含めて
+ * 1商品を識別する。
  */
 function getItemKey(item) {
 
-    if (
-        item.jan &&
-        item.jan !== '-'
-    ) {
-        return "JAN:" + item.jan;
-    }
+    return [
 
-    return (
-        "NOJAN:" +
-        item.name +
-        "|" +
-        item.price +
-        "|" +
-        item.tax
-    );
+        item.jan || '-',
+
+        item.name || '',
+
+        item.price || '',
+
+        item.tax || ''
+
+    ].join('|');
+
 }
 
 
@@ -902,18 +1271,21 @@ function isChecked(item) {
         checked =>
             getItemKey(checked) === key
     );
+
 }
 
 
 /* ===================================
-   データ取り込み
+   貼り付けデータ保存
 =================================== */
 
 function savePastedData() {
 
     const text =
         document
-            .getElementById('pasteInput')
+            .getElementById(
+                'pasteInput'
+            )
             .value
             .trim();
 
@@ -924,33 +1296,37 @@ function savePastedData() {
         );
 
         return;
+
     }
 
-    parseTextData(text);
+    parseTextData(
+        text
+    );
 
-    /*
-     * 新しいデータを取り込んだら
-     * 確認済み状態はリセット
-     */
     checkedItems = [];
 
     document
-        .getElementById('resultCard')
+        .getElementById(
+            'resultCard'
+        )
         .classList
-        .remove('active');
+        .remove(
+            'active'
+        );
 
     updateDisplays();
 
     /*
-     * データ取り込み時は
-     * 一覧を開く
+     * データ取り込み時は一覧を開く
      */
     const list =
         document.getElementById(
             'allDataList'
         );
 
-    list.classList.add('active');
+    list.classList.add(
+        'active'
+    );
 
     createUncheckedTable();
 
@@ -959,8 +1335,13 @@ function savePastedData() {
     alert(
         `データを正常に取り込みました！（全 ${masterData.length} 件）`
     );
+
 }
 
+
+/* ===================================
+   テキスト解析
+=================================== */
 
 function parseTextData(text) {
 
@@ -979,7 +1360,9 @@ function parseTextData(text) {
             lines[i].trim();
 
         if (!line) {
+
             continue;
+
         }
 
         const sep =
@@ -1000,6 +1383,9 @@ function parseTextData(text) {
                             )
                 );
 
+        /*
+         * ヘッダー
+         */
         if (
             i === 0 &&
             (
@@ -1008,13 +1394,19 @@ function parseTextData(text) {
                 (cols[1] || '').includes('名前')
             )
         ) {
+
             continue;
+
         }
 
         let jan = '-';
+
         let name = '';
+
         let price = '';
+
         let tax = '';
+
 
         if (
             /^\d+$/.test(
@@ -1084,6 +1476,7 @@ function parseTextData(text) {
         }
 
     }
+
 }
 
 
@@ -1101,84 +1494,117 @@ function loadCSVData(url) {
     loading.style.display =
         'block';
 
+    loading.innerText =
+        'データ読み込み中...';
+
     fetch(url)
 
-        .then(response => {
+        .then(
+            response => {
 
-            if (!response.ok) {
-                throw new Error();
+                if (!response.ok) {
+
+                    throw new Error();
+
+                }
+
+                return response.text();
+
             }
+        )
 
-            return response.text();
+        .then(
+            text => {
 
-        })
+                handleLoadedCSV(
+                    text
+                );
 
-        .then(text => {
+            }
+        )
 
-            handleLoadedCSV(text);
+        .catch(
+            () => {
 
-        })
+                const proxyUrl =
+                    'https://api.allorigins.win/raw?url=' +
+                    encodeURIComponent(
+                        url
+                    );
 
-        .catch(() => {
+                fetch(proxyUrl)
 
-            const proxyUrl =
-                'https://api.allorigins.win/raw?url=' +
-                encodeURIComponent(url);
+                    .then(
+                        response => {
 
-            fetch(proxyUrl)
+                            if (!response.ok) {
 
-                .then(response => {
+                                throw new Error();
 
-                    if (!response.ok) {
-                        throw new Error();
-                    }
+                            }
 
-                    return response.text();
+                            return response.text();
 
-                })
+                        }
+                    )
 
-                .then(text => {
+                    .then(
+                        text => {
 
-                    handleLoadedCSV(text);
+                            handleLoadedCSV(
+                                text
+                            );
 
-                })
+                        }
+                    )
 
-                .catch(() => {
+                    .catch(
+                        () => {
 
-                    loading.innerText =
-                        'CSV読み込みに失敗しました。';
+                            loading.innerText =
+                                'CSV読み込みに失敗しました。';
 
-                });
+                        }
+                    );
 
-        });
+            }
+        );
+
 }
 
 
 function handleLoadedCSV(text) {
 
-    parseTextData(text);
+    parseTextData(
+        text
+    );
 
     checkedItems = [];
 
     document
-        .getElementById('loading')
+        .getElementById(
+            'loading'
+        )
         .style
         .display =
         'none';
 
     updateDisplays();
+
 }
 
 
 /* ===================================
-   検索
+   メイン検索
 =================================== */
 
 function searchProduct() {
 
     const value =
         document
-            .getElementById('janInput')
+            .getElementById(
+                'janInput'
+            )
             .value
             .trim();
 
@@ -1189,50 +1615,98 @@ function searchProduct() {
         );
 
         return;
+
     }
 
     /*
-     * 数字だけならJAN完全一致検索
+     * 数字だけ
+     * ↓
+     * JAN完全一致
      */
     if (
-        /^\d+$/.test(value)
+        /^\d+$/.test(
+            value
+        )
     ) {
 
-        const item =
-            masterData.find(
-                product =>
-                    product.jan !== '-' &&
-                    product.jan === value
-            );
-
-        if (item) {
-
-            confirmItem(
-                item
-            );
-
-        }
-
-        else {
-
-            showNotFound();
-
-        }
+        searchByJAN(
+            value
+        );
 
         return;
+
     }
 
     /*
-     * 名前部分検索
+     * 数字以外を含む
+     * ↓
+     * 商品名部分一致
      */
     searchByName(
         value
     );
+
 }
 
 
 /* ===================================
-   名前検索候補
+   JAN検索
+=================================== */
+
+function searchByJAN(jan) {
+
+    const results =
+        masterData.filter(
+            item =>
+                item.jan !== '-' &&
+                item.jan === jan
+        );
+
+    /*
+     * 0件
+     */
+    if (
+        results.length === 0
+    ) {
+
+        showNotFound();
+
+        return;
+
+    }
+
+    /*
+     * 1件のみ
+     *
+     * そのまま確定
+     */
+    if (
+        results.length === 1
+    ) {
+
+        confirmItem(
+            results[0]
+        );
+
+        return;
+
+    }
+
+    /*
+     * 同一JANが複数
+     *
+     * 選択式
+     */
+    showCandidateSelection(
+        results,
+        `同じJANコードの商品が${results.length}件あります`
+    );
+
+}
+
+
+/* ===================================
+   商品名検索
 =================================== */
 
 function searchByName(value) {
@@ -1251,11 +1725,6 @@ function searchByName(value) {
                     )
         );
 
-    const card =
-        document.getElementById(
-            'resultCard'
-        );
-
     if (
         results.length === 0
     ) {
@@ -1263,18 +1732,39 @@ function searchByName(value) {
         showNotFound();
 
         return;
+
     }
 
     /*
-     * 完全一致1件でも
-     * 名前検索は必ず選択させる。
-     *
-     * 誤操作防止。
+     * 商品名は1件でも
+     * 必ずユーザーに選択してもらう。
      */
+    showCandidateSelection(
+        results,
+        `${results.length}件見つかりました`
+    );
+
+}
+
+
+/* ===================================
+   候補一覧表示
+=================================== */
+
+function showCandidateSelection(
+    items,
+    message
+) {
+
+    const card =
+        document.getElementById(
+            'resultCard'
+        );
+
     let html =
         `
         <span class="status-badge info">
-            🔎 ${results.length}件見つかりました
+            ${escapeHtml(message)}
         </span>
 
         <div class="result-item">
@@ -1286,7 +1776,7 @@ function searchByName(value) {
             <div class="candidate-list">
         `;
 
-    results.forEach(
+    items.forEach(
         item => {
 
             const index =
@@ -1295,13 +1785,15 @@ function searchByName(value) {
                 );
 
             const checked =
-                isChecked(item);
+                isChecked(
+                    item
+                );
 
             html +=
                 `
                 <button
                     class="candidate-item ${checked ? 'candidate-checked' : ''}"
-                    onclick="selectNameCandidate(${index})"
+                    onclick="selectCandidate(${index})"
                 >
 
                     <div class="candidate-name">
@@ -1310,12 +1802,20 @@ function searchByName(value) {
                     </div>
 
                     <div class="candidate-detail">
-                        JAN:
+
+                        JAN：
                         ${escapeHtml(item.jan)}
-                        /
+
+                        <br>
+
+                        単価：
                         ${formatPrice(item.price)}
-                        /
-                        税 ${formatTax(item.tax)}
+
+                        ／
+
+                        税率：
+                        ${formatTax(item.tax)}
+
                     </div>
 
                 </button>
@@ -1327,6 +1827,7 @@ function searchByName(value) {
     html +=
         `
             </div>
+
         </div>
         `;
 
@@ -1336,39 +1837,48 @@ function searchByName(value) {
     card.classList.add(
         'active'
     );
+
 }
 
 
 /* ===================================
-   名前候補選択
+   候補選択
 =================================== */
 
-function selectNameCandidate(index) {
+function selectCandidate(index) {
 
     const item =
-        masterData[index];
+        masterData[
+            index
+        ];
 
     if (!item) {
+
         return;
+
     }
 
     confirmItem(
         item
     );
+
 }
 
 
 /* ===================================
-   商品確認
+   商品確定
 =================================== */
 
 function confirmItem(item) {
 
     /*
-     * 重複防止
+     * 未確認だった場合のみ
+     * 確認済みへ追加
      */
     if (
-        !isChecked(item)
+        !isChecked(
+            item
+        )
     ) {
 
         checkedItems.push(
@@ -1378,16 +1888,17 @@ function confirmItem(item) {
     }
 
     /*
-     * 上の「該当あり」カードを表示
+     * 元々の「該当あり」欄は維持
      */
     showConfirmedResult(
         item
     );
 
     /*
-     * 未確認一覧・確認済み一覧更新
+     * 全商品一覧・確認済み一覧を更新
      */
     updateDisplays();
+
 }
 
 
@@ -1456,8 +1967,13 @@ function showConfirmedResult(item) {
     card.classList.add(
         'active'
     );
+
 }
 
+
+/* ===================================
+   未登録
+=================================== */
 
 function showNotFound() {
 
@@ -1480,11 +1996,12 @@ function showNotFound() {
     card.classList.add(
         'active'
     );
+
 }
 
 
 /* ===================================
-   一覧更新
+   各一覧更新
 =================================== */
 
 function updateDisplays() {
@@ -1496,21 +2013,29 @@ function updateDisplays() {
     updateToggleButton();
 
     updateCheckedSection();
+
 }
 
 
 /* ===================================
-   未確認一覧
+   未確認商品取得
 =================================== */
 
 function getUncheckedItems() {
 
     return masterData.filter(
         item =>
-            !isChecked(item)
+            !isChecked(
+                item
+            )
     );
+
 }
 
+
+/* ===================================
+   未確認一覧生成
+=================================== */
 
 function createUncheckedTable() {
 
@@ -1529,22 +2054,24 @@ function createUncheckedTable() {
         container.innerHTML =
             `
             <div class="empty-message">
-                🎉 未確認の商品はありません
+                未確認の商品はありません
             </div>
             `;
 
         return;
+
     }
 
     container.innerHTML =
         buildTable(
             items
         );
+
 }
 
 
 /* ===================================
-   確認済み一覧
+   確認済み一覧生成
 =================================== */
 
 function createCheckedTable() {
@@ -1562,14 +2089,20 @@ function createCheckedTable() {
             '';
 
         return;
+
     }
 
     container.innerHTML =
         buildTable(
             checkedItems
         );
+
 }
 
+
+/* ===================================
+   確認済み欄表示
+=================================== */
 
 function updateCheckedSection() {
 
@@ -1603,11 +2136,12 @@ function updateCheckedSection() {
         );
 
     }
+
 }
 
 
 /* ===================================
-   テーブル生成
+   テーブル共通
 =================================== */
 
 function buildTable(items) {
@@ -1617,12 +2151,27 @@ function buildTable(items) {
         <table class="data-table">
 
             <thead>
+
                 <tr>
-                    <th>JANコード</th>
-                    <th>名称</th>
-                    <th class="text-right">単価</th>
-                    <th class="text-right">税%</th>
+
+                    <th>
+                        JANコード
+                    </th>
+
+                    <th>
+                        名称
+                    </th>
+
+                    <th class="text-right">
+                        単価
+                    </th>
+
+                    <th class="text-right">
+                        税%
+                    </th>
+
                 </tr>
+
             </thead>
 
             <tbody>
@@ -1660,15 +2209,17 @@ function buildTable(items) {
     html +=
         `
             </tbody>
+
         </table>
         `;
 
     return html;
+
 }
 
 
 /* ===================================
-   一覧開閉
+   未確認一覧 開閉
 =================================== */
 
 function toggleAllData() {
@@ -1683,6 +2234,7 @@ function toggleAllData() {
     );
 
     updateToggleButton();
+
 }
 
 
@@ -1719,6 +2271,7 @@ function updateToggleButton() {
             `全商品一覧を表示（残り ${remaining} 件 / 全 ${masterData.length} 件）`;
 
     }
+
 }
 
 
@@ -1729,11 +2282,18 @@ function updateToggleButton() {
 function validateEAN(code) {
 
     if (
-        !/^\d+$/.test(code)
+        !/^\d+$/.test(
+            code
+        )
     ) {
+
         return false;
+
     }
 
+    /*
+     * JAN / EAN-13
+     */
     if (
         code.length === 13
     ) {
@@ -1741,7 +2301,9 @@ function validateEAN(code) {
         const digits =
             code
                 .split('')
-                .map(Number);
+                .map(
+                    Number
+                );
 
         let sum = 0;
 
@@ -1769,6 +2331,9 @@ function validateEAN(code) {
 
     }
 
+    /*
+     * EAN-8
+     */
     if (
         code.length === 8
     ) {
@@ -1776,7 +2341,9 @@ function validateEAN(code) {
         const digits =
             code
                 .split('')
-                .map(Number);
+                .map(
+                    Number
+                );
 
         let sum = 0;
 
@@ -1804,6 +2371,9 @@ function validateEAN(code) {
 
     }
 
+    /*
+     * UPC-A
+     */
     if (
         code.length === 12
     ) {
@@ -1811,7 +2381,9 @@ function validateEAN(code) {
         const digits =
             code
                 .split('')
-                .map(Number);
+                .map(
+                    Number
+                );
 
         let sum = 0;
 
@@ -1840,6 +2412,7 @@ function validateEAN(code) {
     }
 
     return false;
+
 }
 
 
@@ -1859,6 +2432,7 @@ function startScanner() {
         );
 
         return;
+
     }
 
     const modal =
@@ -1961,10 +2535,15 @@ function startScanner() {
         decoder: {
 
             readers: [
+
                 "ean_reader",
+
                 "ean_8_reader",
+
                 "upc_reader",
+
                 "upc_e_reader"
+
             ]
 
         },
@@ -1989,6 +2568,7 @@ function startScanner() {
             stopScanner();
 
             return;
+
         }
 
         Quagga.start();
@@ -2000,6 +2580,7 @@ function startScanner() {
             'バーコードを枠の中央に合わせてください';
 
     });
+
 }
 
 
@@ -2014,7 +2595,9 @@ Quagga.onDetected(
             !scannerRunning ||
             detectionLocked
         ) {
+
             return;
+
         }
 
         if (
@@ -2022,7 +2605,9 @@ Quagga.onDetected(
             !result.codeResult ||
             !result.codeResult.code
         ) {
+
             return;
+
         }
 
         const code =
@@ -2032,13 +2617,18 @@ Quagga.onDetected(
                 .trim();
 
         if (
-            !validateEAN(code)
+            !validateEAN(
+                code
+            )
         ) {
+
             return;
+
         }
 
         if (
-            code === lastDetectedCode
+            code ===
+            lastDetectedCode
         ) {
 
             detectionCount++;
@@ -2058,7 +2648,9 @@ Quagga.onDetected(
         if (
             detectionCount < 2
         ) {
+
             return;
+
         }
 
         detectionLocked =
@@ -2076,18 +2668,23 @@ Quagga.onDetected(
         if (
             navigator.vibrate
         ) {
-            navigator.vibrate(100);
+
+            navigator.vibrate(
+                100
+            );
+
         }
 
         stopScanner(
             true
         );
+
     }
 );
 
 
 /* ===================================
-   Scanner停止
+   スキャナー停止
 =================================== */
 
 function stopScanner(
@@ -2099,8 +2696,11 @@ function stopScanner(
     ) {
 
         try {
+
             Quagga.stop();
+
         }
+
         catch(e) {}
 
     }
@@ -2137,6 +2737,13 @@ function stopScanner(
         setTimeout(
             function() {
 
+                /*
+                 * スキャン後も
+                 * 通常JAN検索と同じ処理へ。
+                 *
+                 * 同一JANが複数なら
+                 * 自動的に選択画面になる。
+                 */
                 searchProduct();
 
                 detectionLocked =
@@ -2154,6 +2761,7 @@ function stopScanner(
             false;
 
     }
+
 }
 
 
@@ -2177,6 +2785,7 @@ function toggleClearBtn() {
         input.value
             ? 'flex'
             : 'none';
+
 }
 
 
@@ -2193,6 +2802,7 @@ function clearInput() {
     toggleClearBtn();
 
     input.focus();
+
 }
 
 
@@ -2212,19 +2822,24 @@ function togglePasteClearBtn() {
         input.value
             ? 'flex'
             : 'none';
+
 }
 
 
 function clearPasteInput() {
 
-    document
-        .getElementById(
+    const input =
+        document.getElementById(
             'pasteInput'
-        )
-        .value =
+        );
+
+    input.value =
         '';
 
     togglePasteClearBtn();
+
+    input.focus();
+
 }
 
 
@@ -2244,19 +2859,24 @@ function toggleUrlClearBtn() {
         input.value
             ? 'flex'
             : 'none';
+
 }
 
 
 function clearUrlInput() {
 
-    document
-        .getElementById(
+    const input =
+        document.getElementById(
             'csvUrlInput'
-        )
-        .value =
+        );
+
+    input.value =
         '';
 
     toggleUrlClearBtn();
+
+    input.focus();
+
 }
 
 
@@ -2271,10 +2891,15 @@ function saveAndLoadUrl() {
             .trim();
 
     if (!url) {
+
         return;
+
     }
 
-    loadCSVData(url);
+    loadCSVData(
+        url
+    );
+
 }
 
 
@@ -2290,11 +2915,12 @@ function toggleUrlArea() {
         'none'
             ? 'block'
             : 'none';
+
 }
 
 
 /* ===================================
-   Enter
+   Enter検索
 =================================== */
 
 document
@@ -2306,9 +2932,12 @@ document
         function(e) {
 
             if (
-                e.key === 'Enter'
+                e.key ===
+                'Enter'
             ) {
+
                 searchProduct();
+
             }
 
         }
@@ -2316,7 +2945,7 @@ document
 
 
 /* ===================================
-   モーダル
+   ヘルプ
 =================================== */
 
 function openHelpModal() {
@@ -2329,6 +2958,7 @@ function openHelpModal() {
         .add(
             'active'
         );
+
 }
 
 
@@ -2342,11 +2972,12 @@ function closeHelpModal() {
         .remove(
             'active'
         );
+
 }
 
 
 /* ===================================
-   Safariバックグラウンド
+   Safariバックグラウンド対策
 =================================== */
 
 document.addEventListener(
