@@ -101,11 +101,30 @@
             margin-bottom: 20px;
         }
 
+        /*
+         * データ登録自体も
+         * プルダウンとして操作可能
+         */
         .config-header {
             font-size: 13px;
             color: #6c757d;
             font-weight: bold;
+
             margin-bottom: 10px;
+
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /*
+         * データ入力部分
+         */
+        #pasteArea {
+            display: block;
+        }
+
+        #pasteArea.collapsed {
+            display: none;
         }
 
         .paste-wrapper {
@@ -141,6 +160,9 @@
             border-color: #007aff;
         }
 
+        /*
+         * 貼り付け済み
+         */
         textarea#pasteInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
@@ -153,6 +175,7 @@
 
         .config-body button {
             width: 100%;
+
             padding: 10px;
 
             font-size: 13px;
@@ -171,22 +194,33 @@
             background-color: #0056b3;
         }
 
+
+        /* ========================================
+           URL連携
+        ======================================== */
+
         .sub-config {
             margin-top: 10px;
+
             border-top: 1px dashed #ccc;
+
             padding-top: 10px;
         }
 
         .sub-config-title {
             font-size: 11px;
             color: #8e8e93;
+
             cursor: pointer;
+
             font-weight: bold;
+
+            user-select: none;
         }
 
 
         /* ========================================
-           入力欄
+           入力欄共通
         ======================================== */
 
         .search-box {
@@ -197,6 +231,7 @@
 
         .input-wrapper {
             position: relative;
+
             flex: 1;
 
             display: flex;
@@ -229,10 +264,15 @@
 
         .sub-config .input-wrapper input {
             padding: 6px 36px 6px 6px;
+
             font-size: 11px;
+
             border-radius: 4px;
         }
 
+        /*
+         * URL入力済み
+         */
         #csvUrlInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
@@ -243,8 +283,14 @@
             border-color: #8e8e93;
         }
 
+
+        /* ========================================
+           ×ボタン
+        ======================================== */
+
         .clear-btn {
             position: absolute;
+
             right: 10px;
 
             width: 20px;
@@ -325,6 +371,7 @@
 
         #resultCard {
             display: none;
+
             margin-bottom: 20px;
         }
 
@@ -367,12 +414,14 @@
             border-radius: 8px;
 
             padding: 14px;
+
             margin-bottom: 10px;
         }
 
         .item-name {
             font-size: 1.1rem;
             font-weight: bold;
+
             color: #212529;
 
             margin-bottom: 8px;
@@ -390,23 +439,28 @@
             margin-top: 6px;
 
             font-size: 13px;
+
             color: #495057;
         }
 
         .detail-value {
             font-weight: bold;
+
             font-size: 1rem;
+
             color: #111;
         }
 
 
         /* ========================================
-           候補選択
+           候補一覧
         ======================================== */
 
         .candidate-list {
             display: flex;
+
             flex-direction: column;
+
             gap: 8px;
         }
 
@@ -428,29 +482,29 @@
         }
 
         .candidate-item:active {
-            background: #f1f3f5;
+            background-color: #f1f3f5;
         }
 
         .candidate-name {
             font-size: 15px;
             font-weight: bold;
+
             color: #222;
+
             margin-bottom: 5px;
         }
 
         .candidate-detail {
             font-size: 12px;
-            color: #6c757d;
-            line-height: 1.5;
-        }
 
-        .candidate-checked {
-            opacity: 0.5;
+            color: #6c757d;
+
+            line-height: 1.5;
         }
 
 
         /* ========================================
-           一覧
+           商品一覧
         ======================================== */
 
         .all-data-section {
@@ -522,7 +576,9 @@
         .checked-title {
             font-size: 15px;
             font-weight: bold;
+
             color: #155724;
+
             margin-bottom: 8px;
         }
 
@@ -560,8 +616,14 @@
             text-align: right;
         }
 
+
+        /* ========================================
+           確認済みグレーアウト
+        ======================================== */
+
         table.data-table tr.checked-row td {
             background-color: #e5e5ea;
+
             color: #6c757d;
         }
 
@@ -576,8 +638,11 @@
 
         .empty-message {
             padding: 20px;
+
             text-align: center;
+
             color: #6c757d;
+
             font-size: 13px;
         }
 
@@ -615,6 +680,7 @@
 
         .scanner-container {
             width: 100%;
+
             max-width: 450px;
 
             position: relative;
@@ -643,6 +709,7 @@
             object-fit: cover;
 
             position: absolute;
+
             inset: 0;
         }
 
@@ -676,8 +743,8 @@
             position: absolute;
 
             left: 5%;
-            width: 90%;
 
+            width: 90%;
             height: 2px;
 
             background-color: #ff3b30;
@@ -689,6 +756,7 @@
         }
 
         @keyframes scanMove {
+
             0% {
                 top: 15%;
             }
@@ -700,6 +768,7 @@
             100% {
                 top: 15%;
             }
+
         }
 
         .scanner-message {
@@ -716,7 +785,7 @@
 
             text-align: center;
 
-            background: rgba(0,0,0,0.65);
+            background-color: rgba(0,0,0,0.65);
             color: white;
 
             border-radius: 8px;
@@ -816,7 +885,7 @@
 
 
         /* ========================================
-           閉じる
+           閉じるボタン
         ======================================== */
 
         .close-modal-btn {
@@ -845,7 +914,7 @@
         ======================================== */
 
         .modal-card {
-            background: white;
+            background-color: white;
 
             border-radius: 12px;
 
@@ -887,7 +956,9 @@
         .modal-card ul,
         .modal-card ol {
             font-size: 13px;
+
             color: #495057;
+
             line-height: 1.6;
         }
 
@@ -897,28 +968,43 @@
         }
 
         .guide-note {
-            background: #f8f9fa;
+            background-color: #f8f9fa;
+
             border-radius: 8px;
+
             padding: 10px;
+
             margin-top: 8px;
+
             font-size: 12px;
+
             color: #495057;
         }
 
         .loading {
             text-align: center;
+
             color: #6c757d;
+
             font-size: 14px;
+
             margin-bottom: 10px;
+
             display: none;
         }
+
     </style>
 </head>
 
-
 <body>
 
+
 <div class="container">
+
+
+    <!-- ========================================
+         ヘッダー
+    ========================================= -->
 
     <div class="header-area">
 
@@ -942,48 +1028,79 @@
 
     <div class="config-section">
 
-        <div class="config-header">
-            データ登録（スプレッドシートデータ貼り付け）
+
+        <!--
+            ここを押せば
+            スプレッドシート入力欄を再度開閉できる
+        -->
+        <div
+            id="dataConfigTitle"
+            class="config-header"
+            onclick="toggleDataArea()"
+        >
+            ▼ データ登録（スプレッドシートデータ貼り付け）
         </div>
+
 
         <div class="config-body">
 
-            <div class="paste-wrapper">
 
-                <textarea
-                    id="pasteInput"
-                    placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
-                    oninput="handlePasteInput()"
-                ></textarea>
+            <!--
+                スプレッドシート貼り付け部分のみ
+                自動折りたたみ対象
+            -->
+            <div id="pasteArea">
 
-                <span
-                    id="pasteClearBtn"
-                    class="clear-btn paste-clear-btn"
-                    onclick="clearPasteInput()"
+
+                <div class="paste-wrapper">
+
+                    <textarea
+                        id="pasteInput"
+                        placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
+                        oninput="handlePasteInput()"
+                    ></textarea>
+
+                    <span
+                        id="pasteClearBtn"
+                        class="clear-btn paste-clear-btn"
+                        onclick="clearPasteInput()"
+                    >
+                        ✕
+                    </span>
+
+                </div>
+
+
+                <button
+                    onclick="savePastedData()"
                 >
-                    ✕
-                </span>
+                    データを保存して取り込む
+                </button>
 
             </div>
 
-            <button onclick="savePastedData()">
-                データを保存して取り込む
-            </button>
 
-
+            <!--
+                URL連携は
+                データ登録フォームを閉じても残す
+            -->
             <div class="sub-config">
 
+
                 <div
+                    id="urlConfigTitle"
                     class="sub-config-title"
                     onclick="toggleUrlArea()"
                 >
                     ▼ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
 
+
                 <div
                     id="urlArea"
                     style="display:none; margin-top:8px;"
                 >
+
 
                     <div class="input-wrapper">
 
@@ -1004,6 +1121,7 @@
 
                     </div>
 
+
                     <button
                         style="
                             margin-top:6px;
@@ -1013,6 +1131,7 @@
                     >
                         URLで再読み込み
                     </button>
+
 
                 </div>
 
@@ -1078,14 +1197,16 @@
     </div>
 
 
+    <!-- 検索結果 -->
     <div id="resultCard"></div>
 
 
     <!-- ========================================
-         商品一覧
+         未確認一覧
     ========================================= -->
 
     <div class="all-data-section">
+
 
         <button
             id="toggleAllBtn"
@@ -1094,13 +1215,14 @@
             全商品一覧を表示（全 0 件）
         </button>
 
+
         <div id="allDataList"></div>
 
     </div>
 
 
     <!-- ========================================
-         確認済み
+         確認済み一覧
     ========================================= -->
 
     <div
@@ -1116,6 +1238,7 @@
 
     </div>
 
+
 </div>
 
 
@@ -1128,11 +1251,14 @@
     class="modal-overlay"
 >
 
+
     <div class="scanner-container">
+
 
         <div id="reader"></div>
 
 
+        <!-- フラッシュ -->
         <button
             id="torchBtn"
             class="torch-btn"
@@ -1213,7 +1339,9 @@
 
 
         <div class="scan-guide">
+
             <div class="scan-line"></div>
+
         </div>
 
 
@@ -1223,6 +1351,7 @@
         >
             バーコードを枠の中央に合わせてください
         </div>
+
 
     </div>
 
@@ -1234,11 +1363,12 @@
         閉じる
     </button>
 
+
 </div>
 
 
 <!-- ========================================
-     ヘルプ
+     使い方ガイド
 ========================================= -->
 
 <div
@@ -1247,6 +1377,7 @@
 >
 
     <div class="modal-card">
+
 
         <h2>
             使い方ガイド
@@ -1258,7 +1389,7 @@
         </h3>
 
         <p>
-            照合する商品データをGoogleスプレッドシートなどで準備します。
+            照合したい商品データをGoogleスプレッドシートなどで準備します。
         </p>
 
         <ul>
@@ -1278,12 +1409,36 @@
         </h3>
 
         <ol>
-            <li>商品データが入力された表を選択します。</li>
-            <li>WindowsはCtrl+C、MacはCommand+Cでコピーします。</li>
-            <li>このアプリの「データ登録」欄へ貼り付けます。</li>
-            <li>貼り付けに成功すると入力欄が薄いグレーになります。</li>
-            <li>「データを保存して取り込む」を押します。</li>
+
+            <li>
+                商品データが入力された表を選択します。
+            </li>
+
+            <li>
+                WindowsはCtrl+C、MacはCommand+Cでコピーします。
+            </li>
+
+            <li>
+                このアプリの「データ登録」欄へ貼り付けます。
+            </li>
+
+            <li>
+                貼り付けに成功すると入力欄が薄いグレーになります。
+            </li>
+
+            <li>
+                「データを保存して取り込む」を押します。
+            </li>
+
+            <li>
+                正常に取り込まれると商品一覧が表示され、データ登録欄は自動的に折りたたまれます。
+            </li>
+
         </ol>
+
+        <div class="guide-note">
+            データ登録欄をもう一度開きたい場合は、「▶ データ登録」をタップしてください。
+        </div>
 
 
         <h3>
@@ -1291,7 +1446,7 @@
         </h3>
 
         <p>
-            「スキャン」を押し、商品のバーコードを白い枠の中へ合わせます。
+            「スキャン」を押して、商品のバーコードを白い枠の中へ合わせます。
         </p>
 
         <p>
@@ -1299,7 +1454,7 @@
         </p>
 
         <p>
-            同じJANコードの商品が複数登録されている場合は候補が表示されるため、該当商品を選択してください。
+            同じJANコードの商品が複数登録されている場合は、まだ確認していない商品のみ候補として表示されます。
         </p>
 
 
@@ -1312,28 +1467,28 @@
         </p>
 
         <p>
-            文字だけでなく数字も商品名検索に使用できます。
+            数字だけを入力して、商品名に含まれる数字を検索することもできます。
         </p>
 
         <div class="guide-note">
-            例：「20」と検索すると、「恐竜2006」「宇宙小戦争2021」のように商品名へ「20」を含む商品が候補として表示されます。ただし、JANコードが「20」の商品が実際に登録されている場合はJANコードの完全一致を優先します。
+            例：「20」と入力すると「恐竜2006」「宇宙小戦争2021」など、商品名に20を含む未確認の商品が候補になります。
         </div>
-
-        <p>
-            商品名検索で候補が表示された場合は、実際に確認している商品をタップしてください。タップした商品だけが確認済みになります。
-        </p>
 
 
         <h3>
-            5. 確認済みについて
+            5. 確認済みの商品
         </h3>
 
         <p>
-            確定した商品は未確認一覧から確認済み一覧へ移動します。
+            一度確認済みになった商品は、以降のJAN検索・商品名検索の候補には表示されません。
         </p>
 
         <p>
-            確認済みの商品はグレー表示になります。
+            そのため、検索候補には常に「まだ確認していない商品」だけが表示されます。
+        </p>
+
+        <p>
+            確認済みの商品は確認済み一覧へ移動し、グレー表示になります。
         </p>
 
 
@@ -1342,11 +1497,11 @@
         </h3>
 
         <p>
-            「全商品一覧を表示」で未確認と確認済みの両方を表示します。
+            「全商品一覧を表示」を押すと、未確認一覧と確認済み一覧をまとめて表示します。
         </p>
 
         <p>
-            「一覧を閉じる」で両方まとめて閉じます。
+            「一覧を閉じる」を押すと、確認済みの見出しを含めて両方とも閉じます。
         </p>
 
 
@@ -1355,11 +1510,20 @@
         </h3>
 
         <p>
-            対応端末ではスキャン画面右上に懐中電灯ボタンが表示されます。
+            対応している端末では、スキャン画面右上に懐中電灯マークが表示されます。
         </p>
 
         <p>
             タップするとライトが点灯し、もう一度タップすると消灯します。
+        </p>
+
+
+        <h3>
+            8. URL連携
+        </h3>
+
+        <p>
+            Web公開CSVを使用する場合は「URL連携」を開き、CSV URLを入力して読み込むこともできます。
         </p>
 
 
@@ -1370,6 +1534,7 @@
             閉じる
         </button>
 
+
     </div>
 
 </div>
@@ -1378,10 +1543,11 @@
 <script>
 
 /* ========================================
-   データ
+   商品データ
 ======================================== */
 
 let masterData = [];
+
 let checkedItems = [];
 
 
@@ -1390,8 +1556,11 @@ let checkedItems = [];
 ======================================== */
 
 let scannerRunning = false;
+
 let lastDetectedCode = null;
+
 let detectionCount = 0;
+
 let detectionLocked = false;
 
 
@@ -1400,7 +1569,9 @@ let detectionLocked = false;
 ======================================== */
 
 let torchTrack = null;
+
 let torchSupported = false;
+
 let torchEnabled = false;
 
 
@@ -1420,7 +1591,7 @@ window.onload = function() {
 
 
 /* ========================================
-   表示
+   表示フォーマット
 ======================================== */
 
 function formatPrice(val) {
@@ -1461,8 +1632,10 @@ function formatTax(val) {
 
     }
 
+
     const str =
         String(val).trim();
+
 
     return str.endsWith("%")
         ? str
@@ -1514,6 +1687,7 @@ function isChecked(item) {
     const key =
         getItemKey(item);
 
+
     return checkedItems.some(
         checked =>
             getItemKey(checked) === key
@@ -1523,7 +1697,108 @@ function isChecked(item) {
 
 
 /* ========================================
-   フォーム視覚状態
+   未確認商品取得
+======================================== */
+
+/*
+ * 今回かなり重要。
+ *
+ * 検索も一覧も、
+ * 基本的にこの未確認データを基準にする。
+ */
+function getUncheckedItems() {
+
+    return masterData.filter(
+        item =>
+            !isChecked(item)
+    );
+
+}
+
+
+/* ========================================
+   データ登録欄 開閉
+======================================== */
+
+function toggleDataArea() {
+
+    const area =
+        document.getElementById(
+            'pasteArea'
+        );
+
+
+    const title =
+        document.getElementById(
+            'dataConfigTitle'
+        );
+
+
+    const isClosed =
+        area.classList.contains(
+            'collapsed'
+        );
+
+
+    if (
+        isClosed
+    ) {
+
+        area.classList.remove(
+            'collapsed'
+        );
+
+
+        title.innerText =
+            '▼ データ登録（スプレッドシートデータ貼り付け）';
+
+    }
+
+    else {
+
+        area.classList.add(
+            'collapsed'
+        );
+
+
+        title.innerText =
+            '▶ データ登録（スプレッドシートデータ貼り付け）';
+
+    }
+
+}
+
+
+/*
+ * 取り込み成功時専用
+ */
+function collapseDataArea() {
+
+    const area =
+        document.getElementById(
+            'pasteArea'
+        );
+
+
+    const title =
+        document.getElementById(
+            'dataConfigTitle'
+        );
+
+
+    area.classList.add(
+        'collapsed'
+    );
+
+
+    title.innerText =
+        '▶ データ登録（スプレッドシートデータ貼り付け）';
+
+}
+
+
+/* ========================================
+   フォーム表示状態
 ======================================== */
 
 function handlePasteInput() {
@@ -1542,11 +1817,13 @@ function updatePasteVisualState() {
             'pasteInput'
         );
 
+
     if (!input) {
 
         return;
 
     }
+
 
     input.classList.toggle(
         'has-value',
@@ -1572,11 +1849,13 @@ function updateUrlVisualState() {
             'csvUrlInput'
         );
 
+
     if (!input) {
 
         return;
 
     }
+
 
     input.classList.toggle(
         'has-value',
@@ -1587,7 +1866,7 @@ function updateUrlVisualState() {
 
 
 /* ========================================
-   データ保存
+   データ取り込み
 ======================================== */
 
 function savePastedData() {
@@ -1617,19 +1896,34 @@ function savePastedData() {
     );
 
 
+    /*
+     * 新しいデータなので
+     * 確認済みをリセット
+     */
     checkedItems = [];
 
 
-    document
-        .getElementById(
+    /*
+     * 検索結果もリセット
+     */
+    const resultCard =
+        document.getElementById(
             'resultCard'
-        )
-        .classList
-        .remove(
-            'active'
         );
 
 
+    resultCard.classList.remove(
+        'active'
+    );
+
+
+    resultCard.innerHTML =
+        '';
+
+
+    /*
+     * 一覧を自動で開く
+     */
     document
         .getElementById(
             'allDataList'
@@ -1641,6 +1935,13 @@ function savePastedData() {
 
 
     updateDisplays();
+
+
+    /*
+     * ★ 取り込み成功後に
+     * データ登録欄を自動で閉じる
+     */
+    collapseDataArea();
 
 
     alert(
@@ -1700,6 +2001,9 @@ function parseTextData(text) {
                 );
 
 
+        /*
+         * ヘッダー
+         */
         if (
             i === 0 &&
             (
@@ -1717,8 +2021,11 @@ function parseTextData(text) {
 
 
         let jan = '-';
+
         let name = '';
+
         let price = '';
+
         let tax = '';
 
 
@@ -1731,11 +2038,14 @@ function parseTextData(text) {
             jan =
                 cols[0];
 
+
             name =
                 cols[1] || '';
 
+
             price =
                 cols[2] || '';
+
 
             tax =
                 cols[3] || '';
@@ -1749,11 +2059,14 @@ function parseTextData(text) {
 
             jan = '-';
 
+
             name =
                 cols[1] || '';
 
+
             price =
                 cols[2] || '';
+
 
             tax =
                 cols[3] || '';
@@ -1764,11 +2077,14 @@ function parseTextData(text) {
 
             jan = '-';
 
+
             name =
                 cols[0] || '';
 
+
             price =
                 cols[1] || '';
+
 
             tax =
                 cols[2] || '';
@@ -1828,6 +2144,7 @@ function loadCSVData(url) {
 
                 }
 
+
                 return response.text();
 
             }
@@ -1863,6 +2180,7 @@ function loadCSVData(url) {
                                 throw new Error();
 
                             }
+
 
                             return response.text();
 
@@ -1955,18 +2273,28 @@ function searchProduct() {
 
 
     /*
+     * ★★★
+     *
+     * 検索対象は
+     * 「未確認商品だけ」
+     *
+     * 確認済みはここに入ってこない。
+     *
+     * ★★★
+     */
+    const uncheckedItems =
+        getUncheckedItems();
+
+
+    /*
      * =====================================
      * STEP 1
      *
-     * 入力内容が数字かどうかに関係なく、
-     * まずJANの「完全一致」だけ探す。
-     *
-     * JANの部分一致は絶対にしない。
+     * JAN完全一致
      * =====================================
      */
-
     const exactJANResults =
-        masterData.filter(
+        uncheckedItems.filter(
             item =>
                 item.jan !== '-' &&
                 item.jan === value
@@ -1974,14 +2302,16 @@ function searchProduct() {
 
 
     /*
-     * JAN完全一致があった
+     * 未確認商品の中に
+     * 完全一致JANが存在
      */
     if (
         exactJANResults.length > 0
     ) {
 
+
         /*
-         * 1件なら即確定
+         * 1件
          */
         if (
             exactJANResults.length === 1
@@ -1991,13 +2321,17 @@ function searchProduct() {
                 exactJANResults[0]
             );
 
+
             return;
 
         }
 
 
         /*
-         * 同じJANが複数
+         * 同一JANが複数
+         *
+         * ただし、
+         * 確認済みは既に除外済み
          */
         showCandidateSelection(
             exactJANResults,
@@ -2014,25 +2348,36 @@ function searchProduct() {
      * =====================================
      * STEP 2
      *
-     * JAN完全一致が存在しなかったら、
-     * 入力内容を商品名として部分検索。
-     *
-     * 数字だけでも検索可能。
+     * 未確認商品の商品名を
+     * 部分検索
      * =====================================
      */
 
     searchByName(
-        value
+        value,
+        uncheckedItems
     );
 
 }
 
 
 /* ========================================
-   商品名部分検索
+   名前部分検索
 ======================================== */
 
-function searchByName(value) {
+function searchByName(
+    value,
+    searchTarget = null
+) {
+
+    /*
+     * searchTargetがなければ
+     * 念のため未確認商品だけ取得
+     */
+    const targetItems =
+        searchTarget ||
+        getUncheckedItems();
+
 
     const normalized =
         value
@@ -2041,7 +2386,7 @@ function searchByName(value) {
 
 
     const results =
-        masterData.filter(
+        targetItems.filter(
             item => {
 
                 if (!item.name) {
@@ -2073,8 +2418,7 @@ function searchByName(value) {
 
 
     /*
-     * 商品名検索は
-     * 1件でも必ず選択式
+     * 名前検索は必ず選択式
      */
     showCandidateSelection(
         results,
@@ -2085,7 +2429,7 @@ function searchByName(value) {
 
 
 /* ========================================
-   候補
+   候補一覧
 ======================================== */
 
 function showCandidateSelection(
@@ -2115,6 +2459,11 @@ function showCandidateSelection(
         `;
 
 
+    /*
+     * ★
+     * ここへ来る items は
+     * 既に未確認だけになっている。
+     */
     items.forEach(
         item => {
 
@@ -2124,24 +2473,16 @@ function showCandidateSelection(
                 );
 
 
-            const checked =
-                isChecked(
-                    item
-                );
-
-
             html +=
                 `
                 <button
-                    class="candidate-item ${checked ? 'candidate-checked' : ''}"
+                    class="candidate-item"
                     onclick="selectCandidate(${index})"
                 >
 
                     <div class="candidate-name">
 
                         ${escapeHtml(item.name)}
-
-                        ${checked ? '（確認済み）' : ''}
 
                     </div>
 
@@ -2190,7 +2531,7 @@ function showCandidateSelection(
 
 
 /* ========================================
-   候補確定
+   候補選択
 ======================================== */
 
 function selectCandidate(index) {
@@ -2200,6 +2541,22 @@ function selectCandidate(index) {
 
 
     if (!item) {
+
+        return;
+
+    }
+
+
+    /*
+     * 念のため、
+     * タップされた瞬間に
+     * 既に確認済みだったら無視
+     */
+    if (
+        isChecked(item)
+    ) {
+
+        searchProduct();
 
         return;
 
@@ -2220,9 +2577,7 @@ function selectCandidate(index) {
 function confirmItem(item) {
 
     if (
-        !isChecked(
-            item
-        )
+        !isChecked(item)
     ) {
 
         checkedItems.push(
@@ -2266,6 +2621,7 @@ function showConfirmedResult(item) {
                 ${escapeHtml(item.name)}
             </div>
 
+
             <div class="detail-row">
 
                 <span>
@@ -2278,6 +2634,7 @@ function showConfirmedResult(item) {
 
             </div>
 
+
             <div class="detail-row">
 
                 <span>
@@ -2289,6 +2646,7 @@ function showConfirmedResult(item) {
                 </span>
 
             </div>
+
 
             <div class="detail-row">
 
@@ -2314,7 +2672,7 @@ function showConfirmedResult(item) {
 
 
 /* ========================================
-   未登録
+   未登録 / 未確認なし
 ======================================== */
 
 function showNotFound() {
@@ -2328,11 +2686,11 @@ function showNotFound() {
     card.innerHTML =
         `
         <span class="status-badge error">
-            ❌ 未登録
+            ❌ 該当なし
         </span>
 
         <div class="result-item">
-            該当する商品が見つかりませんでした。
+            未確認の商品から該当する商品が見つかりませんでした。
         </div>
         `;
 
@@ -2345,7 +2703,7 @@ function showNotFound() {
 
 
 /* ========================================
-   一覧
+   一覧更新
 ======================================== */
 
 function updateDisplays() {
@@ -2361,17 +2719,9 @@ function updateDisplays() {
 }
 
 
-function getUncheckedItems() {
-
-    return masterData.filter(
-        item =>
-            !isChecked(
-                item
-            )
-    );
-
-}
-
+/* ========================================
+   未確認一覧
+======================================== */
 
 function createUncheckedTable() {
 
@@ -2396,6 +2746,7 @@ function createUncheckedTable() {
             </div>
             `;
 
+
         return;
 
     }
@@ -2409,6 +2760,10 @@ function createUncheckedTable() {
 
 }
 
+
+/* ========================================
+   確認済み一覧
+======================================== */
 
 function createCheckedTable() {
 
@@ -2425,6 +2780,7 @@ function createCheckedTable() {
         container.innerHTML =
             '';
 
+
         return;
 
     }
@@ -2438,6 +2794,10 @@ function createCheckedTable() {
 
 }
 
+
+/* ========================================
+   確認済みセクション
+======================================== */
 
 function updateCheckedSection() {
 
@@ -2488,6 +2848,10 @@ function updateCheckedSection() {
     }
 
 
+    /*
+     * 一覧全体が開いている場合のみ
+     * 確認済みも表示
+     */
     if (
         allList
             .classList
@@ -2522,6 +2886,10 @@ function updateCheckedSection() {
 
 }
 
+
+/* ========================================
+   テーブル
+======================================== */
 
 function buildTable(
     items,
@@ -2641,6 +3009,9 @@ function toggleAllData() {
             );
 
 
+    /*
+     * 閉じる
+     */
     if (
         isOpen
     ) {
@@ -2661,6 +3032,10 @@ function toggleAllData() {
 
     }
 
+
+    /*
+     * 開く
+     */
     else {
 
         allList.classList.add(
@@ -2691,6 +3066,10 @@ function toggleAllData() {
 }
 
 
+/* ========================================
+   一覧ボタン
+======================================== */
+
 function updateToggleButton() {
 
     const list =
@@ -2717,7 +3096,7 @@ function updateToggleButton() {
     ) {
 
         btn.innerText =
-            `一覧を閉じる`;
+            '一覧を閉じる';
 
     }
 
@@ -2748,6 +3127,9 @@ function validateEAN(code) {
     }
 
 
+    /*
+     * JAN / EAN-13
+     */
     if (
         code.length === 13
     ) {
@@ -2789,6 +3171,9 @@ function validateEAN(code) {
     }
 
 
+    /*
+     * EAN-8
+     */
     if (
         code.length === 8
     ) {
@@ -2830,6 +3215,9 @@ function validateEAN(code) {
     }
 
 
+    /*
+     * UPC-A
+     */
     if (
         code.length === 12
     ) {
@@ -2877,7 +3265,7 @@ function validateEAN(code) {
 
 
 /* ========================================
-   スキャナー
+   スキャナー開始
 ======================================== */
 
 function startScanner() {
@@ -2890,6 +3278,7 @@ function startScanner() {
         alert(
             'Quagga2の読み込みに失敗しました。'
         );
+
 
         return;
 
@@ -3094,7 +3483,7 @@ function startScanner() {
 
 
 /* ========================================
-   フラッシュ
+   フラッシュ対応確認
 ======================================== */
 
 function waitForTorchSupport(
@@ -3208,6 +3597,10 @@ function waitForTorchSupport(
 }
 
 
+/* ========================================
+   フラッシュ表示
+======================================== */
+
 function updateTorchButton() {
 
     const button =
@@ -3281,6 +3674,10 @@ function updateTorchButton() {
 }
 
 
+/* ========================================
+   フラッシュON/OFF
+======================================== */
+
 async function toggleTorch() {
 
     if (
@@ -3339,6 +3736,10 @@ async function toggleTorch() {
 
 }
 
+
+/* ========================================
+   フラッシュリセット
+======================================== */
 
 function resetTorchState() {
 
@@ -3493,6 +3894,9 @@ function stopScanner(
     searchAfterStop = false
 ) {
 
+    /*
+     * ライト消灯
+     */
     if (
         torchTrack &&
         torchEnabled &&
@@ -3523,6 +3927,9 @@ function stopScanner(
     resetTorchState();
 
 
+    /*
+     * Quagga停止
+     */
     if (
         scannerRunning
     ) {
@@ -3598,7 +4005,7 @@ function stopScanner(
 
 
 /* ========================================
-   UI
+   検索入力
 ======================================== */
 
 function toggleClearBtn() {
@@ -3642,6 +4049,10 @@ function clearInput() {
 }
 
 
+/* ========================================
+   貼り付け入力
+======================================== */
+
 function togglePasteClearBtn() {
 
     const input =
@@ -3677,12 +4088,18 @@ function clearPasteInput() {
 
     togglePasteClearBtn();
 
+
     updatePasteVisualState();
+
 
     input.focus();
 
 }
 
+
+/* ========================================
+   URL入力
+======================================== */
 
 function toggleUrlClearBtn() {
 
@@ -3719,7 +4136,9 @@ function clearUrlInput() {
 
     toggleUrlClearBtn();
 
+
     updateUrlVisualState();
+
 
     input.focus();
 
@@ -3751,6 +4170,10 @@ function saveAndLoadUrl() {
 }
 
 
+/* ========================================
+   URL開閉
+======================================== */
+
 function toggleUrlArea() {
 
     const area =
@@ -3759,16 +4182,42 @@ function toggleUrlArea() {
         );
 
 
-    area.style.display =
-        area.style.display === 'none'
-            ? 'block'
-            : 'none';
+    const title =
+        document.getElementById(
+            'urlConfigTitle'
+        );
+
+
+    if (
+        area.style.display ===
+        'none'
+    ) {
+
+        area.style.display =
+            'block';
+
+
+        title.innerText =
+            '▲ URL連携（Web公開CSV）を閉じる';
+
+    }
+
+    else {
+
+        area.style.display =
+            'none';
+
+
+        title.innerText =
+            '▼ URL連携（Web公開CSV）を使用する場合は開く';
+
+    }
 
 }
 
 
 /* ========================================
-   Enter
+   Enter検索
 ======================================== */
 
 document
@@ -3825,7 +4274,7 @@ function closeHelpModal() {
 
 
 /* ========================================
-   バックグラウンド
+   Safariバックグラウンド対策
 ======================================== */
 
 document.addEventListener(
