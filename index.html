@@ -101,10 +101,6 @@
             margin-bottom: 20px;
         }
 
-        /*
-         * データ登録自体も
-         * プルダウンとして操作可能
-         */
         .config-header {
             font-size: 13px;
             color: #6c757d;
@@ -116,9 +112,6 @@
             user-select: none;
         }
 
-        /*
-         * データ入力部分
-         */
         #pasteArea {
             display: block;
         }
@@ -160,9 +153,6 @@
             border-color: #007aff;
         }
 
-        /*
-         * 貼り付け済み
-         */
         textarea#pasteInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
@@ -207,9 +197,14 @@
             padding-top: 10px;
         }
 
+        /*
+         * データ登録と同じ色へ統一
+         * 文字サイズは従来の11pxを維持
+         */
         .sub-config-title {
             font-size: 11px;
-            color: #8e8e93;
+
+            color: #6c757d;
 
             cursor: pointer;
 
@@ -270,9 +265,6 @@
             border-radius: 4px;
         }
 
-        /*
-         * URL入力済み
-         */
         #csvUrlInput.has-value {
             background-color: #e9ecef;
             border-color: #c6c8ca;
@@ -1029,10 +1021,6 @@
     <div class="config-section">
 
 
-        <!--
-            ここを押せば
-            スプレッドシート入力欄を再度開閉できる
-        -->
         <div
             id="dataConfigTitle"
             class="config-header"
@@ -1045,10 +1033,6 @@
         <div class="config-body">
 
 
-            <!--
-                スプレッドシート貼り付け部分のみ
-                自動折りたたみ対象
-            -->
             <div id="pasteArea">
 
 
@@ -1080,10 +1064,10 @@
             </div>
 
 
-            <!--
-                URL連携は
-                データ登録フォームを閉じても残す
-            -->
+            <!-- ========================================
+                 URL連携
+            ========================================= -->
+
             <div class="sub-config">
 
 
@@ -1092,7 +1076,7 @@
                     class="sub-config-title"
                     onclick="toggleUrlArea()"
                 >
-                    ▼ URL連携（Web公開CSV）を使用する場合は開く
+                    ▶ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
 
 
@@ -1197,7 +1181,6 @@
     </div>
 
 
-    <!-- 検索結果 -->
     <div id="resultCard"></div>
 
 
@@ -1258,7 +1241,6 @@
         <div id="reader"></div>
 
 
-        <!-- フラッシュ -->
         <button
             id="torchBtn"
             class="torch-btn"
@@ -1436,10 +1418,6 @@
 
         </ol>
 
-        <div class="guide-note">
-            データ登録欄をもう一度開きたい場合は、「▶ データ登録」をタップしてください。
-        </div>
-
 
         <h3>
             3. バーコードで確認する
@@ -1484,7 +1462,7 @@
         </p>
 
         <p>
-            そのため、検索候補には常に「まだ確認していない商品」だけが表示されます。
+            検索候補には、まだ確認していない商品だけが表示されます。
         </p>
 
         <p>
@@ -1523,7 +1501,15 @@
         </h3>
 
         <p>
-            Web公開CSVを使用する場合は「URL連携」を開き、CSV URLを入力して読み込むこともできます。
+            「▶ URL連携」をタップするとURL入力欄が開きます。
+        </p>
+
+        <p>
+            開いている間は「▼ URL連携」に変わります。もう一度タップすると閉じます。
+        </p>
+
+        <p>
+            Web公開CSVを使用する場合はCSV URLを入力して読み込めます。
         </p>
 
 
@@ -1547,7 +1533,6 @@
 ======================================== */
 
 let masterData = [];
-
 let checkedItems = [];
 
 
@@ -1556,11 +1541,8 @@ let checkedItems = [];
 ======================================== */
 
 let scannerRunning = false;
-
 let lastDetectedCode = null;
-
 let detectionCount = 0;
-
 let detectionLocked = false;
 
 
@@ -1569,9 +1551,7 @@ let detectionLocked = false;
 ======================================== */
 
 let torchTrack = null;
-
 let torchSupported = false;
-
 let torchEnabled = false;
 
 
@@ -1632,10 +1612,8 @@ function formatTax(val) {
 
     }
 
-
     const str =
         String(val).trim();
-
 
     return str.endsWith("%")
         ? str
@@ -1670,11 +1648,8 @@ function getItemKey(item) {
     return [
 
         item.jan || '-',
-
         item.name || '',
-
         item.price || '',
-
         item.tax || ''
 
     ].join('|');
@@ -1686,7 +1661,6 @@ function isChecked(item) {
 
     const key =
         getItemKey(item);
-
 
     return checkedItems.some(
         checked =>
@@ -1700,12 +1674,6 @@ function isChecked(item) {
    未確認商品取得
 ======================================== */
 
-/*
- * 今回かなり重要。
- *
- * 検索も一覧も、
- * 基本的にこの未確認データを基準にする。
- */
 function getUncheckedItems() {
 
     return masterData.filter(
@@ -1744,6 +1712,9 @@ function toggleDataArea() {
         isClosed
     ) {
 
+        /*
+         * 開く
+         */
         area.classList.remove(
             'collapsed'
         );
@@ -1756,6 +1727,9 @@ function toggleDataArea() {
 
     else {
 
+        /*
+         * 閉じる
+         */
         area.classList.add(
             'collapsed'
         );
@@ -1769,9 +1743,10 @@ function toggleDataArea() {
 }
 
 
-/*
- * 取り込み成功時専用
- */
+/* ========================================
+   データ登録欄を自動で閉じる
+======================================== */
+
 function collapseDataArea() {
 
     const area =
@@ -1896,16 +1871,9 @@ function savePastedData() {
     );
 
 
-    /*
-     * 新しいデータなので
-     * 確認済みをリセット
-     */
     checkedItems = [];
 
 
-    /*
-     * 検索結果もリセット
-     */
     const resultCard =
         document.getElementById(
             'resultCard'
@@ -1922,7 +1890,7 @@ function savePastedData() {
 
 
     /*
-     * 一覧を自動で開く
+     * 一覧を開く
      */
     document
         .getElementById(
@@ -1938,8 +1906,7 @@ function savePastedData() {
 
 
     /*
-     * ★ 取り込み成功後に
-     * データ登録欄を自動で閉じる
+     * データ登録を閉じる
      */
     collapseDataArea();
 
@@ -2001,9 +1968,6 @@ function parseTextData(text) {
                 );
 
 
-        /*
-         * ヘッダー
-         */
         if (
             i === 0 &&
             (
@@ -2021,11 +1985,8 @@ function parseTextData(text) {
 
 
         let jan = '-';
-
         let name = '';
-
         let price = '';
-
         let tax = '';
 
 
@@ -2038,14 +1999,11 @@ function parseTextData(text) {
             jan =
                 cols[0];
 
-
             name =
                 cols[1] || '';
 
-
             price =
                 cols[2] || '';
-
 
             tax =
                 cols[3] || '';
@@ -2059,14 +2017,11 @@ function parseTextData(text) {
 
             jan = '-';
 
-
             name =
                 cols[1] || '';
 
-
             price =
                 cols[2] || '';
-
 
             tax =
                 cols[3] || '';
@@ -2077,14 +2032,11 @@ function parseTextData(text) {
 
             jan = '-';
 
-
             name =
                 cols[0] || '';
 
-
             price =
                 cols[1] || '';
-
 
             tax =
                 cols[2] || '';
@@ -2247,7 +2199,7 @@ function handleLoadedCSV(text) {
 
 
 /* ========================================
-   ★ メイン検索
+   メイン検索
 ======================================== */
 
 function searchProduct() {
@@ -2272,26 +2224,12 @@ function searchProduct() {
     }
 
 
-    /*
-     * ★★★
-     *
-     * 検索対象は
-     * 「未確認商品だけ」
-     *
-     * 確認済みはここに入ってこない。
-     *
-     * ★★★
-     */
     const uncheckedItems =
         getUncheckedItems();
 
 
     /*
-     * =====================================
-     * STEP 1
-     *
-     * JAN完全一致
-     * =====================================
+     * JANは完全一致のみ
      */
     const exactJANResults =
         uncheckedItems.filter(
@@ -2301,18 +2239,11 @@ function searchProduct() {
         );
 
 
-    /*
-     * 未確認商品の中に
-     * 完全一致JANが存在
-     */
     if (
         exactJANResults.length > 0
     ) {
 
 
-        /*
-         * 1件
-         */
         if (
             exactJANResults.length === 1
         ) {
@@ -2327,12 +2258,6 @@ function searchProduct() {
         }
 
 
-        /*
-         * 同一JANが複数
-         *
-         * ただし、
-         * 確認済みは既に除外済み
-         */
         showCandidateSelection(
             exactJANResults,
             `同じJANコードの商品が${exactJANResults.length}件あります`
@@ -2345,14 +2270,10 @@ function searchProduct() {
 
 
     /*
-     * =====================================
-     * STEP 2
-     *
-     * 未確認商品の商品名を
-     * 部分検索
-     * =====================================
+     * JAN完全一致なし
+     * ↓
+     * 商品名部分検索
      */
-
     searchByName(
         value,
         uncheckedItems
@@ -2370,10 +2291,6 @@ function searchByName(
     searchTarget = null
 ) {
 
-    /*
-     * searchTargetがなければ
-     * 念のため未確認商品だけ取得
-     */
     const targetItems =
         searchTarget ||
         getUncheckedItems();
@@ -2417,9 +2334,6 @@ function searchByName(
     }
 
 
-    /*
-     * 名前検索は必ず選択式
-     */
     showCandidateSelection(
         results,
         `${results.length}件見つかりました`
@@ -2459,11 +2373,6 @@ function showCandidateSelection(
         `;
 
 
-    /*
-     * ★
-     * ここへ来る items は
-     * 既に未確認だけになっている。
-     */
     items.forEach(
         item => {
 
@@ -2547,11 +2456,6 @@ function selectCandidate(index) {
     }
 
 
-    /*
-     * 念のため、
-     * タップされた瞬間に
-     * 既に確認済みだったら無視
-     */
     if (
         isChecked(item)
     ) {
@@ -2672,7 +2576,7 @@ function showConfirmedResult(item) {
 
 
 /* ========================================
-   未登録 / 未確認なし
+   該当なし
 ======================================== */
 
 function showNotFound() {
@@ -2848,10 +2752,6 @@ function updateCheckedSection() {
     }
 
 
-    /*
-     * 一覧全体が開いている場合のみ
-     * 確認済みも表示
-     */
     if (
         allList
             .classList
@@ -2888,7 +2788,7 @@ function updateCheckedSection() {
 
 
 /* ========================================
-   テーブル
+   テーブル生成
 ======================================== */
 
 function buildTable(
@@ -3009,9 +2909,6 @@ function toggleAllData() {
             );
 
 
-    /*
-     * 閉じる
-     */
     if (
         isOpen
     ) {
@@ -3032,10 +2929,6 @@ function toggleAllData() {
 
     }
 
-
-    /*
-     * 開く
-     */
     else {
 
         allList.classList.add(
@@ -3127,9 +3020,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * JAN / EAN-13
-     */
     if (
         code.length === 13
     ) {
@@ -3171,9 +3061,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * EAN-8
-     */
     if (
         code.length === 8
     ) {
@@ -3215,9 +3102,6 @@ function validateEAN(code) {
     }
 
 
-    /*
-     * UPC-A
-     */
     if (
         code.length === 12
     ) {
@@ -3894,9 +3778,6 @@ function stopScanner(
     searchAfterStop = false
 ) {
 
-    /*
-     * ライト消灯
-     */
     if (
         torchTrack &&
         torchEnabled &&
@@ -3927,9 +3808,6 @@ function stopScanner(
     resetTorchState();
 
 
-    /*
-     * Quagga停止
-     */
     if (
         scannerRunning
     ) {
@@ -4171,7 +4049,7 @@ function saveAndLoadUrl() {
 
 
 /* ========================================
-   URL開閉
+   URL連携 開閉
 ======================================== */
 
 function toggleUrlArea() {
@@ -4188,6 +4066,11 @@ function toggleUrlArea() {
         );
 
 
+    /*
+     * 今閉じている
+     * ↓
+     * 開く
+     */
     if (
         area.style.display ===
         'none'
@@ -4198,10 +4081,16 @@ function toggleUrlArea() {
 
 
         title.innerText =
-            '▲ URL連携（Web公開CSV）を閉じる';
+            '▼ URL連携（Web公開CSV）を使用する場合は開く';
 
     }
 
+
+    /*
+     * 今開いている
+     * ↓
+     * 閉じる
+     */
     else {
 
         area.style.display =
@@ -4209,7 +4098,7 @@ function toggleUrlArea() {
 
 
         title.innerText =
-            '▼ URL連携（Web公開CSV）を使用する場合は開く';
+            '▶ URL連携（Web公開CSV）を使用する場合は開く';
 
     }
 
