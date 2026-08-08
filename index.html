@@ -2,16 +2,50 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
     <title>商品登録チェック</title>
-    <!-- バーコードスキャン用ライブラリ -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+    <!-- Quagga2 -->
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f6f8; margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        
-        /* ヘッダーエリア */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                sans-serif;
+
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+
+        /* ================================
+           ヘッダー
+        ================================= */
+
         .header-area {
             position: relative;
             display: flex;
@@ -19,721 +53,3067 @@
             justify-content: center;
             margin-bottom: 20px;
         }
-        h1 { font-size: 1.4rem; text-align: center; color: #333; margin: 0; }
-        
+
+        h1 {
+            font-size: 1.4rem;
+            text-align: center;
+            color: #333;
+            margin: 0;
+        }
+
         .help-btn {
             position: absolute;
             right: 0;
+
             width: 26px;
             height: 26px;
+
             border-radius: 50%;
             background-color: #007aff;
             color: white;
+
             font-size: 14px;
             font-weight: bold;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             cursor: pointer;
             user-select: none;
+
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
-        .help-btn:active { background-color: #0056b3; }
 
-        /* 設定エリア（常時表示） */
+        .help-btn:active {
+            background-color: #0056b3;
+        }
+
+
+        /* ================================
+           設定エリア
+        ================================= */
+
         .config-section {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 8px;
+
             padding: 12px;
             margin-bottom: 20px;
         }
+
         .config-header {
             font-size: 13px;
             color: #6c757d;
             font-weight: bold;
+
             margin-bottom: 10px;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        /* 貼り付けフォーム用テキストエリア */
+
+        /* ================================
+           貼り付け
+        ================================= */
+
         .paste-wrapper {
             position: relative;
             margin-bottom: 8px;
         }
+
         textarea#pasteInput {
             width: 100%;
             height: 80px;
+
             padding: 10px;
             padding-right: 36px;
+
             font-size: 12px;
+
             border: 1px solid #ccc;
             border-radius: 6px;
+
             resize: vertical;
             outline: none;
+
             font-family: inherit;
         }
-        textarea#pasteInput:focus { border-color: #007aff; }
+
+        textarea#pasteInput:focus {
+            border-color: #007aff;
+        }
 
         .config-body button {
             width: 100%;
+
             padding: 10px;
+
             font-size: 13px;
+
             background-color: #007aff;
             color: white;
+
             border: none;
             border-radius: 6px;
+
             cursor: pointer;
             font-weight: bold;
         }
-        .config-body button:active { background-color: #0056b3; }
 
-        /* アコーディオン（URL設定用） */
+        .config-body button:active {
+            background-color: #0056b3;
+        }
+
+
+        /* ================================
+           URL設定
+        ================================= */
+
         .sub-config {
             margin-top: 10px;
+
             border-top: 1px dashed #ccc;
             padding-top: 10px;
         }
+
         .sub-config-title {
             font-size: 11px;
             color: #8e8e93;
+
             cursor: pointer;
             font-weight: bold;
         }
 
-        .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
-        
+
+        /* ================================
+           検索入力欄
+        ================================= */
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
         .input-wrapper {
             position: relative;
+
             flex: 1;
+
             display: flex;
             align-items: center;
         }
+
         .input-wrapper input {
             width: 100%;
+
             padding: 12px;
             padding-right: 36px;
+
             font-size: 15px;
+
             border: 1px solid #ccc;
             border-radius: 8px;
+
             outline: none;
         }
+
         .sub-config .input-wrapper input {
             padding: 6px 36px 6px 6px;
             font-size: 11px;
             border-radius: 4px;
         }
-        .input-wrapper input:focus { border-color: #007aff; }
+
+        .input-wrapper input:focus {
+            border-color: #007aff;
+        }
+
+
+        /* ================================
+           クリアボタン
+        ================================= */
 
         .clear-btn {
             position: absolute;
+
             right: 10px;
+
             width: 20px;
             height: 20px;
+
             border-radius: 50%;
+
             background-color: #ccc;
             color: white;
+
             font-size: 12px;
             font-weight: bold;
+
             display: none;
+
             align-items: center;
             justify-content: center;
+
             cursor: pointer;
             user-select: none;
         }
-        .clear-btn:active { background-color: #999; }
-        .paste-clear-btn { top: 10px; }
 
-        .btn-group { display: flex; gap: 8px; margin-bottom: 20px; }
+        .clear-btn:active {
+            background-color: #999;
+        }
+
+        .paste-clear-btn {
+            top: 10px;
+        }
+
+
+        /* ================================
+           ボタン
+        ================================= */
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+
+            margin-bottom: 20px;
+        }
+
         .btn-group button {
             flex: 1;
+
             padding: 12px;
+
             font-size: 15px;
+
             border: none;
             border-radius: 8px;
+
             cursor: pointer;
             font-weight: bold;
         }
-        button#searchBtn { background-color: #007aff; color: white; }
-        button#searchBtn:active { background-color: #0056b3; }
-        button#scanBtn { background-color: #34c759; color: white; }
-        button#scanBtn:active { background-color: #28a745; }
 
-        /* モーダル共通スタイル */
+        button#searchBtn {
+            background-color: #007aff;
+            color: white;
+        }
+
+        button#searchBtn:active {
+            background-color: #0056b3;
+        }
+
+        button#scanBtn {
+            background-color: #34c759;
+            color: white;
+        }
+
+        button#scanBtn:active {
+            background-color: #28a745;
+        }
+
+
+        /* ================================
+           モーダル共通
+        ================================= */
+
         .modal-overlay {
             display: none;
+
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85);
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-color: rgba(0,0,0,0.88);
+
             z-index: 1000;
+
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
             padding: 15px;
         }
-        .modal-overlay.active { display: flex; }
-        
-        #reader { width: 100%; max-width: 450px; background: white; border-radius: 12px; overflow: hidden; }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+
+        /* ================================
+           Quagga2 カメラ
+        ================================= */
+
+        .scanner-container {
+            width: 100%;
+            max-width: 450px;
+
+            position: relative;
+        }
+
+        #reader {
+            position: relative;
+
+            width: 100%;
+            height: 55vh;
+
+            min-height: 320px;
+            max-height: 520px;
+
+            background-color: #000;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+
+            object-fit: cover;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #reader canvas {
+            display: none !important;
+        }
+
+
+        /* 読み取りガイド */
+
+        .scan-guide {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 82%;
+            height: 130px;
+
+            border: 3px solid rgba(255,255,255,0.9);
+            border-radius: 10px;
+
+            z-index: 10;
+
+            pointer-events: none;
+
+            box-shadow:
+                0 0 0 9999px rgba(0,0,0,0.20);
+        }
+
+
+        /* 赤いスキャンライン */
+
+        .scan-line {
+            position: absolute;
+
+            left: 5%;
+            width: 90%;
+
+            height: 2px;
+
+            background-color: #ff3b30;
+
+            box-shadow:
+                0 0 8px rgba(255,59,48,0.9);
+
+            animation: scanMove 2s ease-in-out infinite;
+        }
+
+        @keyframes scanMove {
+
+            0% {
+                top: 15%;
+            }
+
+            50% {
+                top: 85%;
+            }
+
+            100% {
+                top: 15%;
+            }
+        }
+
+
+        /* スキャン説明 */
+
+        .scanner-message {
+            position: absolute;
+
+            left: 50%;
+            bottom: 18px;
+
+            transform: translateX(-50%);
+
+            z-index: 20;
+
+            width: 90%;
+
+            text-align: center;
+
+            background: rgba(0,0,0,0.6);
+            color: white;
+
+            border-radius: 8px;
+
+            padding: 8px 10px;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================
+           ヘルプモーダル
+        ================================= */
 
         .modal-card {
             background: white;
+
             border-radius: 12px;
+
             padding: 20px;
+
             max-width: 450px;
             width: 100%;
+
             max-height: 80vh;
+
             overflow-y: auto;
+
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
-        .modal-card h2 { font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; color: #333; border-bottom: 2px solid #007aff; padding-bottom: 8px; }
-        .modal-card h3 { font-size: 0.95rem; margin-top: 15px; margin-bottom: 6px; color: #007aff; }
-        .modal-card p, .modal-card ul { font-size: 13px; color: #495057; line-height: 1.5; margin: 0 0 10px 0; }
-        .modal-card ul { padding-left: 20px; }
+
+        .modal-card h2 {
+            font-size: 1.2rem;
+
+            margin-top: 0;
+            margin-bottom: 15px;
+
+            color: #333;
+
+            border-bottom: 2px solid #007aff;
+
+            padding-bottom: 8px;
+        }
+
+        .modal-card h3 {
+            font-size: 0.95rem;
+
+            margin-top: 15px;
+            margin-bottom: 6px;
+
+            color: #007aff;
+        }
+
+        .modal-card p,
+        .modal-card ul {
+            font-size: 13px;
+
+            color: #495057;
+
+            line-height: 1.5;
+
+            margin: 0 0 10px 0;
+        }
+
+        .modal-card ul {
+            padding-left: 20px;
+        }
+
+
+        /* ================================
+           閉じるボタン
+        ================================= */
 
         .close-modal-btn {
             margin-top: 15px;
+
             width: 100%;
+
             padding: 10px;
+
             background-color: #ff3b30;
             color: white;
+
             border: none;
             border-radius: 8px;
+
             font-size: 14px;
             font-weight: bold;
+
             cursor: pointer;
         }
 
-        /* 検索結果エリア */
-        #resultCard { display: none; margin-bottom: 20px; }
-        #resultCard.active { display: block; }
-        
-        .status-badge { display: inline-block; padding: 4px 8px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-bottom: 12px; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+
+        /* ================================
+           検索結果
+        ================================= */
+
+        #resultCard {
+            display: none;
+
+            margin-bottom: 20px;
+        }
+
+        #resultCard.active {
+            display: block;
+        }
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 4px 8px;
+
+            font-size: 12px;
+
+            border-radius: 4px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
 
         .result-item {
             background: #f8f9fa;
+
             border: 1px solid #e9ecef;
             border-radius: 8px;
+
             padding: 14px;
+
             margin-bottom: 10px;
         }
-        .result-item:last-child { margin-bottom: 0; }
-        .item-name { font-size: 1.1rem; font-weight: bold; color: #212529; margin-bottom: 8px; word-break: break-all; }
-        .detail-row { display: flex; justify-content: space-between; border-top: 1px solid #dee2e6; padding-top: 6px; margin-top: 6px; font-size: 13px; color: #495057; }
-        .detail-value { font-weight: bold; font-size: 1rem; color: #111; }
-        
-        .loading { text-align: center; color: #6c757d; font-size: 14px; margin-bottom: 10px; display: none; }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+
+            font-weight: bold;
+
+            color: #212529;
+
+            margin-bottom: 8px;
+
+            word-break: break-all;
+        }
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            border-top: 1px solid #dee2e6;
+
+            padding-top: 6px;
+            margin-top: 6px;
+
+            font-size: 13px;
+
+            color: #495057;
+        }
+
+        .detail-value {
+            font-weight: bold;
+
+            font-size: 1rem;
+
+            color: #111;
+        }
+
+
+        /* ================================
+           ローディング
+        ================================= */
+
+        .loading {
+            text-align: center;
+
+            color: #6c757d;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+
+            display: none;
+        }
+
+
+        /* ================================
+           商品一覧
+        ================================= */
 
         .all-data-section {
             margin-top: 30px;
+
             border-top: 2px solid #e9ecef;
+
             padding-top: 20px;
+
             text-align: center;
         }
+
         button#toggleAllBtn {
             padding: 10px 20px;
+
             font-size: 14px;
+
             background-color: #6c757d;
             color: white;
+
             border: none;
             border-radius: 8px;
+
             cursor: pointer;
         }
+
         #allDataList {
             display: none;
+
             margin-top: 20px;
+
             text-align: left;
+
             max-height: 400px;
+
             overflow-y: auto;
+
             border: 1px solid #dee2e6;
+
             border-radius: 8px;
         }
-        #allDataList.active { display: block; }
-        table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        table.data-table th, table.data-table td { padding: 8px; border-bottom: 1px solid #eee; }
-        table.data-table th { background-color: #f8f9fa; position: sticky; top: 0; z-index: 1; }
-        .text-right { text-align: right; }
+
+        #allDataList.active {
+            display: block;
+        }
+
+        table.data-table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 12px;
+        }
+
+        table.data-table th,
+        table.data-table td {
+            padding: 8px;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        table.data-table th {
+            background-color: #f8f9fa;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
     </style>
+
 </head>
+
 <body>
 
+
 <div class="container">
+
     <div class="header-area">
+
         <h1>商品登録チェック</h1>
-        <div class="help-btn" onclick="openHelpModal()">?</div>
+
+        <div
+            class="help-btn"
+            onclick="openHelpModal()"
+        >
+            ?
+        </div>
+
     </div>
-    
-    <!-- 常時表示の設定エリア -->
+
+
+    <!-- ===============================
+         データ登録
+    ================================= -->
+
     <div class="config-section">
+
         <div class="config-header">
-            <span>データ登録 (スプレッドシートデータ貼り付け)</span>
+
+            <span>
+                データ登録
+                (スプレッドシートデータ貼り付け)
+            </span>
+
         </div>
+
+
         <div class="config-body">
+
             <div class="paste-wrapper">
-                <textarea id="pasteInput" placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください" oninput="togglePasteClearBtn()"></textarea>
-                <span id="pasteClearBtn" class="clear-btn paste-clear-btn" onclick="clearPasteInput()">✕</span>
+
+                <textarea
+                    id="pasteInput"
+                    placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
+                    oninput="togglePasteClearBtn()"
+                ></textarea>
+
+                <span
+                    id="pasteClearBtn"
+                    class="clear-btn paste-clear-btn"
+                    onclick="clearPasteInput()"
+                >
+                    ✕
+                </span>
+
             </div>
-            <button onclick="savePastedData()">データを保存して取り込む</button>
-            
+
+
+            <button onclick="savePastedData()">
+                データを保存して取り込む
+            </button>
+
+
             <div class="sub-config">
-                <div class="sub-config-title" onclick="toggleUrlArea()">▼ URL連携（Web公開CSV）を使用する場合は開く</div>
-                <div id="urlArea" style="display:none; margin-top:8px;">
-                    <div class="input-wrapper">
-                        <input type="text" id="csvUrlInput" placeholder="CSV URLを入力" oninput="toggleUrlClearBtn()">
-                        <span id="urlClearBtn" class="clear-btn" onclick="clearUrlInput()">✕</span>
-                    </div>
-                    <button style="margin-top:6px; background-color:#6c757d;" onclick="saveAndLoadUrl()">URLで再読み込み</button>
+
+                <div
+                    class="sub-config-title"
+                    onclick="toggleUrlArea()"
+                >
+                    ▼ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
+
+
+                <div
+                    id="urlArea"
+                    style="display:none; margin-top:8px;"
+                >
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="text"
+                            id="csvUrlInput"
+                            placeholder="CSV URLを入力"
+                            oninput="toggleUrlClearBtn()"
+                        >
+
+                        <span
+                            id="urlClearBtn"
+                            class="clear-btn"
+                            onclick="clearUrlInput()"
+                        >
+                            ✕
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        style="
+                            margin-top:6px;
+                            background-color:#6c757d;
+                        "
+                        onclick="saveAndLoadUrl()"
+                    >
+                        URLで再読み込み
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
+
+
+    <!-- ===============================
+         商品検索
+    ================================= -->
 
     <div class="search-box">
+
         <div class="input-wrapper">
-            <input type="text" id="janInput" placeholder="JANコードまたは商品名" oninput="toggleClearBtn()">
-            <span id="clearBtn" class="clear-btn" onclick="clearInput()">✕</span>
+
+            <input
+                type="text"
+                id="janInput"
+                placeholder="JANコードまたは商品名"
+                oninput="toggleClearBtn()"
+            >
+
+            <span
+                id="clearBtn"
+                class="clear-btn"
+                onclick="clearInput()"
+            >
+                ✕
+            </span>
+
         </div>
+
     </div>
+
 
     <div class="btn-group">
-        <button id="searchBtn" onclick="searchJAN()">検索</button>
-        <button id="scanBtn" onclick="startScanner()">スキャン</button>
+
+        <button
+            id="searchBtn"
+            onclick="searchJAN()"
+        >
+            検索
+        </button>
+
+        <button
+            id="scanBtn"
+            onclick="startScanner()"
+        >
+            スキャン
+        </button>
+
     </div>
 
-    <div id="loading" class="loading">データ読み込み中...</div>
+
+    <div
+        id="loading"
+        class="loading"
+    >
+        データ読み込み中...
+    </div>
+
+
     <div id="resultCard"></div>
 
+
+    <!-- ===============================
+         全商品一覧
+    ================================= -->
+
     <div class="all-data-section">
-        <button id="toggleAllBtn" onclick="toggleAllData()">全商品一覧を表示（全 <span id="itemCount">0</span> 件）</button>
+
+        <button
+            id="toggleAllBtn"
+            onclick="toggleAllData()"
+        >
+            全商品一覧を表示（全
+            <span id="itemCount">0</span>
+            件）
+        </button>
+
         <div id="allDataList"></div>
+
     </div>
+
 </div>
 
-<!-- カメラスキャンモーダル -->
-<div id="scannerModal" class="modal-overlay">
-    <div id="reader"></div>
-    <button class="close-modal-btn" style="max-width:450px;" onclick="stopScanner()">閉じる</button>
+
+
+<!-- ===============================
+     スキャナーモーダル
+================================= -->
+
+<div
+    id="scannerModal"
+    class="modal-overlay"
+>
+
+    <div class="scanner-container">
+
+        <div id="reader"></div>
+
+
+        <div class="scan-guide">
+
+            <div class="scan-line"></div>
+
+        </div>
+
+
+        <div
+            id="scannerMessage"
+            class="scanner-message"
+        >
+            バーコードを枠の中央に合わせてください
+        </div>
+
+    </div>
+
+
+    <button
+        class="close-modal-btn"
+        style="max-width:450px;"
+        onclick="stopScanner()"
+    >
+        閉じる
+    </button>
+
 </div>
 
-<!-- アプリ説明モーダル -->
-<div id="helpModal" class="modal-overlay">
+
+
+<!-- ===============================
+     ヘルプ
+================================= -->
+
+<div
+    id="helpModal"
+    class="modal-overlay"
+>
+
     <div class="modal-card">
+
         <h2>使い方ガイド</h2>
-        
-        <h3>1. スプレッドシートの貼り付け登録</h3>
-        <p>商品データを取り込むための操作手順です。</p>
+
+
+        <h3>
+            1. スプレッドシートの貼り付け登録
+        </h3>
+
+        <p>
+            商品データを取り込むための操作手順です。
+        </p>
+
         <ul>
-            <li>Googleスプレッドシートを開き、全選択（Ctrl+A / Cmd+A）してコピー（Ctrl+C / Cmd+C）します。</li>
-            <li>「データ登録」の枠にそのまま貼り付けて「データを保存して取り込む」を押します。</li>
+
+            <li>
+                Googleスプレッドシートを開き、
+                全選択（Ctrl+A / Cmd+A）して
+                コピー（Ctrl+C / Cmd+C）します。
+            </li>
+
+            <li>
+                「データ登録」の枠にそのまま貼り付けて
+                「データを保存して取り込む」を押します。
+            </li>
+
         </ul>
 
-        <h3>2. 商品データの照会</h3>
-        <p>登録されたデータから商品を検索・確認します。</p>
+
+        <h3>
+            2. 商品データの照会
+        </h3>
+
+        <p>
+            登録されたデータから商品を検索・確認します。
+        </p>
+
         <ul>
-            <li><strong>手入力検索:</strong> JANコード（完全一致）または商品名（部分一致）を入力して「検索」を押します。</li>
-            <li><strong>バーコードスキャン:</strong> 「スキャン」を押してスマホのカメラで商品のバーコードをかざすと、自動で照会します。</li>
-            <li><strong>一括消去:</strong> 入力欄の右端に表示される「✕」をタップすると、入力した文字を一括消去できます。</li>
+
+            <li>
+                <strong>手入力検索:</strong>
+                JANコード（完全一致）または
+                商品名（部分一致）を入力して
+                「検索」を押します。
+            </li>
+
+            <li>
+                <strong>バーコードスキャン:</strong>
+                「スキャン」を押して
+                商品バーコードを枠の中央に合わせます。
+            </li>
+
+            <li>
+                バーコードを正常に読み取ると
+                自動的に検索します。
+            </li>
+
+            <li>
+                <strong>一括消去:</strong>
+                入力欄右端の「✕」で
+                入力内容を消去できます。
+            </li>
+
         </ul>
 
-        <h3>3. URL連携機能（任意）</h3>
+
+        <h3>
+            3. URL連携機能（任意）
+        </h3>
+
         <ul>
-            <li>個人アカウントでWeb公開したCSV URLを入力して連携することも可能です。</li>
+
+            <li>
+                Web公開したCSV URLから
+                商品データを読み込むこともできます。
+            </li>
+
         </ul>
 
-        <h3>4. スプレッドシートの列構造【必須】</h3>
-        <p style="color: #d9534f; font-weight: bold; margin-bottom: 6px;">※以下の列順序を必ず守って作成してください。</p>
+
+        <h3>
+            4. スプレッドシートの列構造【必須】
+        </h3>
+
+        <p
+            style="
+                color:#d9534f;
+                font-weight:bold;
+                margin-bottom:6px;
+            "
+        >
+            ※以下の列順序を必ず守って作成してください。
+        </p>
+
         <ul>
-            <li><strong>A列:</strong> JANコード</li>
-            <li><strong>B列:</strong> 商品名称</li>
-            <li><strong>C列:</strong> 単価（数字）</li>
-            <li><strong>D列:</strong> 消費税率（数字）</li>
+
+            <li>
+                <strong>A列:</strong>
+                JANコード
+            </li>
+
+            <li>
+                <strong>B列:</strong>
+                商品名称
+            </li>
+
+            <li>
+                <strong>C列:</strong>
+                単価（数字）
+            </li>
+
+            <li>
+                <strong>D列:</strong>
+                消費税率（数字）
+            </li>
+
         </ul>
 
-        <button class="close-modal-btn" onclick="closeHelpModal()">閉じる</button>
+
+        <button
+            class="close-modal-btn"
+            onclick="closeHelpModal()"
+        >
+            閉じる
+        </button>
+
     </div>
+
 </div>
+
+
 
 <script>
-    let masterData = [];
-    let html5QrcodeScanner = null;
 
-    window.onload = function() {
-        localStorage.removeItem('custom_pasted_data');
-        localStorage.removeItem('custom_csv_url');
-        updateItemCountDisplay();
-    };
 
-    /* --- 単価・税率表示補正ヘルパー --- */
-    function formatPrice(val) {
-        if (val === undefined || val === null || val === "" || val === "-") return "-";
-        if (!isNaN(val) && val !== "") {
-            return "¥" + Number(val).toLocaleString();
-        }
-        return "¥" + val;
+/* ===================================
+   グローバル変数
+=================================== */
+
+let masterData = [];
+
+let scannerRunning = false;
+
+let lastDetectedCode = null;
+
+let detectionCount = 0;
+
+let detectionLocked = false;
+
+
+
+/* ===================================
+   初期化
+=================================== */
+
+window.onload = function() {
+
+    localStorage.removeItem(
+        'custom_pasted_data'
+    );
+
+    localStorage.removeItem(
+        'custom_csv_url'
+    );
+
+    updateItemCountDisplay();
+
+};
+
+
+
+/* ===================================
+   単価表示
+=================================== */
+
+function formatPrice(val) {
+
+    if (
+        val === undefined ||
+        val === null ||
+        val === "" ||
+        val === "-"
+    ) {
+        return "-";
     }
 
-    function formatTax(val) {
-        if (val === undefined || val === null || val === "" || val === "-") return "-";
-        const str = val.toString().trim();
-        return str.endsWith("%") ? str : str + "%";
+
+    if (
+        !isNaN(val) &&
+        val !== ""
+    ) {
+
+        return "¥" +
+            Number(val).toLocaleString();
+
     }
 
-    /* --- 全商品一覧を自動展開表示する関数 --- */
-    function showAllDataListAuto() {
-        createDataTable();
-        const listContainer = document.getElementById('allDataList');
-        const btn = document.getElementById('toggleAllBtn');
-        listContainer.classList.add('active');
-        btn.innerText = `一覧を閉じる`;
-    }
 
-    /* --- テキスト貼り付けデータ解析処理 --- */
-    function savePastedData() {
-        const text = document.getElementById('pasteInput').value.trim();
-        if (!text) {
-            alert('スプレッドシートのデータを貼り付けてください。');
-            return;
-        }
-        
-        parseTextData(text);
-        updateItemCountDisplay();
-        
-        document.getElementById('resultCard').classList.remove('active');
-        showAllDataListAuto();
-        
-        alert(`データを正常に取り込みました！（全 ${masterData.length} 件）`);
-    }
-
-    function parseTextData(text) {
-        masterData = [];
-        const lines = text.split(/\r?\n/);
-        
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-
-            const sep = line.includes('\t') ? '\t' : ',';
-            const cols = line.split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
-
-            if (i === 0 && (cols[0].includes('JAN') || cols[1].includes('名称') || cols[1].includes('名前') || cols[0].includes('名称'))) {
-                continue;
-            }
-
-            if (cols.length >= 1) {
-                let jan = '-';
-                let name = '';
-                let price = '';
-                let tax = '';
-
-                if (/^\d+$/.test(cols[0])) {
-                    jan = cols[0];
-                    name = cols[1] || '';
-                    price = cols[2] || '';
-                    tax = cols[3] || '';
-                } else if (cols[0] === '' && cols[1]) {
-                    jan = '-';
-                    name = cols[1] || '';
-                    price = cols[2] || '';
-                    tax = cols[3] || '';
-                } else {
-                    jan = '-';
-                    name = cols[0] || '';
-                    price = cols[1] || '';
-                    tax = cols[2] || '';
-                }
-
-                if (name || jan !== '-') {
-                    masterData.push({ jan, name, price, tax });
-                }
-            }
-        }
-    }
-
-    /* --- URL経由のデータ取得処理 --- */
-    function loadCSVData(url) {
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('loading').innerText = 'データ読み込み中...';
-        
-        fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error('HTTPエラー: ' + response.status);
-                return response.text();
-            })
-            .then(text => { handleLoadedCSV(text); })
-            .catch(err => {
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                fetch(proxyUrl)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Proxyエラー: ' + response.status);
-                        return response.text();
-                    })
-                    .then(text => { handleLoadedCSV(text); })
-                    .catch(() => {
-                        document.getElementById('loading').innerText = 'エラー: スプレッドシートのURL読み込みに失敗しました。';
-                    });
-            });
-    }
-
-    function handleLoadedCSV(text) {
-        parseTextData(text);
-        document.getElementById('loading').style.display = 'none';
-        updateItemCountDisplay();
-        showAllDataListAuto();
-    }
-
-    function updateItemCountDisplay() {
-        const countSpan = document.getElementById('itemCount');
-        if (countSpan) countSpan.innerText = masterData.length;
-        
-        const listContainer = document.getElementById('allDataList');
-        const btn = document.getElementById('toggleAllBtn');
-        if (!listContainer.classList.contains('active')) {
-            btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
-        }
-    }
-
-    /* --- モーダル制御 --- */
-    function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
-    function closeHelpModal() { document.getElementById('helpModal').classList.remove('active'); }
-
-    /* --- スキャン機能（高解像度化・読み取り安定仕様） --- */
-    function startScanner() {
-    document.getElementById('scannerModal').classList.add('active');
-
-    if (html5QrcodeScanner) {
-        try {
-            html5QrcodeScanner.clear();
-        } catch (e) {}
-    }
-
-    html5QrcodeScanner = new Html5Qrcode("reader");
-
-    // iPhone Safariとの互換性を優先
-    const cameraConfig = {
-        facingMode: "environment"
-    };
-
-    const scanConfig = {
-        fps: 10,
-        qrbox: {
-            width: 280,
-            height: 120
-        },
-        aspectRatio: 1.777778,
-        formatsToSupport: [
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E
-        ]
-    };
-
-    html5QrcodeScanner.start(
-        cameraConfig,
-        scanConfig,
-        onScanSuccess,
-        onScanFailure
-    )
-    .then(() => {
-        console.log("カメラ起動成功");
-
-        // iPhone Safari向け
-        const video = document.querySelector("#reader video");
-
-        if (video) {
-            video.setAttribute("playsinline", "true");
-            video.setAttribute("webkit-playsinline", "true");
-            video.setAttribute("autoplay", "true");
-            video.muted = true;
-        }
-    })
-    .catch(err => {
-        console.error("Camera start error:", err);
-
-        alert(
-            "カメラの起動に失敗しました。\n\n" +
-            "エラー内容:\n" +
-            String(err)
-        );
-
-        stopScanner();
-    });
+    return "¥" + val;
 }
 
-    function onScanSuccess(decodedText) {
-        document.getElementById('janInput').value = decodedText;
-        toggleClearBtn();
-        stopScanner();
-        searchJAN();
-    }
-    
-    function onScanFailure(error) {
-        // スキャン試行中の不一致は無視
+
+
+/* ===================================
+   税率表示
+=================================== */
+
+function formatTax(val) {
+
+    if (
+        val === undefined ||
+        val === null ||
+        val === "" ||
+        val === "-"
+    ) {
+        return "-";
     }
 
-    function stopScanner() {
-        if (html5QrcodeScanner && html5QrcodeScanner.isScanning) {
-            html5QrcodeScanner.stop().then(() => {
-                html5QrcodeScanner.clear();
-                document.getElementById('scannerModal').classList.remove('active');
-            }).catch(() => { document.getElementById('scannerModal').classList.remove('active'); });
-        } else {
-            if (html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} }
-            document.getElementById('scannerModal').classList.remove('active');
+
+    const str =
+        val
+        .toString()
+        .trim();
+
+
+    return str.endsWith("%")
+        ? str
+        : str + "%";
+}
+
+
+
+/* ===================================
+   全商品一覧 自動表示
+=================================== */
+
+function showAllDataListAuto() {
+
+    createDataTable();
+
+
+    const listContainer =
+        document.getElementById(
+            'allDataList'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'toggleAllBtn'
+        );
+
+
+    listContainer.classList.add(
+        'active'
+    );
+
+
+    btn.innerText =
+        `一覧を閉じる`;
+}
+
+
+
+/* ===================================
+   貼り付けデータ保存
+=================================== */
+
+function savePastedData() {
+
+    const text =
+        document
+        .getElementById(
+            'pasteInput'
+        )
+        .value
+        .trim();
+
+
+    if (!text) {
+
+        alert(
+            'スプレッドシートのデータを貼り付けてください。'
+        );
+
+        return;
+    }
+
+
+    parseTextData(text);
+
+    updateItemCountDisplay();
+
+
+    document
+        .getElementById(
+            'resultCard'
+        )
+        .classList
+        .remove(
+            'active'
+        );
+
+
+    showAllDataListAuto();
+
+
+    alert(
+        `データを正常に取り込みました！（全 ${masterData.length} 件）`
+    );
+
+}
+
+
+
+/* ===================================
+   テキスト解析
+=================================== */
+
+function parseTextData(text) {
+
+    masterData = [];
+
+
+    const lines =
+        text.split(/\r?\n/);
+
+
+    for (
+        let i = 0;
+        i < lines.length;
+        i++
+    ) {
+
+        const line =
+            lines[i].trim();
+
+
+        if (!line) {
+            continue;
         }
-    }
 
-    /* --- 各種入力欄クリア機能 --- */
-    function togglePasteClearBtn() {
-        const input = document.getElementById('pasteInput');
-        const btn = document.getElementById('pasteClearBtn');
-        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
-    }
-    function clearPasteInput() {
-        document.getElementById('pasteInput').value = '';
-        togglePasteClearBtn();
-        document.getElementById('pasteInput').focus();
-    }
 
-    function toggleUrlClearBtn() {
-        const input = document.getElementById('csvUrlInput');
-        const btn = document.getElementById('urlClearBtn');
-        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
-    }
-    function clearUrlInput() {
-        document.getElementById('csvUrlInput').value = '';
-        toggleUrlClearBtn();
-        document.getElementById('csvUrlInput').focus();
-    }
+        const sep =
+            line.includes('\t')
+                ? '\t'
+                : ',';
 
-    function toggleClearBtn() {
-        const input = document.getElementById('janInput');
-        const btn = document.getElementById('clearBtn');
-        btn.style.display = input.value.length > 0 ? 'flex' : 'none';
-    }
-    function clearInput() {
-        document.getElementById('janInput').value = '';
-        toggleClearBtn();
-        document.getElementById('janInput').focus();
-    }
 
-    function saveAndLoadUrl() {
-        const inputUrl = document.getElementById('csvUrlInput').value.trim();
-        if (!inputUrl) {
-            masterData = [];
-            updateItemCountDisplay();
-            document.getElementById('allDataList').innerHTML = '';
-            document.getElementById('allDataList').classList.remove('active');
-        } else {
-            loadCSVData(inputUrl);
+        const cols =
+            line
+            .split(sep)
+            .map(
+                c =>
+                    c
+                    .trim()
+                    .replace(
+                        /^"|"$/g,
+                        ''
+                    )
+            );
+
+
+        /*
+         * ヘッダー判定
+         */
+
+        if (
+            i === 0 &&
+            (
+                (cols[0] || '')
+                    .includes('JAN') ||
+
+                (cols[1] || '')
+                    .includes('名称') ||
+
+                (cols[1] || '')
+                    .includes('名前') ||
+
+                (cols[0] || '')
+                    .includes('名称')
+            )
+        ) {
+
+            continue;
         }
+
+
+        if (
+            cols.length >= 1
+        ) {
+
+            let jan = '-';
+
+            let name = '';
+
+            let price = '';
+
+            let tax = '';
+
+
+            if (
+                /^\d+$/.test(
+                    cols[0]
+                )
+            ) {
+
+                jan =
+                    cols[0];
+
+                name =
+                    cols[1] || '';
+
+                price =
+                    cols[2] || '';
+
+                tax =
+                    cols[3] || '';
+
+            }
+
+            else if (
+                cols[0] === '' &&
+                cols[1]
+            ) {
+
+                jan = '-';
+
+                name =
+                    cols[1] || '';
+
+                price =
+                    cols[2] || '';
+
+                tax =
+                    cols[3] || '';
+
+            }
+
+            else {
+
+                jan = '-';
+
+                name =
+                    cols[0] || '';
+
+                price =
+                    cols[1] || '';
+
+                tax =
+                    cols[2] || '';
+
+            }
+
+
+            if (
+                name ||
+                jan !== '-'
+            ) {
+
+                masterData.push({
+                    jan,
+                    name,
+                    price,
+                    tax
+                });
+
+            }
+
+        }
+
     }
 
-    function toggleUrlArea() {
-        const area = document.getElementById('urlArea');
-        area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+
+
+/* ===================================
+   CSV URL読込
+=================================== */
+
+function loadCSVData(url) {
+
+    const loading =
+        document.getElementById(
+            'loading'
+        );
+
+
+    loading.style.display =
+        'block';
+
+
+    loading.innerText =
+        'データ読み込み中...';
+
+
+    fetch(url)
+
+        .then(
+            response => {
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        'HTTPエラー: ' +
+                        response.status
+                    );
+
+                }
+
+
+                return response.text();
+
+            }
+        )
+
+
+        .then(
+            text => {
+
+                handleLoadedCSV(
+                    text
+                );
+
+            }
+        )
+
+
+        .catch(
+            () => {
+
+                const proxyUrl =
+                    'https://api.allorigins.win/raw?url=' +
+                    encodeURIComponent(
+                        url
+                    );
+
+
+                fetch(proxyUrl)
+
+                    .then(
+                        response => {
+
+                            if (
+                                !response.ok
+                            ) {
+
+                                throw new Error(
+                                    'Proxyエラー: ' +
+                                    response.status
+                                );
+
+                            }
+
+
+                            return response.text();
+
+                        }
+                    )
+
+
+                    .then(
+                        text => {
+
+                            handleLoadedCSV(
+                                text
+                            );
+
+                        }
+                    )
+
+
+                    .catch(
+                        () => {
+
+                            loading.innerText =
+                                'エラー: スプレッドシートのURL読み込みに失敗しました。';
+
+                        }
+                    );
+
+            }
+        );
+
+}
+
+
+
+/* ===================================
+   CSV読込完了
+=================================== */
+
+function handleLoadedCSV(text) {
+
+    parseTextData(text);
+
+
+    document
+        .getElementById(
+            'loading'
+        )
+        .style
+        .display =
+        'none';
+
+
+    updateItemCountDisplay();
+
+    showAllDataListAuto();
+
+}
+
+
+
+/* ===================================
+   件数表示
+=================================== */
+
+function updateItemCountDisplay() {
+
+    const countSpan =
+        document.getElementById(
+            'itemCount'
+        );
+
+
+    if (countSpan) {
+
+        countSpan.innerText =
+            masterData.length;
+
     }
 
-    /* --- 検索処理 --- */
-    function searchJAN() {
-        const inputVal = document.getElementById('janInput').value.trim();
-        const card = document.getElementById('resultCard');
-        
-        if (!inputVal) {
-            alert('JANコードまたは商品名を入力してください');
+
+    const listContainer =
+        document.getElementById(
+            'allDataList'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'toggleAllBtn'
+        );
+
+
+    if (
+        !listContainer
+        .classList
+        .contains(
+            'active'
+        )
+    ) {
+
+        btn.innerText =
+            `全商品一覧を表示（全 ${masterData.length} 件）`;
+
+    }
+
+}
+
+
+
+/* ===================================
+   ヘルプ
+=================================== */
+
+function openHelpModal() {
+
+    document
+        .getElementById(
+            'helpModal'
+        )
+        .classList
+        .add(
+            'active'
+        );
+
+}
+
+
+function closeHelpModal() {
+
+    document
+        .getElementById(
+            'helpModal'
+        )
+        .classList
+        .remove(
+            'active'
+        );
+
+}
+
+
+
+/* ===================================
+   JANチェックディジット検証
+=================================== */
+
+function validateEAN(code) {
+
+    if (
+        !/^\d+$/.test(code)
+    ) {
+        return false;
+    }
+
+
+    /*
+     * EAN-13 / JAN-13
+     */
+
+    if (
+        code.length === 13
+    ) {
+
+        const digits =
+            code
+            .split('')
+            .map(Number);
+
+
+        const checkDigit =
+            digits[12];
+
+
+        let sum = 0;
+
+
+        for (
+            let i = 0;
+            i < 12;
+            i++
+        ) {
+
+            /*
+             * 左から
+             *
+             * 奇数位置 × 1
+             * 偶数位置 × 3
+             */
+
+            if (
+                i % 2 === 0
+            ) {
+
+                sum +=
+                    digits[i];
+
+            }
+
+            else {
+
+                sum +=
+                    digits[i] * 3;
+
+            }
+
+        }
+
+
+        const calculated =
+            (
+                10 -
+                (
+                    sum % 10
+                )
+            ) % 10;
+
+
+        return (
+            calculated ===
+            checkDigit
+        );
+
+    }
+
+
+    /*
+     * EAN-8
+     */
+
+    if (
+        code.length === 8
+    ) {
+
+        const digits =
+            code
+            .split('')
+            .map(Number);
+
+
+        const checkDigit =
+            digits[7];
+
+
+        let sum = 0;
+
+
+        for (
+            let i = 0;
+            i < 7;
+            i++
+        ) {
+
+            /*
+             * EAN-8
+             *
+             * 奇数位置 × 3
+             * 偶数位置 × 1
+             */
+
+            if (
+                i % 2 === 0
+            ) {
+
+                sum +=
+                    digits[i] * 3;
+
+            }
+
+            else {
+
+                sum +=
+                    digits[i];
+
+            }
+
+        }
+
+
+        const calculated =
+            (
+                10 -
+                (
+                    sum % 10
+                )
+            ) % 10;
+
+
+        return (
+            calculated ===
+            checkDigit
+        );
+
+    }
+
+
+    /*
+     * UPC-A
+     */
+
+    if (
+        code.length === 12
+    ) {
+
+        const digits =
+            code
+            .split('')
+            .map(Number);
+
+
+        const checkDigit =
+            digits[11];
+
+
+        let sum = 0;
+
+
+        for (
+            let i = 0;
+            i < 11;
+            i++
+        ) {
+
+            if (
+                i % 2 === 0
+            ) {
+
+                sum +=
+                    digits[i] * 3;
+
+            }
+
+            else {
+
+                sum +=
+                    digits[i];
+
+            }
+
+        }
+
+
+        const calculated =
+            (
+                10 -
+                (
+                    sum % 10
+                )
+            ) % 10;
+
+
+        return (
+            calculated ===
+            checkDigit
+        );
+
+    }
+
+
+    return false;
+
+}
+
+
+
+/* ===================================
+   Quagga2 スタート
+=================================== */
+
+function startScanner() {
+
+    if (
+        typeof Quagga ===
+        'undefined'
+    ) {
+
+        alert(
+            'Quagga2の読み込みに失敗しました。\nネットワーク接続を確認してください。'
+        );
+
+        return;
+    }
+
+
+    const modal =
+        document.getElementById(
+            'scannerModal'
+        );
+
+
+    const reader =
+        document.getElementById(
+            'reader'
+        );
+
+
+    const message =
+        document.getElementById(
+            'scannerMessage'
+        );
+
+
+    /*
+     * 古い映像を削除
+     */
+
+    reader.innerHTML = '';
+
+
+    modal.classList.add(
+        'active'
+    );
+
+
+    message.innerText =
+        'カメラを起動しています...';
+
+
+    /*
+     * 状態初期化
+     */
+
+    scannerRunning =
+        false;
+
+    detectionLocked =
+        false;
+
+    lastDetectedCode =
+        null;
+
+    detectionCount =
+        0;
+
+
+    /*
+     * Quagga初期化
+     */
+
+    Quagga.init({
+
+        inputStream: {
+
+            name:
+                "Live",
+
+            type:
+                "LiveStream",
+
+            target:
+                reader,
+
+
+            constraints: {
+
+                /*
+                 * 背面カメラ優先
+                 */
+
+                facingMode: {
+                    ideal:
+                        "environment"
+                },
+
+
+                /*
+                 * 高解像度を要求
+                 */
+
+                width: {
+                    ideal:
+                        1920
+                },
+
+                height: {
+                    ideal:
+                        1080
+                }
+
+            },
+
+
+            /*
+             * 中央付近を重点的に解析
+             *
+             * 上下を少し削るだけなので、
+             * ガイド枠より広く解析する。
+             */
+
+            area: {
+
+                top:
+                    "20%",
+
+                right:
+                    "5%",
+
+                left:
+                    "5%",
+
+                bottom:
+                    "20%"
+
+            }
+
+        },
+
+
+        locator: {
+
+            /*
+             * 高精度優先
+             */
+
+            patchSize:
+                "medium",
+
+
+            /*
+             * 解像度を半分にしない
+             */
+
+            halfSample:
+                false
+
+        },
+
+
+        /*
+         * JAN系だけに限定
+         */
+
+        decoder: {
+
+            readers: [
+
+                "ean_reader",
+
+                "ean_8_reader",
+
+                "upc_reader",
+
+                "upc_e_reader"
+
+            ]
+
+        },
+
+
+        /*
+         * バーコード位置を自動検出
+         */
+
+        locate:
+            true,
+
+
+        /*
+         * 解析頻度
+         */
+
+        frequency:
+            10
+
+    },
+
+
+    function(err) {
+
+        if (err) {
+
+            console.error(
+                "Quagga init error:",
+                err
+            );
+
+
+            message.innerText =
+                'カメラの起動に失敗しました。';
+
+
+            alert(
+                "カメラの起動に失敗しました。\n\n" +
+                "Safariのカメラ権限とHTTPS接続を確認してください。\n\n" +
+                String(err)
+            );
+
+
+            stopScanner();
+
             return;
         }
 
-        const results = masterData.filter(d => 
-            (d.jan !== '-' && d.jan === inputVal) || 
-            (d.name && d.name.toLowerCase().includes(inputVal.toLowerCase()))
+
+        console.log(
+            "Quagga2 初期化成功"
         );
 
-        if (results.length > 0) {
-            let html = `<span class="status-badge success">✅ 該当あり（${results.length}件見つかりました）</span>`;
-            
-            results.forEach(item => {
-                html += `
-                    <div class="result-item">
-                        <div class="item-name">${item.name}</div>
-                        <div class="detail-row">
-                            <span>JANコード</span>
-                            <span class="detail-value">${item.jan}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span>単価（税抜）</span>
-                            <span class="detail-value">${formatPrice(item.price)}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span>消費税率</span>
-                            <span class="detail-value">${formatTax(item.tax)}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            card.innerHTML = html;
-        } else {
-            card.innerHTML = `
-                <span class="status-badge error">❌ 未登録</span>
-                <div class="result-item">該当する商品が見つかりませんでした。</div>
-            `;
-        }
-        card.classList.add('active');
-        
-        document.getElementById('allDataList').classList.remove('active');
-        document.getElementById('toggleAllBtn').innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
-    }
 
-    document.getElementById('janInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') searchJAN();
+        try {
+
+            Quagga.start();
+
+
+            scannerRunning =
+                true;
+
+
+            message.innerText =
+                'バーコードを枠の中央に合わせてください';
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                'スキャナーを開始できませんでした。'
+            );
+
+
+            stopScanner();
+
+        }
+
     });
 
-    function toggleAllData() {
-        const listContainer = document.getElementById('allDataList');
-        const btn = document.getElementById('toggleAllBtn');
+}
 
-        if (listContainer.classList.contains('active')) {
-            listContainer.classList.remove('active');
-            btn.innerText = `全商品一覧を表示（全 ${masterData.length} 件）`;
-        } else {
-            createDataTable();
-            listContainer.classList.add('active');
-            btn.innerText = `一覧を閉じる`;
+
+
+/* ===================================
+   Quagga2 検出処理
+=================================== */
+
+Quagga.onDetected(
+    function(result) {
+
+        /*
+         * スキャナー停止中なら無視
+         */
+
+        if (
+            !scannerRunning
+        ) {
+            return;
         }
+
+
+        /*
+         * 確定済みなら無視
+         */
+
+        if (
+            detectionLocked
+        ) {
+            return;
+        }
+
+
+        if (
+            !result ||
+            !result.codeResult ||
+            !result.codeResult.code
+        ) {
+            return;
+        }
+
+
+        const code =
+            result
+            .codeResult
+            .code
+            .trim();
+
+
+        console.log(
+            "検出候補:",
+            code
+        );
+
+
+        /*
+         * 数字以外は拒否
+         */
+
+        if (
+            !/^\d+$/.test(
+                code
+            )
+        ) {
+            return;
+        }
+
+
+        /*
+         * JAN / EAN / UPC長以外は拒否
+         */
+
+        if (
+            code.length !== 13 &&
+            code.length !== 8 &&
+            code.length !== 12
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * チェックディジット検証
+         */
+
+        if (
+            !validateEAN(
+                code
+            )
+        ) {
+
+            console.log(
+                "チェックディジット不一致:",
+                code
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * 同一コードを連続検出したか確認
+         */
+
+        if (
+            code ===
+            lastDetectedCode
+        ) {
+
+            detectionCount++;
+
+        }
+
+        else {
+
+            lastDetectedCode =
+                code;
+
+            detectionCount =
+                1;
+
+        }
+
+
+        console.log(
+            "一致回数:",
+            detectionCount
+        );
+
+
+        /*
+         * 2回連続で同じコードを検出するまで待つ
+         */
+
+        if (
+            detectionCount < 2
+        ) {
+
+            document
+                .getElementById(
+                    'scannerMessage'
+                )
+                .innerText =
+                'バーコードを検出中...';
+
+            return;
+
+        }
+
+
+        /*
+         * ここで確定
+         */
+
+        detectionLocked =
+            true;
+
+
+        console.log(
+            "バーコード確定:",
+            code
+        );
+
+
+        document
+            .getElementById(
+                'scannerMessage'
+            )
+            .innerText =
+            '読み取り成功！';
+
+
+        /*
+         * 振動
+         */
+
+        if (
+            navigator.vibrate
+        ) {
+
+            navigator.vibrate(
+                100
+            );
+
+        }
+
+
+        /*
+         * 入力欄へ反映
+         */
+
+        document
+            .getElementById(
+                'janInput'
+            )
+            .value =
+            code;
+
+
+        toggleClearBtn();
+
+
+        /*
+         * スキャナー停止 → 検索
+         */
+
+        stopScanner(
+            true
+        );
+
+    }
+);
+
+
+
+/* ===================================
+   スキャナー停止
+=================================== */
+
+function stopScanner(
+    searchAfterStop = false
+) {
+
+    if (
+        scannerRunning
+    ) {
+
+        try {
+
+            Quagga.stop();
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "Quagga stop error:",
+                error
+            );
+
+        }
+
     }
 
-    function createDataTable() {
-        const listContainer = document.getElementById('allDataList');
-        
-        let tableHtml = `<table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>JANコード</th>
-                                    <th>名称</th>
-                                    <th class="text-right">単価</th>
-                                    <th class="text-right">税%</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
 
-        masterData.forEach(item => {
-            tableHtml += `<tr>
-                            <td>${item.jan}</td>
-                            <td>${item.name}</td>
-                            <td class="text-right">${formatPrice(item.price)}</td>
-                            <td class="text-right">${formatTax(item.tax)}</td>
-                          </tr>`;
-        });
+    scannerRunning =
+        false;
 
-        tableHtml += `</tbody></table>`;
-        
-        listContainer.innerHTML = tableHtml;
+
+    document
+        .getElementById(
+            'scannerModal'
+        )
+        .classList
+        .remove(
+            'active'
+        );
+
+
+    document
+        .getElementById(
+            'reader'
+        )
+        .innerHTML =
+        '';
+
+
+    lastDetectedCode =
+        null;
+
+    detectionCount =
+        0;
+
+
+    /*
+     * 読み取り成功時だけ検索
+     */
+
+    if (
+        searchAfterStop
+    ) {
+
+        setTimeout(
+            function() {
+
+                searchJAN();
+
+                detectionLocked =
+                    false;
+
+            },
+            100
+        );
+
     }
+
+    else {
+
+        detectionLocked =
+            false;
+
+    }
+
+}
+
+
+
+/* ===================================
+   貼り付け欄クリア
+=================================== */
+
+function togglePasteClearBtn() {
+
+    const input =
+        document.getElementById(
+            'pasteInput'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'pasteClearBtn'
+        );
+
+
+    btn.style.display =
+        input.value.length > 0
+            ? 'flex'
+            : 'none';
+
+}
+
+
+function clearPasteInput() {
+
+    const input =
+        document.getElementById(
+            'pasteInput'
+        );
+
+
+    input.value = '';
+
+
+    togglePasteClearBtn();
+
+    input.focus();
+
+}
+
+
+
+/* ===================================
+   URLクリア
+=================================== */
+
+function toggleUrlClearBtn() {
+
+    const input =
+        document.getElementById(
+            'csvUrlInput'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'urlClearBtn'
+        );
+
+
+    btn.style.display =
+        input.value.length > 0
+            ? 'flex'
+            : 'none';
+
+}
+
+
+function clearUrlInput() {
+
+    const input =
+        document.getElementById(
+            'csvUrlInput'
+        );
+
+
+    input.value = '';
+
+
+    toggleUrlClearBtn();
+
+    input.focus();
+
+}
+
+
+
+/* ===================================
+   検索欄クリア
+=================================== */
+
+function toggleClearBtn() {
+
+    const input =
+        document.getElementById(
+            'janInput'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'clearBtn'
+        );
+
+
+    btn.style.display =
+        input.value.length > 0
+            ? 'flex'
+            : 'none';
+
+}
+
+
+function clearInput() {
+
+    const input =
+        document.getElementById(
+            'janInput'
+        );
+
+
+    input.value = '';
+
+
+    toggleClearBtn();
+
+    input.focus();
+
+}
+
+
+
+/* ===================================
+   URL読込
+=================================== */
+
+function saveAndLoadUrl() {
+
+    const inputUrl =
+        document
+        .getElementById(
+            'csvUrlInput'
+        )
+        .value
+        .trim();
+
+
+    if (
+        !inputUrl
+    ) {
+
+        masterData = [];
+
+
+        updateItemCountDisplay();
+
+
+        document
+            .getElementById(
+                'allDataList'
+            )
+            .innerHTML =
+            '';
+
+
+        document
+            .getElementById(
+                'allDataList'
+            )
+            .classList
+            .remove(
+                'active'
+            );
+
+    }
+
+    else {
+
+        loadCSVData(
+            inputUrl
+        );
+
+    }
+
+}
+
+
+
+/* ===================================
+   URL設定開閉
+=================================== */
+
+function toggleUrlArea() {
+
+    const area =
+        document.getElementById(
+            'urlArea'
+        );
+
+
+    area.style.display =
+        area.style.display === 'none'
+            ? 'block'
+            : 'none';
+
+}
+
+
+
+/* ===================================
+   商品検索
+=================================== */
+
+function searchJAN() {
+
+    const inputVal =
+        document
+        .getElementById(
+            'janInput'
+        )
+        .value
+        .trim();
+
+
+    const card =
+        document.getElementById(
+            'resultCard'
+        );
+
+
+    if (
+        !inputVal
+    ) {
+
+        alert(
+            'JANコードまたは商品名を入力してください'
+        );
+
+        return;
+
+    }
+
+
+    const results =
+        masterData.filter(
+            d =>
+
+                (
+                    d.jan !== '-' &&
+                    d.jan === inputVal
+                )
+
+                ||
+
+                (
+                    d.name &&
+                    d.name
+                    .toLowerCase()
+                    .includes(
+                        inputVal
+                        .toLowerCase()
+                    )
+                )
+        );
+
+
+    if (
+        results.length > 0
+    ) {
+
+        let html =
+            `
+            <span class="status-badge success">
+                ✅ 該当あり（${results.length}件見つかりました）
+            </span>
+            `;
+
+
+        results.forEach(
+            item => {
+
+                html +=
+                    `
+                    <div class="result-item">
+
+                        <div class="item-name">
+                            ${escapeHtml(item.name)}
+                        </div>
+
+                        <div class="detail-row">
+
+                            <span>
+                                JANコード
+                            </span>
+
+                            <span class="detail-value">
+                                ${escapeHtml(item.jan)}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                単価（税抜）
+                            </span>
+
+                            <span class="detail-value">
+                                ${formatPrice(item.price)}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span>
+                                消費税率
+                            </span>
+
+                            <span class="detail-value">
+                                ${formatTax(item.tax)}
+                            </span>
+
+                        </div>
+
+                    </div>
+                    `;
+
+            }
+        );
+
+
+        card.innerHTML =
+            html;
+
+    }
+
+    else {
+
+        card.innerHTML =
+            `
+            <span class="status-badge error">
+                ❌ 未登録
+            </span>
+
+            <div class="result-item">
+                該当する商品が見つかりませんでした。
+            </div>
+            `;
+
+    }
+
+
+    card.classList.add(
+        'active'
+    );
+
+
+    document
+        .getElementById(
+            'allDataList'
+        )
+        .classList
+        .remove(
+            'active'
+        );
+
+
+    document
+        .getElementById(
+            'toggleAllBtn'
+        )
+        .innerText =
+        `全商品一覧を表示（全 ${masterData.length} 件）`;
+
+}
+
+
+
+/* ===================================
+   Enter検索
+=================================== */
+
+document
+    .getElementById(
+        'janInput'
+    )
+    .addEventListener(
+        'keydown',
+        function(e) {
+
+            if (
+                e.key === 'Enter'
+            ) {
+
+                searchJAN();
+
+            }
+
+        }
+    );
+
+
+
+/* ===================================
+   一覧開閉
+=================================== */
+
+function toggleAllData() {
+
+    const listContainer =
+        document.getElementById(
+            'allDataList'
+        );
+
+
+    const btn =
+        document.getElementById(
+            'toggleAllBtn'
+        );
+
+
+    if (
+        listContainer
+        .classList
+        .contains(
+            'active'
+        )
+    ) {
+
+        listContainer
+            .classList
+            .remove(
+                'active'
+            );
+
+
+        btn.innerText =
+            `全商品一覧を表示（全 ${masterData.length} 件）`;
+
+    }
+
+    else {
+
+        createDataTable();
+
+
+        listContainer
+            .classList
+            .add(
+                'active'
+            );
+
+
+        btn.innerText =
+            `一覧を閉じる`;
+
+    }
+
+}
+
+
+
+/* ===================================
+   HTMLエスケープ
+=================================== */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ''
+    )
+
+    .replace(
+        /&/g,
+        '&amp;'
+    )
+
+    .replace(
+        /</g,
+        '&lt;'
+    )
+
+    .replace(
+        />/g,
+        '&gt;'
+    )
+
+    .replace(
+        /"/g,
+        '&quot;'
+    )
+
+    .replace(
+        /'/g,
+        '&#039;'
+    );
+
+}
+
+
+
+/* ===================================
+   商品一覧テーブル
+=================================== */
+
+function createDataTable() {
+
+    const listContainer =
+        document.getElementById(
+            'allDataList'
+        );
+
+
+    let tableHtml =
+        `
+        <table class="data-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        JANコード
+                    </th>
+
+                    <th>
+                        名称
+                    </th>
+
+                    <th class="text-right">
+                        単価
+                    </th>
+
+                    <th class="text-right">
+                        税%
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+        `;
+
+
+    masterData.forEach(
+        item => {
+
+            tableHtml +=
+                `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(item.jan)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.name)}
+                    </td>
+
+                    <td class="text-right">
+                        ${formatPrice(item.price)}
+                    </td>
+
+                    <td class="text-right">
+                        ${formatTax(item.tax)}
+                    </td>
+
+                </tr>
+                `;
+
+        }
+    );
+
+
+    tableHtml +=
+        `
+            </tbody>
+
+        </table>
+        `;
+
+
+    listContainer.innerHTML =
+        tableHtml;
+
+}
+
+
+
+/* ===================================
+   モーダル外タップ等の安全対策
+=================================== */
+
+document.addEventListener(
+    'visibilitychange',
+    function() {
+
+        /*
+         * Safariをバックグラウンドにした場合、
+         * カメラを停止
+         */
+
+        if (
+            document.hidden &&
+            scannerRunning
+        ) {
+
+            stopScanner();
+
+        }
+
+    }
+);
+
+
 </script>
+
 
 </body>
 </html>
