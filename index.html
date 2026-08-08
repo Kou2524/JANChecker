@@ -88,14 +88,13 @@
         }
 
         /* ================================
-           設定エリア
+           設定
         ================================= */
 
         .config-section {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
             border-radius: 8px;
-
             padding: 12px;
             margin-bottom: 20px;
         }
@@ -104,17 +103,8 @@
             font-size: 13px;
             color: #6c757d;
             font-weight: bold;
-
             margin-bottom: 10px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
-
-        /* ================================
-           貼り付け
-        ================================= */
 
         .paste-wrapper {
             position: relative;
@@ -124,18 +114,13 @@
         textarea#pasteInput {
             width: 100%;
             height: 80px;
-
             padding: 10px;
             padding-right: 36px;
-
             font-size: 12px;
-
             border: 1px solid #ccc;
             border-radius: 6px;
-
             resize: vertical;
             outline: none;
-
             font-family: inherit;
         }
 
@@ -145,32 +130,18 @@
 
         .config-body button {
             width: 100%;
-
             padding: 10px;
-
             font-size: 13px;
-
             background-color: #007aff;
             color: white;
-
             border: none;
             border-radius: 6px;
-
             cursor: pointer;
             font-weight: bold;
         }
 
-        .config-body button:active {
-            background-color: #0056b3;
-        }
-
-        /* ================================
-           URL設定
-        ================================= */
-
         .sub-config {
             margin-top: 10px;
-
             border-top: 1px dashed #ccc;
             padding-top: 10px;
         }
@@ -178,13 +149,12 @@
         .sub-config-title {
             font-size: 11px;
             color: #8e8e93;
-
             cursor: pointer;
             font-weight: bold;
         }
 
         /* ================================
-           検索入力欄
+           入力
         ================================= */
 
         .search-box {
@@ -195,24 +165,18 @@
 
         .input-wrapper {
             position: relative;
-
             flex: 1;
-
             display: flex;
             align-items: center;
         }
 
         .input-wrapper input {
             width: 100%;
-
             padding: 12px;
             padding-right: 36px;
-
             font-size: 15px;
-
             border: 1px solid #ccc;
             border-radius: 8px;
-
             outline: none;
         }
 
@@ -222,41 +186,21 @@
             border-radius: 4px;
         }
 
-        .input-wrapper input:focus {
-            border-color: #007aff;
-        }
-
-        /* ================================
-           クリアボタン
-        ================================= */
-
         .clear-btn {
             position: absolute;
-
             right: 10px;
-
             width: 20px;
             height: 20px;
-
             border-radius: 50%;
-
             background-color: #ccc;
             color: white;
-
             font-size: 12px;
             font-weight: bold;
-
             display: none;
-
             align-items: center;
             justify-content: center;
-
             cursor: pointer;
             user-select: none;
-        }
-
-        .clear-btn:active {
-            background-color: #999;
         }
 
         .paste-clear-btn {
@@ -275,261 +219,22 @@
 
         .btn-group button {
             flex: 1;
-
             padding: 12px;
-
             font-size: 15px;
-
             border: none;
             border-radius: 8px;
-
             cursor: pointer;
             font-weight: bold;
         }
 
-        button#searchBtn {
+        #searchBtn {
             background-color: #007aff;
             color: white;
         }
 
-        button#searchBtn:active {
-            background-color: #0056b3;
-        }
-
-        button#scanBtn {
+        #scanBtn {
             background-color: #34c759;
             color: white;
-        }
-
-        button#scanBtn:active {
-            background-color: #28a745;
-        }
-
-        /* ================================
-           モーダル共通
-        ================================= */
-
-        .modal-overlay {
-            display: none;
-
-            position: fixed;
-
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 100%;
-
-            background-color: rgba(0,0,0,0.88);
-
-            z-index: 1000;
-
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            padding: 15px;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        /* ================================
-           Quagga2 カメラ
-        ================================= */
-
-        .scanner-container {
-            width: 100%;
-            max-width: 450px;
-            position: relative;
-        }
-
-        #reader {
-            position: relative;
-
-            width: 100%;
-            height: 55vh;
-
-            min-height: 320px;
-            max-height: 520px;
-
-            background-color: #000;
-
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        #reader video {
-            width: 100% !important;
-            height: 100% !important;
-
-            object-fit: cover;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        #reader canvas {
-            display: none !important;
-        }
-
-        .scan-guide {
-            position: absolute;
-
-            top: 50%;
-            left: 50%;
-
-            transform: translate(-50%, -50%);
-
-            width: 82%;
-            height: 130px;
-
-            border: 3px solid rgba(255,255,255,0.9);
-            border-radius: 10px;
-
-            z-index: 10;
-
-            pointer-events: none;
-
-            box-shadow:
-                0 0 0 9999px rgba(0,0,0,0.20);
-        }
-
-        .scan-line {
-            position: absolute;
-
-            left: 5%;
-            width: 90%;
-
-            height: 2px;
-
-            background-color: #ff3b30;
-
-            box-shadow:
-                0 0 8px rgba(255,59,48,0.9);
-
-            animation: scanMove 2s ease-in-out infinite;
-        }
-
-        @keyframes scanMove {
-            0% {
-                top: 15%;
-            }
-
-            50% {
-                top: 85%;
-            }
-
-            100% {
-                top: 15%;
-            }
-        }
-
-        .scanner-message {
-            position: absolute;
-
-            left: 50%;
-            bottom: 18px;
-
-            transform: translateX(-50%);
-
-            z-index: 20;
-
-            width: 90%;
-
-            text-align: center;
-
-            background: rgba(0,0,0,0.6);
-            color: white;
-
-            border-radius: 8px;
-
-            padding: 8px 10px;
-
-            font-size: 13px;
-        }
-
-        /* ================================
-           ヘルプモーダル
-        ================================= */
-
-        .modal-card {
-            background: white;
-
-            border-radius: 12px;
-
-            padding: 20px;
-
-            max-width: 450px;
-            width: 100%;
-
-            max-height: 80vh;
-
-            overflow-y: auto;
-
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .modal-card h2 {
-            font-size: 1.2rem;
-
-            margin-top: 0;
-            margin-bottom: 15px;
-
-            color: #333;
-
-            border-bottom: 2px solid #007aff;
-
-            padding-bottom: 8px;
-        }
-
-        .modal-card h3 {
-            font-size: 0.95rem;
-
-            margin-top: 15px;
-            margin-bottom: 6px;
-
-            color: #007aff;
-        }
-
-        .modal-card p,
-        .modal-card ul {
-            font-size: 13px;
-
-            color: #495057;
-
-            line-height: 1.5;
-
-            margin: 0 0 10px 0;
-        }
-
-        .modal-card ul {
-            padding-left: 20px;
-        }
-
-        /* ================================
-           閉じるボタン
-        ================================= */
-
-        .close-modal-btn {
-            margin-top: 15px;
-
-            width: 100%;
-
-            padding: 10px;
-
-            background-color: #ff3b30;
-            color: white;
-
-            border: none;
-            border-radius: 8px;
-
-            font-size: 14px;
-            font-weight: bold;
-
-            cursor: pointer;
         }
 
         /* ================================
@@ -547,15 +252,10 @@
 
         .status-badge {
             display: inline-block;
-
             padding: 4px 8px;
-
             font-size: 12px;
-
             border-radius: 4px;
-
             font-weight: bold;
-
             margin-bottom: 12px;
         }
 
@@ -569,42 +269,33 @@
             color: #721c24;
         }
 
-        .result-item {
-            background: #f8f9fa;
-
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-
-            padding: 14px;
-
-            margin-bottom: 10px;
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
         }
 
-        .result-item:last-child {
-            margin-bottom: 0;
+        .result-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
         }
 
         .item-name {
             font-size: 1.1rem;
             font-weight: bold;
             color: #212529;
-
             margin-bottom: 8px;
-
-            word-break: break-all;
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-
             border-top: 1px solid #dee2e6;
-
             padding-top: 6px;
             margin-top: 6px;
-
             font-size: 13px;
-
             color: #495057;
         }
 
@@ -615,69 +306,98 @@
         }
 
         /* ================================
-           ローディング
+           名前検索候補
         ================================= */
 
-        .loading {
-            text-align: center;
+        .candidate-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
+        .candidate-item {
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 1px solid #d9dde2;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .candidate-item:active {
+            background: #f1f3f5;
+        }
+
+        .candidate-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 5px;
+        }
+
+        .candidate-detail {
+            font-size: 12px;
             color: #6c757d;
+        }
 
-            font-size: 14px;
-
-            margin-bottom: 10px;
-
-            display: none;
+        .candidate-checked {
+            opacity: 0.5;
         }
 
         /* ================================
-           商品一覧
+           一覧
         ================================= */
 
-        .all-data-section {
+        .all-data-section,
+        .checked-section {
             margin-top: 30px;
-
             border-top: 2px solid #e9ecef;
-
             padding-top: 20px;
-
             text-align: center;
         }
 
-        button#toggleAllBtn {
+        #toggleAllBtn {
             padding: 10px 20px;
-
             font-size: 14px;
-
             background-color: #6c757d;
             color: white;
-
             border: none;
             border-radius: 8px;
-
             cursor: pointer;
+        }
+
+        #allDataList,
+        #checkedDataList {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
         }
 
         #allDataList {
             display: none;
-
-            margin-top: 20px;
-
-            text-align: left;
-
-            max-height: 400px;
-
-            overflow-y: auto;
-
-            border: 1px solid #dee2e6;
-
-            border-radius: 8px;
-
-            scroll-behavior: smooth;
         }
 
         #allDataList.active {
             display: block;
+        }
+
+        .checked-section {
+            display: none;
+        }
+
+        .checked-section.active {
+            display: block;
+        }
+
+        .checked-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 8px;
         }
 
         table.data-table {
@@ -689,21 +409,13 @@
         table.data-table th,
         table.data-table td {
             padding: 8px;
-
             border-bottom: 1px solid #eee;
-
-            transition:
-                background-color 0.2s ease,
-                color 0.2s ease;
         }
 
         table.data-table th {
             background-color: #f8f9fa;
-
             position: sticky;
-
             top: 0;
-
             z-index: 2;
         }
 
@@ -711,23 +423,138 @@
             text-align: right;
         }
 
+        .empty-message {
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 13px;
+        }
+
         /* ================================
-           検索該当行
+           モーダル
         ================================= */
 
-        table.data-table tr.matched-row td {
-            background-color: #e5e5ea;
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.88);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .scanner-container {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+        }
+
+        #reader {
+            position: relative;
+            width: 100%;
+            height: 55vh;
+            min-height: 320px;
+            max-height: 520px;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+        }
+
+        #reader canvas {
+            display: none !important;
+        }
+
+        .scan-guide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 82%;
+            height: 130px;
+            border: 3px solid rgba(255,255,255,0.9);
+            border-radius: 10px;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.20);
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            height: 2px;
+            background-color: #ff3b30;
+            box-shadow: 0 0 8px rgba(255,59,48,0.9);
+            animation: scanMove 2s ease-in-out infinite;
+        }
+
+        @keyframes scanMove {
+            0% { top: 15%; }
+            50% { top: 85%; }
+            100% { top: 15%; }
+        }
+
+        .scanner-message {
+            position: absolute;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 90%;
+            text-align: center;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+
+        .close-modal-btn {
+            margin-top: 15px;
+            width: 100%;
+            max-width: 450px;
+            padding: 10px;
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: bold;
+            cursor: pointer;
         }
 
-        table.data-table tr.matched-row {
-            box-shadow: inset 4px 0 0 #8e8e93;
+        .modal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        table.data-table tr.matched-row td:first-child {
-            padding-left: 12px;
+        .loading {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
         }
-
     </style>
 </head>
 
@@ -737,32 +564,21 @@
 
     <div class="header-area">
         <h1>商品登録チェック</h1>
-
-        <div
-            class="help-btn"
-            onclick="openHelpModal()"
-        >
-            ?
-        </div>
+        <div class="help-btn" onclick="openHelpModal()">?</div>
     </div>
 
-    <!-- データ登録 -->
     <div class="config-section">
 
         <div class="config-header">
-            <span>
-                データ登録
-                (スプレッドシートデータ貼り付け)
-            </span>
+            データ登録（スプレッドシートデータ貼り付け）
         </div>
 
         <div class="config-body">
 
             <div class="paste-wrapper">
-
                 <textarea
                     id="pasteInput"
-                    placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
+                    placeholder="スプレッドシートの全セルをコピーして貼り付けてください"
                     oninput="togglePasteClearBtn()"
                 ></textarea>
 
@@ -770,10 +586,7 @@
                     id="pasteClearBtn"
                     class="clear-btn paste-clear-btn"
                     onclick="clearPasteInput()"
-                >
-                    ✕
-                </span>
-
+                >✕</span>
             </div>
 
             <button onclick="savePastedData()">
@@ -789,10 +602,7 @@
                     ▼ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
 
-                <div
-                    id="urlArea"
-                    style="display:none; margin-top:8px;"
-                >
+                <div id="urlArea" style="display:none; margin-top:8px;">
 
                     <div class="input-wrapper">
 
@@ -807,17 +617,12 @@
                             id="urlClearBtn"
                             class="clear-btn"
                             onclick="clearUrlInput()"
-                        >
-                            ✕
-                        </span>
+                        >✕</span>
 
                     </div>
 
                     <button
-                        style="
-                            margin-top:6px;
-                            background-color:#6c757d;
-                        "
+                        style="margin-top:6px; background-color:#6c757d;"
                         onclick="saveAndLoadUrl()"
                     >
                         URLで再読み込み
@@ -828,10 +633,8 @@
             </div>
 
         </div>
-
     </div>
 
-    <!-- 商品検索 -->
     <div class="search-box">
 
         <div class="input-wrapper">
@@ -847,9 +650,7 @@
                 id="clearBtn"
                 class="clear-btn"
                 onclick="clearInput()"
-            >
-                ✕
-            </span>
+            >✕</span>
 
         </div>
 
@@ -859,7 +660,7 @@
 
         <button
             id="searchBtn"
-            onclick="searchJAN()"
+            onclick="searchProduct()"
         >
             検索
         </button>
@@ -873,34 +674,44 @@
 
     </div>
 
-    <div
-        id="loading"
-        class="loading"
-    >
+    <div id="loading" class="loading">
         データ読み込み中...
     </div>
 
+    <!-- 今回検索した結果 -->
     <div id="resultCard"></div>
 
-    <!-- 全商品一覧 -->
+    <!-- 未確認商品 -->
     <div class="all-data-section">
 
         <button
             id="toggleAllBtn"
             onclick="toggleAllData()"
         >
-            全商品一覧を表示（全
-            <span id="itemCount">0</span>
-            件）
+            全商品一覧を表示（全 0 件）
         </button>
 
         <div id="allDataList"></div>
 
     </div>
 
+    <!-- 確認済み -->
+    <div
+        id="checkedSection"
+        class="checked-section"
+    >
+
+        <div class="checked-title">
+            ✅ 確認済み（<span id="checkedCount">0</span>件）
+        </div>
+
+        <div id="checkedDataList"></div>
+
+    </div>
+
 </div>
 
-<!-- スキャナーモーダル -->
+<!-- スキャナー -->
 <div
     id="scannerModal"
     class="modal-overlay"
@@ -925,7 +736,6 @@
 
     <button
         class="close-modal-btn"
-        style="max-width:450px;"
         onclick="stopScanner()"
     >
         閉じる
@@ -943,87 +753,15 @@
 
         <h2>使い方ガイド</h2>
 
-        <h3>
-            1. スプレッドシートの貼り付け登録
-        </h3>
+        <p>
+            JANコードを入力またはスキャンすると、
+            一致した商品は自動的に確認済みになります。
+        </p>
 
         <p>
-            商品データを取り込むための操作手順です。
+            商品名検索の場合は部分一致候補を表示します。
+            対象の商品をタップすると、その商品だけを確認済みにします。
         </p>
-
-        <ul>
-            <li>
-                Googleスプレッドシートを開き、
-                全選択（Ctrl+A / Cmd+A）して
-                コピー（Ctrl+C / Cmd+C）します。
-            </li>
-
-            <li>
-                「データ登録」の枠にそのまま貼り付けて
-                「データを保存して取り込む」を押します。
-            </li>
-        </ul>
-
-        <h3>
-            2. 商品データの照会
-        </h3>
-
-        <ul>
-            <li>
-                <strong>手入力検索:</strong>
-                JANコード（完全一致）または
-                商品名（部分一致）を入力して
-                「検索」を押します。
-            </li>
-
-            <li>
-                <strong>バーコードスキャン:</strong>
-                「スキャン」を押して
-                商品バーコードを枠の中央に合わせます。
-            </li>
-
-            <li>
-                バーコードを正常に読み取ると
-                自動的に検索します。
-            </li>
-
-            <li>
-                一覧が開いている場合は、
-                該当商品まで自動スクロールします。
-            </li>
-        </ul>
-
-        <h3>
-            3. URL連携機能（任意）
-        </h3>
-
-        <ul>
-            <li>
-                Web公開したCSV URLから
-                商品データを読み込むこともできます。
-            </li>
-        </ul>
-
-        <h3>
-            4. スプレッドシートの列構造【必須】
-        </h3>
-
-        <p
-            style="
-                color:#d9534f;
-                font-weight:bold;
-                margin-bottom:6px;
-            "
-        >
-            ※以下の列順序を必ず守って作成してください。
-        </p>
-
-        <ul>
-            <li><strong>A列:</strong> JANコード</li>
-            <li><strong>B列:</strong> 商品名称</li>
-            <li><strong>C列:</strong> 単価（数字）</li>
-            <li><strong>D列:</strong> 消費税率（数字）</li>
-        </ul>
 
         <button
             class="close-modal-btn"
@@ -1039,27 +777,27 @@
 <script>
 
 /* ===================================
-   グローバル変数
+   データ
 =================================== */
 
 let masterData = [];
 
-let scannerRunning = false;
-
-let lastDetectedCode = null;
-
-let detectionCount = 0;
-
-let detectionLocked = false;
-
 /*
- * 現在検索されている文字列
+ * 確認済み商品
  *
- * 入力欄を消しても、
- * 一覧の該当表示を制御しやすいよう
- * 別変数として持つ。
+ * 商品そのものを保存する。
  */
-let currentSearchValue = '';
+let checkedItems = [];
+
+
+/* ===================================
+   Quagga
+=================================== */
+
+let scannerRunning = false;
+let lastDetectedCode = null;
+let detectionCount = 0;
+let detectionLocked = false;
 
 
 /* ===================================
@@ -1067,22 +805,12 @@ let currentSearchValue = '';
 =================================== */
 
 window.onload = function() {
-
-    localStorage.removeItem(
-        'custom_pasted_data'
-    );
-
-    localStorage.removeItem(
-        'custom_csv_url'
-    );
-
-    updateItemCountDisplay();
-
+    updateDisplays();
 };
 
 
 /* ===================================
-   単価表示
+   表示補助
 =================================== */
 
 function formatPrice(val) {
@@ -1096,23 +824,13 @@ function formatPrice(val) {
         return "-";
     }
 
-    if (
-        !isNaN(val) &&
-        val !== ""
-    ) {
-
-        return "¥" +
-            Number(val).toLocaleString();
-
+    if (!isNaN(val)) {
+        return "¥" + Number(val).toLocaleString();
     }
 
     return "¥" + val;
 }
 
-
-/* ===================================
-   税率表示
-=================================== */
 
 function formatTax(val) {
 
@@ -1126,9 +844,7 @@ function formatTax(val) {
     }
 
     const str =
-        val
-            .toString()
-            .trim();
+        String(val).trim();
 
     return str.endsWith("%")
         ? str
@@ -1136,47 +852,68 @@ function formatTax(val) {
 }
 
 
-/* ===================================
-   全商品一覧 自動表示
-=================================== */
+function escapeHtml(value) {
 
-function showAllDataListAuto() {
-
-    createDataTable(
-        currentSearchValue
-    );
-
-    const listContainer =
-        document.getElementById(
-            'allDataList'
-        );
-
-    const btn =
-        document.getElementById(
-            'toggleAllBtn'
-        );
-
-    listContainer.classList.add(
-        'active'
-    );
-
-    btn.innerText =
-        `一覧を閉じる`;
-
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 
 /* ===================================
-   貼り付けデータ保存
+   商品固有キー
+=================================== */
+
+/*
+ * JANあり商品 → JAN
+ * JANなし商品 → 商品名＋価格＋税率
+ *
+ * JANなし商品でも重複防止できるようにする。
+ */
+function getItemKey(item) {
+
+    if (
+        item.jan &&
+        item.jan !== '-'
+    ) {
+        return "JAN:" + item.jan;
+    }
+
+    return (
+        "NOJAN:" +
+        item.name +
+        "|" +
+        item.price +
+        "|" +
+        item.tax
+    );
+}
+
+
+function isChecked(item) {
+
+    const key =
+        getItemKey(item);
+
+    return checkedItems.some(
+        checked =>
+            getItemKey(checked) === key
+    );
+}
+
+
+/* ===================================
+   データ取り込み
 =================================== */
 
 function savePastedData() {
 
     const text =
         document
-            .getElementById(
-                'pasteInput'
-            )
+            .getElementById('pasteInput')
             .value
             .trim();
 
@@ -1191,31 +928,39 @@ function savePastedData() {
 
     parseTextData(text);
 
-    currentSearchValue = '';
-
-    updateItemCountDisplay();
+    /*
+     * 新しいデータを取り込んだら
+     * 確認済み状態はリセット
+     */
+    checkedItems = [];
 
     document
-        .getElementById(
-            'resultCard'
-        )
+        .getElementById('resultCard')
         .classList
-        .remove(
-            'active'
+        .remove('active');
+
+    updateDisplays();
+
+    /*
+     * データ取り込み時は
+     * 一覧を開く
+     */
+    const list =
+        document.getElementById(
+            'allDataList'
         );
 
-    showAllDataListAuto();
+    list.classList.add('active');
+
+    createUncheckedTable();
+
+    updateToggleButton();
 
     alert(
         `データを正常に取り込みました！（全 ${masterData.length} 件）`
     );
-
 }
 
-
-/* ===================================
-   テキスト解析
-=================================== */
 
 function parseTextData(text) {
 
@@ -1258,108 +1003,92 @@ function parseTextData(text) {
         if (
             i === 0 &&
             (
-                (cols[0] || '')
-                    .includes('JAN') ||
-
-                (cols[1] || '')
-                    .includes('名称') ||
-
-                (cols[1] || '')
-                    .includes('名前') ||
-
-                (cols[0] || '')
-                    .includes('名称')
+                (cols[0] || '').includes('JAN') ||
+                (cols[1] || '').includes('名称') ||
+                (cols[1] || '').includes('名前')
             )
         ) {
-
             continue;
         }
 
+        let jan = '-';
+        let name = '';
+        let price = '';
+        let tax = '';
+
         if (
-            cols.length >= 1
+            /^\d+$/.test(
+                cols[0] || ''
+            )
         ) {
 
-            let jan = '-';
-            let name = '';
-            let price = '';
-            let tax = '';
+            jan =
+                cols[0];
 
-            if (
-                /^\d+$/.test(
-                    cols[0]
-                )
-            ) {
+            name =
+                cols[1] || '';
 
-                jan =
-                    cols[0];
+            price =
+                cols[2] || '';
 
-                name =
-                    cols[1] || '';
+            tax =
+                cols[3] || '';
 
-                price =
-                    cols[2] || '';
+        }
 
-                tax =
-                    cols[3] || '';
+        else if (
+            (cols[0] || '') === '' &&
+            cols[1]
+        ) {
 
-            }
+            jan = '-';
 
-            else if (
-                cols[0] === '' &&
-                cols[1]
-            ) {
+            name =
+                cols[1] || '';
 
-                jan = '-';
+            price =
+                cols[2] || '';
 
-                name =
-                    cols[1] || '';
+            tax =
+                cols[3] || '';
 
-                price =
-                    cols[2] || '';
+        }
 
-                tax =
-                    cols[3] || '';
+        else {
 
-            }
+            jan = '-';
 
-            else {
+            name =
+                cols[0] || '';
 
-                jan = '-';
+            price =
+                cols[1] || '';
 
-                name =
-                    cols[0] || '';
+            tax =
+                cols[2] || '';
 
-                price =
-                    cols[1] || '';
+        }
 
-                tax =
-                    cols[2] || '';
+        if (
+            name ||
+            jan !== '-'
+        ) {
 
-            }
-
-            if (
-                name ||
-                jan !== '-'
-            ) {
-
-                masterData.push({
-                    jan,
-                    name,
-                    price,
-                    tax
-                });
-
-            }
+            masterData.push({
+                jan,
+                name,
+                price,
+                tax
+            });
 
         }
 
     }
-
 }
 
 
 /* ===================================
-   CSV URL読込
+   URL CSV
 =================================== */
 
 function loadCSVData(url) {
@@ -1372,139 +1101,594 @@ function loadCSVData(url) {
     loading.style.display =
         'block';
 
-    loading.innerText =
-        'データ読み込み中...';
-
     fetch(url)
 
-        .then(
-            response => {
+        .then(response => {
 
-                if (
-                    !response.ok
-                ) {
-
-                    throw new Error(
-                        'HTTPエラー: ' +
-                        response.status
-                    );
-
-                }
-
-                return response.text();
-
+            if (!response.ok) {
+                throw new Error();
             }
-        )
 
-        .then(
-            text => {
+            return response.text();
 
-                handleLoadedCSV(
-                    text
-                );
+        })
 
-            }
-        )
+        .then(text => {
 
-        .catch(
-            () => {
+            handleLoadedCSV(text);
 
-                const proxyUrl =
-                    'https://api.allorigins.win/raw?url=' +
-                    encodeURIComponent(
-                        url
-                    );
+        })
 
-                fetch(proxyUrl)
+        .catch(() => {
 
-                    .then(
-                        response => {
+            const proxyUrl =
+                'https://api.allorigins.win/raw?url=' +
+                encodeURIComponent(url);
 
-                            if (
-                                !response.ok
-                            ) {
+            fetch(proxyUrl)
 
-                                throw new Error(
-                                    'Proxyエラー: ' +
-                                    response.status
-                                );
+                .then(response => {
 
-                            }
+                    if (!response.ok) {
+                        throw new Error();
+                    }
 
-                            return response.text();
+                    return response.text();
 
-                        }
-                    )
+                })
 
-                    .then(
-                        text => {
+                .then(text => {
 
-                            handleLoadedCSV(
-                                text
-                            );
+                    handleLoadedCSV(text);
 
-                        }
-                    )
+                })
 
-                    .catch(
-                        () => {
+                .catch(() => {
 
-                            loading.innerText =
-                                'エラー: スプレッドシートのURL読み込みに失敗しました。';
+                    loading.innerText =
+                        'CSV読み込みに失敗しました。';
 
-                        }
-                    );
+                });
 
-            }
-        );
-
+        });
 }
 
-
-/* ===================================
-   CSV読込完了
-=================================== */
 
 function handleLoadedCSV(text) {
 
     parseTextData(text);
 
-    currentSearchValue = '';
+    checkedItems = [];
 
     document
-        .getElementById(
-            'loading'
-        )
+        .getElementById('loading')
         .style
         .display =
         'none';
 
-    updateItemCountDisplay();
-
-    showAllDataListAuto();
-
+    updateDisplays();
 }
 
 
 /* ===================================
-   件数表示
+   検索
 =================================== */
 
-function updateItemCountDisplay() {
+function searchProduct() {
 
-    const countSpan =
-        document.getElementById(
-            'itemCount'
+    const value =
+        document
+            .getElementById('janInput')
+            .value
+            .trim();
+
+    if (!value) {
+
+        alert(
+            'JANコードまたは商品名を入力してください'
         );
 
-    if (countSpan) {
+        return;
+    }
 
-        countSpan.innerText =
-            masterData.length;
+    /*
+     * 数字だけならJAN完全一致検索
+     */
+    if (
+        /^\d+$/.test(value)
+    ) {
+
+        const item =
+            masterData.find(
+                product =>
+                    product.jan !== '-' &&
+                    product.jan === value
+            );
+
+        if (item) {
+
+            confirmItem(
+                item
+            );
+
+        }
+
+        else {
+
+            showNotFound();
+
+        }
+
+        return;
+    }
+
+    /*
+     * 名前部分検索
+     */
+    searchByName(
+        value
+    );
+}
+
+
+/* ===================================
+   名前検索候補
+=================================== */
+
+function searchByName(value) {
+
+    const normalized =
+        value.toLowerCase();
+
+    const results =
+        masterData.filter(
+            item =>
+                item.name &&
+                item.name
+                    .toLowerCase()
+                    .includes(
+                        normalized
+                    )
+        );
+
+    const card =
+        document.getElementById(
+            'resultCard'
+        );
+
+    if (
+        results.length === 0
+    ) {
+
+        showNotFound();
+
+        return;
+    }
+
+    /*
+     * 完全一致1件でも
+     * 名前検索は必ず選択させる。
+     *
+     * 誤操作防止。
+     */
+    let html =
+        `
+        <span class="status-badge info">
+            🔎 ${results.length}件見つかりました
+        </span>
+
+        <div class="result-item">
+
+            <div class="item-name">
+                対象の商品を選択してください
+            </div>
+
+            <div class="candidate-list">
+        `;
+
+    results.forEach(
+        item => {
+
+            const index =
+                masterData.indexOf(
+                    item
+                );
+
+            const checked =
+                isChecked(item);
+
+            html +=
+                `
+                <button
+                    class="candidate-item ${checked ? 'candidate-checked' : ''}"
+                    onclick="selectNameCandidate(${index})"
+                >
+
+                    <div class="candidate-name">
+                        ${escapeHtml(item.name)}
+                        ${checked ? '（確認済み）' : ''}
+                    </div>
+
+                    <div class="candidate-detail">
+                        JAN:
+                        ${escapeHtml(item.jan)}
+                        /
+                        ${formatPrice(item.price)}
+                        /
+                        税 ${formatTax(item.tax)}
+                    </div>
+
+                </button>
+                `;
+
+        }
+    );
+
+    html +=
+        `
+            </div>
+        </div>
+        `;
+
+    card.innerHTML =
+        html;
+
+    card.classList.add(
+        'active'
+    );
+}
+
+
+/* ===================================
+   名前候補選択
+=================================== */
+
+function selectNameCandidate(index) {
+
+    const item =
+        masterData[index];
+
+    if (!item) {
+        return;
+    }
+
+    confirmItem(
+        item
+    );
+}
+
+
+/* ===================================
+   商品確認
+=================================== */
+
+function confirmItem(item) {
+
+    /*
+     * 重複防止
+     */
+    if (
+        !isChecked(item)
+    ) {
+
+        checkedItems.push(
+            item
+        );
 
     }
 
-    const listContainer =
+    /*
+     * 上の「該当あり」カードを表示
+     */
+    showConfirmedResult(
+        item
+    );
+
+    /*
+     * 未確認一覧・確認済み一覧更新
+     */
+    updateDisplays();
+}
+
+
+/* ===================================
+   該当あり表示
+=================================== */
+
+function showConfirmedResult(item) {
+
+    const card =
+        document.getElementById(
+            'resultCard'
+        );
+
+    card.innerHTML =
+        `
+        <span class="status-badge success">
+            ✅ 該当あり
+        </span>
+
+        <div class="result-item">
+
+            <div class="item-name">
+                ${escapeHtml(item.name)}
+            </div>
+
+            <div class="detail-row">
+
+                <span>
+                    JANコード
+                </span>
+
+                <span class="detail-value">
+                    ${escapeHtml(item.jan)}
+                </span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <span>
+                    単価（税抜）
+                </span>
+
+                <span class="detail-value">
+                    ${formatPrice(item.price)}
+                </span>
+
+            </div>
+
+            <div class="detail-row">
+
+                <span>
+                    消費税率
+                </span>
+
+                <span class="detail-value">
+                    ${formatTax(item.tax)}
+                </span>
+
+            </div>
+
+        </div>
+        `;
+
+    card.classList.add(
+        'active'
+    );
+}
+
+
+function showNotFound() {
+
+    const card =
+        document.getElementById(
+            'resultCard'
+        );
+
+    card.innerHTML =
+        `
+        <span class="status-badge error">
+            ❌ 未登録
+        </span>
+
+        <div class="result-item">
+            該当する商品が見つかりませんでした。
+        </div>
+        `;
+
+    card.classList.add(
+        'active'
+    );
+}
+
+
+/* ===================================
+   一覧更新
+=================================== */
+
+function updateDisplays() {
+
+    createUncheckedTable();
+
+    createCheckedTable();
+
+    updateToggleButton();
+
+    updateCheckedSection();
+}
+
+
+/* ===================================
+   未確認一覧
+=================================== */
+
+function getUncheckedItems() {
+
+    return masterData.filter(
+        item =>
+            !isChecked(item)
+    );
+}
+
+
+function createUncheckedTable() {
+
+    const container =
+        document.getElementById(
+            'allDataList'
+        );
+
+    const items =
+        getUncheckedItems();
+
+    if (
+        items.length === 0
+    ) {
+
+        container.innerHTML =
+            `
+            <div class="empty-message">
+                🎉 未確認の商品はありません
+            </div>
+            `;
+
+        return;
+    }
+
+    container.innerHTML =
+        buildTable(
+            items
+        );
+}
+
+
+/* ===================================
+   確認済み一覧
+=================================== */
+
+function createCheckedTable() {
+
+    const container =
+        document.getElementById(
+            'checkedDataList'
+        );
+
+    if (
+        checkedItems.length === 0
+    ) {
+
+        container.innerHTML =
+            '';
+
+        return;
+    }
+
+    container.innerHTML =
+        buildTable(
+            checkedItems
+        );
+}
+
+
+function updateCheckedSection() {
+
+    const section =
+        document.getElementById(
+            'checkedSection'
+        );
+
+    const count =
+        document.getElementById(
+            'checkedCount'
+        );
+
+    count.innerText =
+        checkedItems.length;
+
+    if (
+        checkedItems.length > 0
+    ) {
+
+        section.classList.add(
+            'active'
+        );
+
+    }
+
+    else {
+
+        section.classList.remove(
+            'active'
+        );
+
+    }
+}
+
+
+/* ===================================
+   テーブル生成
+=================================== */
+
+function buildTable(items) {
+
+    let html =
+        `
+        <table class="data-table">
+
+            <thead>
+                <tr>
+                    <th>JANコード</th>
+                    <th>名称</th>
+                    <th class="text-right">単価</th>
+                    <th class="text-right">税%</th>
+                </tr>
+            </thead>
+
+            <tbody>
+        `;
+
+    items.forEach(
+        item => {
+
+            html +=
+                `
+                <tr>
+
+                    <td>
+                        ${escapeHtml(item.jan)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.name)}
+                    </td>
+
+                    <td class="text-right">
+                        ${formatPrice(item.price)}
+                    </td>
+
+                    <td class="text-right">
+                        ${formatTax(item.tax)}
+                    </td>
+
+                </tr>
+                `;
+
+        }
+    );
+
+    html +=
+        `
+            </tbody>
+        </table>
+        `;
+
+    return html;
+}
+
+
+/* ===================================
+   一覧開閉
+=================================== */
+
+function toggleAllData() {
+
+    const list =
+        document.getElementById(
+            'allDataList'
+        );
+
+    list.classList.toggle(
+        'active'
+    );
+
+    updateToggleButton();
+}
+
+
+function updateToggleButton() {
+
+    const list =
         document.getElementById(
             'allDataList'
         );
@@ -1514,55 +1698,32 @@ function updateItemCountDisplay() {
             'toggleAllBtn'
         );
 
+    const remaining =
+        getUncheckedItems()
+            .length;
+
     if (
-        !listContainer
-            .classList
-            .contains(
-                'active'
-            )
+        list.classList.contains(
+            'active'
+        )
     ) {
 
         btn.innerText =
-            `全商品一覧を表示（全 ${masterData.length} 件）`;
+            `一覧を閉じる`;
 
     }
 
+    else {
+
+        btn.innerText =
+            `全商品一覧を表示（残り ${remaining} 件 / 全 ${masterData.length} 件）`;
+
+    }
 }
 
 
 /* ===================================
-   ヘルプ
-=================================== */
-
-function openHelpModal() {
-
-    document
-        .getElementById(
-            'helpModal'
-        )
-        .classList
-        .add(
-            'active'
-        );
-
-}
-
-function closeHelpModal() {
-
-    document
-        .getElementById(
-            'helpModal'
-        )
-        .classList
-        .remove(
-            'active'
-        );
-
-}
-
-
-/* ===================================
-   JANチェックディジット検証
+   JANチェックディジット
 =================================== */
 
 function validateEAN(code) {
@@ -1573,9 +1734,6 @@ function validateEAN(code) {
         return false;
     }
 
-    /*
-     * EAN-13 / JAN-13
-     */
     if (
         code.length === 13
     ) {
@@ -1585,9 +1743,6 @@ function validateEAN(code) {
                 .split('')
                 .map(Number);
 
-        const checkDigit =
-            digits[12];
-
         let sum = 0;
 
         for (
@@ -1596,42 +1751,24 @@ function validateEAN(code) {
             i++
         ) {
 
-            if (
+            sum +=
                 i % 2 === 0
-            ) {
-
-                sum +=
-                    digits[i];
-
-            }
-
-            else {
-
-                sum +=
-                    digits[i] * 3;
-
-            }
+                    ? digits[i]
+                    : digits[i] * 3;
 
         }
 
-        const calculated =
+        return (
             (
                 10 -
                 (
                     sum % 10
                 )
-            ) % 10;
-
-        return (
-            calculated ===
-            checkDigit
-        );
+            ) % 10
+        ) === digits[12];
 
     }
 
-    /*
-     * EAN-8
-     */
     if (
         code.length === 8
     ) {
@@ -1641,9 +1778,6 @@ function validateEAN(code) {
                 .split('')
                 .map(Number);
 
-        const checkDigit =
-            digits[7];
-
         let sum = 0;
 
         for (
@@ -1652,42 +1786,24 @@ function validateEAN(code) {
             i++
         ) {
 
-            if (
+            sum +=
                 i % 2 === 0
-            ) {
-
-                sum +=
-                    digits[i] * 3;
-
-            }
-
-            else {
-
-                sum +=
-                    digits[i];
-
-            }
+                    ? digits[i] * 3
+                    : digits[i];
 
         }
 
-        const calculated =
+        return (
             (
                 10 -
                 (
                     sum % 10
                 )
-            ) % 10;
-
-        return (
-            calculated ===
-            checkDigit
-        );
+            ) % 10
+        ) === digits[7];
 
     }
 
-    /*
-     * UPC-A
-     */
     if (
         code.length === 12
     ) {
@@ -1697,9 +1813,6 @@ function validateEAN(code) {
                 .split('')
                 .map(Number);
 
-        const checkDigit =
-            digits[11];
-
         let sum = 0;
 
         for (
@@ -1708,46 +1821,30 @@ function validateEAN(code) {
             i++
         ) {
 
-            if (
+            sum +=
                 i % 2 === 0
-            ) {
-
-                sum +=
-                    digits[i] * 3;
-
-            }
-
-            else {
-
-                sum +=
-                    digits[i];
-
-            }
+                    ? digits[i] * 3
+                    : digits[i];
 
         }
 
-        const calculated =
+        return (
             (
                 10 -
                 (
                     sum % 10
                 )
-            ) % 10;
-
-        return (
-            calculated ===
-            checkDigit
-        );
+            ) % 10
+        ) === digits[11];
 
     }
 
     return false;
-
 }
 
 
 /* ===================================
-   Quagga2 スタート
+   Quagga開始
 =================================== */
 
 function startScanner() {
@@ -1758,7 +1855,7 @@ function startScanner() {
     ) {
 
         alert(
-            'Quagga2の読み込みに失敗しました。\nネットワーク接続を確認してください。'
+            'Quagga2の読み込みに失敗しました。'
         );
 
         return;
@@ -1779,7 +1876,8 @@ function startScanner() {
             'scannerMessage'
         );
 
-    reader.innerHTML = '';
+    reader.innerHTML =
+        '';
 
     modal.classList.add(
         'active'
@@ -1883,17 +1981,8 @@ function startScanner() {
 
         if (err) {
 
-            console.error(
-                "Quagga init error:",
-                err
-            );
-
-            message.innerText =
-                'カメラの起動に失敗しました。';
-
             alert(
                 "カメラの起動に失敗しました。\n\n" +
-                "Safariのカメラ権限とHTTPS接続を確認してください。\n\n" +
                 String(err)
             );
 
@@ -1902,51 +1991,27 @@ function startScanner() {
             return;
         }
 
-        try {
+        Quagga.start();
 
-            Quagga.start();
+        scannerRunning =
+            true;
 
-            scannerRunning =
-                true;
-
-            message.innerText =
-                'バーコードを枠の中央に合わせてください';
-
-        }
-
-        catch (error) {
-
-            console.error(
-                error
-            );
-
-            alert(
-                'スキャナーを開始できませんでした。'
-            );
-
-            stopScanner();
-
-        }
+        message.innerText =
+            'バーコードを枠の中央に合わせてください';
 
     });
-
 }
 
 
 /* ===================================
-   Quagga2 検出処理
+   Quagga検出
 =================================== */
 
 Quagga.onDetected(
     function(result) {
 
         if (
-            !scannerRunning
-        ) {
-            return;
-        }
-
-        if (
+            !scannerRunning ||
             detectionLocked
         ) {
             return;
@@ -1967,36 +2032,13 @@ Quagga.onDetected(
                 .trim();
 
         if (
-            !/^\d+$/.test(
-                code
-            )
+            !validateEAN(code)
         ) {
             return;
         }
 
         if (
-            code.length !== 13 &&
-            code.length !== 8 &&
-            code.length !== 12
-        ) {
-
-            return;
-
-        }
-
-        if (
-            !validateEAN(
-                code
-            )
-        ) {
-
-            return;
-
-        }
-
-        if (
-            code ===
-            lastDetectedCode
+            code === lastDetectedCode
         ) {
 
             detectionCount++;
@@ -2016,37 +2058,11 @@ Quagga.onDetected(
         if (
             detectionCount < 2
         ) {
-
-            document
-                .getElementById(
-                    'scannerMessage'
-                )
-                .innerText =
-                'バーコードを検出中...';
-
             return;
-
         }
 
         detectionLocked =
             true;
-
-        document
-            .getElementById(
-                'scannerMessage'
-            )
-            .innerText =
-            '読み取り成功！';
-
-        if (
-            navigator.vibrate
-        ) {
-
-            navigator.vibrate(
-                100
-            );
-
-        }
 
         document
             .getElementById(
@@ -2057,16 +2073,21 @@ Quagga.onDetected(
 
         toggleClearBtn();
 
+        if (
+            navigator.vibrate
+        ) {
+            navigator.vibrate(100);
+        }
+
         stopScanner(
             true
         );
-
     }
 );
 
 
 /* ===================================
-   スキャナー停止
+   Scanner停止
 =================================== */
 
 function stopScanner(
@@ -2078,19 +2099,9 @@ function stopScanner(
     ) {
 
         try {
-
             Quagga.stop();
-
         }
-
-        catch (error) {
-
-            console.warn(
-                "Quagga stop error:",
-                error
-            );
-
-        }
+        catch(e) {}
 
     }
 
@@ -2126,7 +2137,7 @@ function stopScanner(
         setTimeout(
             function() {
 
-                searchJAN();
+                searchProduct();
 
                 detectionLocked =
                     false;
@@ -2143,90 +2154,11 @@ function stopScanner(
             false;
 
     }
-
 }
 
 
 /* ===================================
-   貼り付け欄クリア
-=================================== */
-
-function togglePasteClearBtn() {
-
-    const input =
-        document.getElementById(
-            'pasteInput'
-        );
-
-    const btn =
-        document.getElementById(
-            'pasteClearBtn'
-        );
-
-    btn.style.display =
-        input.value.length > 0
-            ? 'flex'
-            : 'none';
-
-}
-
-function clearPasteInput() {
-
-    const input =
-        document.getElementById(
-            'pasteInput'
-        );
-
-    input.value = '';
-
-    togglePasteClearBtn();
-
-    input.focus();
-
-}
-
-
-/* ===================================
-   URLクリア
-=================================== */
-
-function toggleUrlClearBtn() {
-
-    const input =
-        document.getElementById(
-            'csvUrlInput'
-        );
-
-    const btn =
-        document.getElementById(
-            'urlClearBtn'
-        );
-
-    btn.style.display =
-        input.value.length > 0
-            ? 'flex'
-            : 'none';
-
-}
-
-function clearUrlInput() {
-
-    const input =
-        document.getElementById(
-            'csvUrlInput'
-        );
-
-    input.value = '';
-
-    toggleUrlClearBtn();
-
-    input.focus();
-
-}
-
-
-/* ===================================
-   検索欄クリア
+   入力UI
 =================================== */
 
 function toggleClearBtn() {
@@ -2236,17 +2168,17 @@ function toggleClearBtn() {
             'janInput'
         );
 
-    const btn =
-        document.getElementById(
+    document
+        .getElementById(
             'clearBtn'
-        );
-
-    btn.style.display =
-        input.value.length > 0
+        )
+        .style
+        .display =
+        input.value
             ? 'flex'
             : 'none';
-
 }
+
 
 function clearInput() {
 
@@ -2255,43 +2187,82 @@ function clearInput() {
             'janInput'
         );
 
-    input.value = '';
-
-    currentSearchValue = '';
+    input.value =
+        '';
 
     toggleClearBtn();
 
-    /*
-     * 一覧が開いている場合は
-     * グレー表示を解除する
-     */
-    const listContainer =
-        document.getElementById(
-            'allDataList'
-        );
-
-    if (
-        listContainer
-            .classList
-            .contains('active')
-    ) {
-
-        createDataTable('');
-
-    }
-
     input.focus();
-
 }
 
 
-/* ===================================
-   URL読込
-=================================== */
+function togglePasteClearBtn() {
+
+    const input =
+        document.getElementById(
+            'pasteInput'
+        );
+
+    document
+        .getElementById(
+            'pasteClearBtn'
+        )
+        .style
+        .display =
+        input.value
+            ? 'flex'
+            : 'none';
+}
+
+
+function clearPasteInput() {
+
+    document
+        .getElementById(
+            'pasteInput'
+        )
+        .value =
+        '';
+
+    togglePasteClearBtn();
+}
+
+
+function toggleUrlClearBtn() {
+
+    const input =
+        document.getElementById(
+            'csvUrlInput'
+        );
+
+    document
+        .getElementById(
+            'urlClearBtn'
+        )
+        .style
+        .display =
+        input.value
+            ? 'flex'
+            : 'none';
+}
+
+
+function clearUrlInput() {
+
+    document
+        .getElementById(
+            'csvUrlInput'
+        )
+        .value =
+        '';
+
+    toggleUrlClearBtn();
+}
+
 
 function saveAndLoadUrl() {
 
-    const inputUrl =
+    const url =
         document
             .getElementById(
                 'csvUrlInput'
@@ -2299,48 +2270,13 @@ function saveAndLoadUrl() {
             .value
             .trim();
 
-    if (
-        !inputUrl
-    ) {
-
-        masterData = [];
-
-        currentSearchValue = '';
-
-        updateItemCountDisplay();
-
-        document
-            .getElementById(
-                'allDataList'
-            )
-            .innerHTML =
-            '';
-
-        document
-            .getElementById(
-                'allDataList'
-            )
-            .classList
-            .remove(
-                'active'
-            );
-
+    if (!url) {
+        return;
     }
 
-    else {
-
-        loadCSVData(
-            inputUrl
-        );
-
-    }
-
+    loadCSVData(url);
 }
 
-
-/* ===================================
-   URL設定開閉
-=================================== */
 
 function toggleUrlArea() {
 
@@ -2350,280 +2286,15 @@ function toggleUrlArea() {
         );
 
     area.style.display =
-        area.style.display === 'none'
+        area.style.display ===
+        'none'
             ? 'block'
             : 'none';
-
 }
 
 
 /* ===================================
-   商品検索
-=================================== */
-
-function searchJAN() {
-
-    const inputVal =
-        document
-            .getElementById(
-                'janInput'
-            )
-            .value
-            .trim();
-
-    const card =
-        document.getElementById(
-            'resultCard'
-        );
-
-    if (
-        !inputVal
-    ) {
-
-        alert(
-            'JANコードまたは商品名を入力してください'
-        );
-
-        return;
-
-    }
-
-    /*
-     * 現在検索中の商品を保存
-     */
-    currentSearchValue =
-        inputVal;
-
-    const results =
-        masterData.filter(
-            d =>
-
-                (
-                    d.jan !== '-' &&
-                    d.jan === inputVal
-                )
-
-                ||
-
-                (
-                    d.name &&
-                    d.name
-                        .toLowerCase()
-                        .includes(
-                            inputVal
-                                .toLowerCase()
-                        )
-                )
-        );
-
-    if (
-        results.length > 0
-    ) {
-
-        let html =
-            `
-            <span class="status-badge success">
-                ✅ 該当あり（${results.length}件見つかりました）
-            </span>
-            `;
-
-        results.forEach(
-            item => {
-
-                html +=
-                    `
-                    <div class="result-item">
-
-                        <div class="item-name">
-                            ${escapeHtml(item.name)}
-                        </div>
-
-                        <div class="detail-row">
-
-                            <span>
-                                JANコード
-                            </span>
-
-                            <span class="detail-value">
-                                ${escapeHtml(item.jan)}
-                            </span>
-
-                        </div>
-
-                        <div class="detail-row">
-
-                            <span>
-                                単価（税抜）
-                            </span>
-
-                            <span class="detail-value">
-                                ${formatPrice(item.price)}
-                            </span>
-
-                        </div>
-
-                        <div class="detail-row">
-
-                            <span>
-                                消費税率
-                            </span>
-
-                            <span class="detail-value">
-                                ${formatTax(item.tax)}
-                            </span>
-
-                        </div>
-
-                    </div>
-                    `;
-
-            }
-        );
-
-        card.innerHTML =
-            html;
-
-    }
-
-    else {
-
-        card.innerHTML =
-            `
-            <span class="status-badge error">
-                ❌ 未登録
-            </span>
-
-            <div class="result-item">
-                該当する商品が見つかりませんでした。
-            </div>
-            `;
-
-    }
-
-    card.classList.add(
-        'active'
-    );
-
-    /*
-     * ================================
-     * 一覧の開閉状態は変更しない
-     * ================================
-     */
-
-    const listContainer =
-        document.getElementById(
-            'allDataList'
-        );
-
-    /*
-     * 一覧が開いていた場合のみ
-     * 再描画して該当商品を強調
-     */
-    if (
-        listContainer
-            .classList
-            .contains('active')
-    ) {
-
-        createDataTable(
-            currentSearchValue
-        );
-
-        /*
-         * 該当行まで自動スクロール
-         */
-        if (
-            results.length > 0
-        ) {
-
-            scrollToMatchedRow();
-
-        }
-
-    }
-
-}
-
-
-/* ===================================
-   該当商品へ自動スクロール
-=================================== */
-
-function scrollToMatchedRow() {
-
-    /*
-     * テーブル描画が完了した後に実行
-     */
-    requestAnimationFrame(
-        function() {
-
-            requestAnimationFrame(
-                function() {
-
-                    const matchedRow =
-                        document.querySelector(
-                            '#allDataList .matched-row'
-                        );
-
-                    if (
-                        !matchedRow
-                    ) {
-                        return;
-                    }
-
-                    /*
-                     * 商品一覧のスクロール領域だけを移動
-                     *
-                     * scrollIntoViewよりも
-                     * ページ全体が勝手に動きにくい。
-                     */
-                    const listContainer =
-                        document.getElementById(
-                            'allDataList'
-                        );
-
-                    const rowTop =
-                        matchedRow.offsetTop;
-
-                    const rowHeight =
-                        matchedRow.offsetHeight;
-
-                    const containerHeight =
-                        listContainer.clientHeight;
-
-                    const targetScrollTop =
-                        rowTop
-                        -
-                        (
-                            containerHeight / 2
-                        )
-                        +
-                        (
-                            rowHeight / 2
-                        );
-
-                    listContainer.scrollTo({
-                        top:
-                            Math.max(
-                                0,
-                                targetScrollTop
-                            ),
-
-                        behavior:
-                            'smooth'
-                    });
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* ===================================
-   Enter検索
+   Enter
 =================================== */
 
 document
@@ -2637,9 +2308,7 @@ document
             if (
                 e.key === 'Enter'
             ) {
-
-                searchJAN();
-
+                searchProduct();
             }
 
         }
@@ -2647,255 +2316,37 @@ document
 
 
 /* ===================================
-   一覧開閉
+   モーダル
 =================================== */
 
-function toggleAllData() {
+function openHelpModal() {
 
-    const listContainer =
-        document.getElementById(
-            'allDataList'
+    document
+        .getElementById(
+            'helpModal'
+        )
+        .classList
+        .add(
+            'active'
         );
+}
 
-    const btn =
-        document.getElementById(
-            'toggleAllBtn'
+
+function closeHelpModal() {
+
+    document
+        .getElementById(
+            'helpModal'
+        )
+        .classList
+        .remove(
+            'active'
         );
-
-    if (
-        listContainer
-            .classList
-            .contains('active')
-    ) {
-
-        /*
-         * 一覧を閉じる
-         */
-        listContainer
-            .classList
-            .remove('active');
-
-        btn.innerText =
-            `全商品一覧を表示（全 ${masterData.length} 件）`;
-
-    }
-
-    else {
-
-        /*
-         * 現在検索されている商品を反映した状態で
-         * 一覧を生成
-         */
-        createDataTable(
-            currentSearchValue
-        );
-
-        listContainer
-            .classList
-            .add('active');
-
-        btn.innerText =
-            `一覧を閉じる`;
-
-        /*
-         * 検索中の商品があれば
-         * 開いた瞬間にそこまで移動
-         */
-        if (
-            currentSearchValue
-        ) {
-
-            setTimeout(
-                function() {
-
-                    const matchedRow =
-                        document.querySelector(
-                            '#allDataList .matched-row'
-                        );
-
-                    if (
-                        matchedRow
-                    ) {
-
-                        scrollToMatchedRow();
-
-                    }
-
-                },
-                50
-            );
-
-        }
-
-    }
-
 }
 
 
 /* ===================================
-   HTMLエスケープ
-=================================== */
-
-function escapeHtml(value) {
-
-    return String(
-        value ?? ''
-    )
-
-        .replace(
-            /&/g,
-            '&amp;'
-        )
-
-        .replace(
-            /</g,
-            '&lt;'
-        )
-
-        .replace(
-            />/g,
-            '&gt;'
-        )
-
-        .replace(
-            /"/g,
-            '&quot;'
-        )
-
-        .replace(
-            /'/g,
-            '&#039;'
-        );
-
-}
-
-
-/* ===================================
-   商品一覧テーブル
-=================================== */
-
-function createDataTable(
-    searchValue = ''
-) {
-
-    const listContainer =
-        document.getElementById(
-            'allDataList'
-        );
-
-    const normalizedSearch =
-        String(
-            searchValue || ''
-        )
-            .trim()
-            .toLowerCase();
-
-    let tableHtml =
-        `
-        <table class="data-table">
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        JANコード
-                    </th>
-
-                    <th>
-                        名称
-                    </th>
-
-                    <th class="text-right">
-                        単価
-                    </th>
-
-                    <th class="text-right">
-                        税%
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-        `;
-
-    masterData.forEach(
-        item => {
-
-            let isMatched =
-                false;
-
-            if (
-                normalizedSearch
-            ) {
-
-                const janMatch =
-                    item.jan !== '-' &&
-                    item.jan ===
-                    searchValue;
-
-                const nameMatch =
-                    item.name &&
-                    item.name
-                        .toLowerCase()
-                        .includes(
-                            normalizedSearch
-                        );
-
-                isMatched =
-                    janMatch ||
-                    nameMatch;
-
-            }
-
-            const rowClass =
-                isMatched
-                    ? 'matched-row'
-                    : '';
-
-            tableHtml +=
-                `
-                <tr class="${rowClass}">
-
-                    <td>
-                        ${escapeHtml(item.jan)}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(item.name)}
-                    </td>
-
-                    <td class="text-right">
-                        ${formatPrice(item.price)}
-                    </td>
-
-                    <td class="text-right">
-                        ${formatTax(item.tax)}
-                    </td>
-
-                </tr>
-                `;
-
-        }
-    );
-
-    tableHtml +=
-        `
-            </tbody>
-
-        </table>
-        `;
-
-    listContainer.innerHTML =
-        tableHtml;
-
-}
-
-
-/* ===================================
-   Safariバックグラウンド対策
+   Safariバックグラウンド
 =================================== */
 
 document.addEventListener(
