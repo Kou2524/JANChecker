@@ -122,6 +122,8 @@
 
             font-size: 12px;
 
+            background-color: white;
+
             border: 1px solid #ccc;
             border-radius: 6px;
 
@@ -129,11 +131,36 @@
             outline: none;
 
             font-family: inherit;
+
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         textarea#pasteInput:focus {
             border-color: #007aff;
         }
+
+
+        /*
+         * データ貼り付け済み
+         *
+         * 中身が見えづらくても
+         * 「ちゃんと入っている」ことを
+         * 背景色で分かるようにする
+         */
+        textarea#pasteInput.has-value {
+            background-color: #e9ecef;
+            border-color: #c6c8ca;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+        }
+
+        textarea#pasteInput.has-value:focus {
+            background-color: #e9ecef;
+            border-color: #8e8e93;
+        }
+
 
         .config-body button {
             width: 100%;
@@ -195,10 +222,16 @@
 
             font-size: 15px;
 
+            background-color: white;
+
             border: 1px solid #ccc;
             border-radius: 8px;
 
             outline: none;
+
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease;
         }
 
         .input-wrapper input:focus {
@@ -210,6 +243,21 @@
             font-size: 11px;
             border-radius: 4px;
         }
+
+
+        /*
+         * URL入力済み
+         */
+        #csvUrlInput.has-value {
+            background-color: #e9ecef;
+            border-color: #c6c8ca;
+        }
+
+        #csvUrlInput.has-value:focus {
+            background-color: #e9ecef;
+            border-color: #8e8e93;
+        }
+
 
         .clear-btn {
             position: absolute;
@@ -483,10 +531,6 @@
             text-align: center;
         }
 
-        /*
-         * 一覧が開いている時だけ
-         * 確認済みセクション自体を表示
-         */
         .checked-section.active {
             display: block;
         }
@@ -718,15 +762,15 @@
 
             z-index: 40;
 
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
 
             padding: 0;
 
             border: none;
             border-radius: 50%;
 
-            background-color: rgba(0,0,0,0.60);
+            background-color: rgba(0,0,0,0.62);
 
             align-items: center;
             justify-content: center;
@@ -739,69 +783,97 @@
                 0 2px 8px rgba(0,0,0,0.30);
         }
 
-        /*
-         * フラッシュ対応カメラの場合のみ出現
-         */
         .torch-btn.supported {
             display: flex;
         }
 
-        .torch-circle {
+
+        /*
+         * ピクトグラム部分
+         */
+        .torch-icon-wrapper {
             position: relative;
 
-            display: block;
+            width: 32px;
+            height: 32px;
 
-            width: 26px;
-            height: 26px;
-
-            border: 3px solid white;
-            border-radius: 50%;
-
-            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .torch-icon {
+            width: 27px;
+            height: 27px;
+
+            color: white;
+
+            transition:
+                color 0.15s ease,
+                opacity 0.15s ease;
+        }
+
+        .torch-icon path,
+        .torch-icon line {
+            vector-effect: non-scaling-stroke;
+        }
+
 
         /*
-         * 現在ライトOFF
-         * ↓
-         * 普通の丸
-         * ↓
-         * 押すとON
+         * ライトOFF
+         *
+         * 白い懐中電灯
+         * = 押すとON
          */
-        .torch-btn.torch-ready .torch-circle {
-            border-color: white;
-            background-color: transparent;
+        .torch-btn.torch-ready {
+            background-color: rgba(0,0,0,0.62);
         }
+
+        .torch-btn.torch-ready .torch-icon {
+            color: white;
+        }
+
 
         /*
-         * 現在ライトON
-         * ↓
-         * グレー＋斜線
-         * ↓
-         * 押すとOFF
+         * ライトON
+         *
+         * グレーの懐中電灯
+         * + 斜線
+         * = 押すとOFF
          */
-        .torch-btn.torch-active .torch-circle {
-            border-color: #a8a8ad;
-            background-color: rgba(120,120,125,0.28);
+        .torch-btn.torch-active {
+            background-color: rgba(70,70,75,0.78);
         }
 
-        .torch-btn.torch-active .torch-circle::after {
+        .torch-btn.torch-active .torch-icon {
+            color: #aeb0b5;
+        }
+
+
+        /*
+         * ON中の斜線
+         */
+        .torch-btn.torch-active .torch-icon-wrapper::after {
             content: "";
 
             position: absolute;
 
-            width: 34px;
+            width: 39px;
             height: 3px;
 
-            top: 9px;
-            left: -7px;
+            top: 14px;
+            left: -3px;
 
-            background-color: #a8a8ad;
+            background-color: #aeb0b5;
 
             border-radius: 3px;
 
             transform: rotate(-45deg);
 
             transform-origin: center;
+
+            box-shadow:
+                0 0 1px rgba(0,0,0,0.4);
         }
 
 
@@ -910,7 +982,10 @@
 
 <div class="container">
 
-    <!-- ヘッダー -->
+    <!-- ========================================
+         ヘッダー
+    ========================================= -->
+
     <div class="header-area">
 
         <h1>
@@ -944,7 +1019,7 @@
                 <textarea
                     id="pasteInput"
                     placeholder="スプレッドシートの全セルをコピー（Ctrl+A → Ctrl+C）して、ここに貼り付けてください"
-                    oninput="togglePasteClearBtn()"
+                    oninput="handlePasteInput()"
                 ></textarea>
 
                 <span
@@ -957,7 +1032,10 @@
 
             </div>
 
-            <button onclick="savePastedData()">
+
+            <button
+                onclick="savePastedData()"
+            >
                 データを保存して取り込む
             </button>
 
@@ -982,7 +1060,7 @@
                             type="text"
                             id="csvUrlInput"
                             placeholder="CSV URLを入力"
-                            oninput="toggleUrlClearBtn()"
+                            oninput="handleUrlInput()"
                         >
 
                         <span
@@ -994,6 +1072,7 @@
                         </span>
 
                     </div>
+
 
                     <button
                         style="
@@ -1125,21 +1204,99 @@
         <div id="reader"></div>
 
 
-        <!-- フラッシュ -->
+        <!-- ========================================
+             フラッシュボタン
+        ========================================= -->
+
         <button
             id="torchBtn"
             class="torch-btn"
             type="button"
             onclick="toggleTorch()"
             aria-label="フラッシュをオン"
+            title="フラッシュ"
         >
 
-            <span class="torch-circle"></span>
+            <span class="torch-icon-wrapper">
+
+                <!--
+                    外部ライブラリ不要の
+                    懐中電灯ピクトグラム
+                -->
+                <svg
+                    class="torch-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                >
+
+                    <!-- ライトヘッド -->
+                    <path
+                        d="M7.5 3.5H16.5L15 8H9L7.5 3.5Z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- 本体 -->
+                    <path
+                        d="M9 8H15V19.2C15 20.2 14.2 21 13.2 21H10.8C9.8 21 9 20.2 9 19.2V8Z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linejoin="round"
+                    />
+
+                    <!-- スイッチ -->
+                    <line
+                        x1="11"
+                        y1="12"
+                        x2="13"
+                        y2="12"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                    />
+
+                    <!-- 光 -->
+                    <line
+                        x1="5"
+                        y1="2"
+                        x2="3.5"
+                        y2="0.8"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <line
+                        x1="12"
+                        y1="1.5"
+                        x2="12"
+                        y2="0"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                    <line
+                        x1="19"
+                        y1="2"
+                        x2="20.5"
+                        y2="0.8"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+
+                </svg>
+
+            </span>
 
         </button>
 
 
-        <!-- スキャン枠 -->
+        <!-- 読み取りガイド -->
         <div class="scan-guide">
             <div class="scan-line"></div>
         </div>
@@ -1236,14 +1393,18 @@
             </li>
 
             <li>
+                貼り付けが成功すると、入力欄の背景が薄いグレーに変わります。
+            </li>
+
+            <li>
                 「データを保存して取り込む」を押します。
             </li>
 
         </ol>
 
-        <p>
-            正常に取り込まれると、登録された商品件数が商品一覧に反映されます。
-        </p>
+        <div class="guide-note">
+            スプレッドシートを大量に貼り付けた場合、入力欄の表示位置によっては文字が見えないことがあります。背景が薄いグレーになっていれば、データは入力されています。
+        </div>
 
 
         <h3>
@@ -1284,19 +1445,19 @@
         </h3>
 
         <p>
-            使用している端末とカメラがフラッシュ制御に対応している場合、スキャン画面の右上に丸いフラッシュボタンが表示されます。
+            使用している端末とカメラがライト制御に対応している場合、スキャン画面の右上に懐中電灯マークのボタンが表示されます。
         </p>
 
         <p>
-            普通の白い丸をタップするとライトが点灯します。
+            白い懐中電灯マークをタップするとライトが点灯します。
         </p>
 
         <p>
-            点灯中はボタンがグレーの斜線付きに変わります。もう一度タップするとライトが消灯します。
+            ライト点灯中は、懐中電灯マークがグレーになり、斜線が表示されます。もう一度タップすると消灯します。
         </p>
 
         <p>
-            スキャン画面を閉じた場合や、バーコードを読み取ってスキャン画面が自動的に閉じた場合もライトはOFFになります。
+            スキャン画面を閉じた場合や、バーコード読み取り後にスキャン画面が自動的に閉じた場合も、ライトは自動的にOFFになります。
         </p>
 
 
@@ -1380,6 +1541,10 @@
             GoogleスプレッドシートなどをWeb公開CSVとして利用している場合は、「URL連携」を開いてCSV URLから商品データを読み込むこともできます。
         </p>
 
+        <p>
+            URLが入力されている場合は、URL入力欄も薄いグレーに変わります。
+        </p>
+
 
         <button
             class="close-modal-btn"
@@ -1435,6 +1600,10 @@ let torchEnabled = false;
 window.onload = function() {
 
     updateDisplays();
+
+    updatePasteVisualState();
+
+    updateUrlVisualState();
 
 };
 
@@ -1512,11 +1681,6 @@ function escapeHtml(value) {
    商品識別
 ======================================== */
 
-/*
- * 同じJANでも、
- * 名称・価格・税率が違えば
- * 別の商品として扱う。
- */
 function getItemKey(item) {
 
     return [
@@ -1548,6 +1712,87 @@ function isChecked(item) {
 
 
 /* ========================================
+   貼り付けフォームの視覚状態
+======================================== */
+
+function handlePasteInput() {
+
+    togglePasteClearBtn();
+
+    updatePasteVisualState();
+
+}
+
+
+function updatePasteVisualState() {
+
+    const input =
+        document.getElementById(
+            'pasteInput'
+        );
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    /*
+     * 空白だけなら未入力扱い
+     */
+    const hasValue =
+        input.value.trim().length > 0;
+
+
+    input.classList.toggle(
+        'has-value',
+        hasValue
+    );
+
+}
+
+
+/* ========================================
+   URLフォームの視覚状態
+======================================== */
+
+function handleUrlInput() {
+
+    toggleUrlClearBtn();
+
+    updateUrlVisualState();
+
+}
+
+
+function updateUrlVisualState() {
+
+    const input =
+        document.getElementById(
+            'csvUrlInput'
+        );
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    const hasValue =
+        input.value.trim().length > 0;
+
+
+    input.classList.toggle(
+        'has-value',
+        hasValue
+    );
+
+}
+
+
+/* ========================================
    データ保存
 ======================================== */
 
@@ -1560,6 +1805,7 @@ function savePastedData() {
             )
             .value
             .trim();
+
 
     if (!text) {
 
@@ -1577,10 +1823,6 @@ function savePastedData() {
     );
 
 
-    /*
-     * 新しいデータを取り込んだら
-     * 確認済みをリセット
-     */
     checkedItems = [];
 
 
@@ -1595,7 +1837,7 @@ function savePastedData() {
 
 
     /*
-     * 取り込み時は一覧を開く
+     * データ取り込み後は一覧を開く
      */
     document
         .getElementById(
@@ -1668,7 +1910,7 @@ function parseTextData(text) {
 
 
         /*
-         * ヘッダー行を除外
+         * ヘッダー判定
          */
         if (
             i === 0 &&
@@ -1886,9 +2128,6 @@ function handleLoadedCSV(text) {
         'none';
 
 
-    /*
-     * URL読み込みでも一覧を開く
-     */
     document
         .getElementById(
             'allDataList'
@@ -1931,7 +2170,7 @@ function searchProduct() {
 
 
     /*
-     * 数字だけならJAN検索
+     * 数字だけならJAN
      */
     if (
         /^\d+$/.test(
@@ -1949,7 +2188,7 @@ function searchProduct() {
 
 
     /*
-     * それ以外は商品名
+     * それ以外は名前検索
      */
     searchByName(
         value
@@ -1984,7 +2223,7 @@ function searchByJAN(jan) {
 
 
     /*
-     * 1件なら即確定
+     * 1件だけなら即確定
      */
     if (
         results.length === 1
@@ -2000,7 +2239,7 @@ function searchByJAN(jan) {
 
 
     /*
-     * 同じJANが複数なら選択
+     * 同一JAN複数商品
      */
     showCandidateSelection(
         results,
@@ -2044,8 +2283,7 @@ function searchByName(value) {
 
 
     /*
-     * 名前検索では
-     * 1件でも選択させる
+     * 名前検索は1件でも選択式
      */
     showCandidateSelection(
         results,
@@ -2189,9 +2427,6 @@ function selectCandidate(index) {
 
 function confirmItem(item) {
 
-    /*
-     * 二重登録防止
-     */
     if (
         !isChecked(
             item
@@ -2211,7 +2446,7 @@ function confirmItem(item) {
 
 
     /*
-     * 開閉状態は変更しない
+     * 一覧の開閉状態は維持
      */
     updateDisplays();
 
@@ -2219,7 +2454,7 @@ function confirmItem(item) {
 
 
 /* ========================================
-   該当あり表示
+   該当あり
 ======================================== */
 
 function showConfirmedResult(item) {
@@ -2428,7 +2663,7 @@ function createCheckedTable() {
 
 
 /* ========================================
-   確認済みセクション表示
+   確認済みセクション
 ======================================== */
 
 function updateCheckedSection() {
@@ -2462,7 +2697,7 @@ function updateCheckedSection() {
 
 
     /*
-     * 確認済み0件なら完全非表示
+     * 確認済みなし
      */
     if (
         checkedItems.length === 0
@@ -2484,8 +2719,7 @@ function updateCheckedSection() {
 
 
     /*
-     * 一覧が開いている場合だけ
-     * 「確認済み」の見出しごと表示
+     * 一覧が開いている場合だけ表示
      */
     if (
         allList
@@ -2645,9 +2879,7 @@ function toggleAllData() {
 
 
     /*
-     * =====================================
      * 閉じる
-     * =====================================
      */
     if (
         isOpen
@@ -2663,10 +2895,6 @@ function toggleAllData() {
         );
 
 
-        /*
-         * 「確認済み」見出しも
-         * 完全に閉じる
-         */
         checkedSection.classList.remove(
             'active'
         );
@@ -2675,9 +2903,7 @@ function toggleAllData() {
 
 
     /*
-     * =====================================
      * 開く
-     * =====================================
      */
     else {
 
@@ -2686,10 +2912,6 @@ function toggleAllData() {
         );
 
 
-        /*
-         * 確認済みが存在する場合だけ
-         * セクションも表示
-         */
         if (
             checkedItems.length > 0
         ) {
@@ -2949,9 +3171,6 @@ function startScanner() {
         );
 
 
-    /*
-     * フラッシュ状態初期化
-     */
     resetTorchState();
 
 
@@ -3107,8 +3326,8 @@ function startScanner() {
 
 
             /*
-             * video要素が生成された後に
-             * フラッシュ対応チェック
+             * video要素生成後に
+             * フラッシュをチェック
              */
             waitForTorchSupport();
 
@@ -3143,11 +3362,6 @@ function waitForTorchSupport(
     attempt = 0
 ) {
 
-    /*
-     * Quaggaがvideoを作るまで
-     * 少し時間差がある場合があるので
-     * 最大10回確認
-     */
     const video =
         document.querySelector(
             '#reader video'
@@ -3235,9 +3449,6 @@ function waitForTorchSupport(
     }
 
 
-    /*
-     * フラッシュ非対応
-     */
     if (
         capabilities.torch !== true
     ) {
@@ -3252,9 +3463,6 @@ function waitForTorchSupport(
     }
 
 
-    /*
-     * フラッシュ対応
-     */
     torchTrack =
         track;
 
@@ -3273,7 +3481,7 @@ function waitForTorchSupport(
 
 
 /* ========================================
-   フラッシュボタン表示更新
+   フラッシュ表示
 ======================================== */
 
 function updateTorchButton() {
@@ -3284,9 +3492,6 @@ function updateTorchButton() {
         );
 
 
-    /*
-     * 非対応
-     */
     if (
         !torchSupported ||
         !torchTrack
@@ -3310,10 +3515,9 @@ function updateTorchButton() {
 
 
     /*
-     * ライト点灯中
+     * 点灯中
      *
-     * → グレー斜線
-     * → 次に押すとOFF
+     * グレー + 斜線
      */
     if (
         torchEnabled
@@ -3334,14 +3538,19 @@ function updateTorchButton() {
             'フラッシュをオフ'
         );
 
+
+        button.setAttribute(
+            'title',
+            'フラッシュをオフ'
+        );
+
     }
 
 
     /*
-     * ライト消灯中
+     * 消灯中
      *
-     * → 普通の丸
-     * → 次に押すとON
+     * 白い懐中電灯
      */
     else {
 
@@ -3360,13 +3569,19 @@ function updateTorchButton() {
             'フラッシュをオン'
         );
 
+
+        button.setAttribute(
+            'title',
+            'フラッシュをオン'
+        );
+
     }
 
 }
 
 
 /* ========================================
-   フラッシュON/OFF
+   フラッシュ切り替え
 ======================================== */
 
 async function toggleTorch() {
@@ -3381,9 +3596,6 @@ async function toggleTorch() {
     }
 
 
-    /*
-     * カメラ停止済みなら無視
-     */
     if (
         torchTrack.readyState !==
         'live'
@@ -3430,10 +3642,6 @@ async function toggleTorch() {
         );
 
 
-        /*
-         * 実際には非対応だった場合など
-         * ボタンを消す
-         */
         resetTorchState();
 
     }
@@ -3442,7 +3650,7 @@ async function toggleTorch() {
 
 
 /* ========================================
-   フラッシュ状態初期化
+   フラッシュ初期化
 ======================================== */
 
 function resetTorchState() {
@@ -3479,6 +3687,12 @@ function resetTorchState() {
         button.setAttribute(
             'aria-label',
             'フラッシュをオン'
+        );
+
+
+        button.setAttribute(
+            'title',
+            'フラッシュ'
         );
 
     }
@@ -3521,9 +3735,6 @@ Quagga.onDetected(
                 .trim();
 
 
-        /*
-         * チェックディジット
-         */
         if (
             !validateEAN(
                 code
@@ -3535,9 +3746,6 @@ Quagga.onDetected(
         }
 
 
-        /*
-         * 同じJANを連続検出
-         */
         if (
             code ===
             lastDetectedCode
@@ -3559,9 +3767,6 @@ Quagga.onDetected(
         }
 
 
-        /*
-         * 2回連続一致まで待つ
-         */
         if (
             detectionCount < 2
         ) {
@@ -3622,9 +3827,7 @@ function stopScanner(
 ) {
 
     /*
-     * =====================================
-     * フラッシュOFF
-     * =====================================
+     * フラッシュを消灯
      */
     if (
         torchTrack &&
@@ -3664,9 +3867,7 @@ function stopScanner(
 
 
     /*
-     * =====================================
      * Quagga停止
-     * =====================================
      */
     if (
         scannerRunning
@@ -3720,10 +3921,6 @@ function stopScanner(
         0;
 
 
-    /*
-     * スキャン成功後のみ
-     * 自動検索
-     */
     if (
         searchAfterStop
     ) {
@@ -3838,13 +4035,16 @@ function clearPasteInput() {
     togglePasteClearBtn();
 
 
+    updatePasteVisualState();
+
+
     input.focus();
 
 }
 
 
 /* ========================================
-   URL
+   URL入力欄
 ======================================== */
 
 function toggleUrlClearBtn() {
@@ -3881,6 +4081,9 @@ function clearUrlInput() {
 
 
     toggleUrlClearBtn();
+
+
+    updateUrlVisualState();
 
 
     input.focus();
