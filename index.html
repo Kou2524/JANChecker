@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -88,7 +87,7 @@
         }
 
         /* ================================
-           設定
+           データ登録
         ================================= */
 
         .config-section {
@@ -114,13 +113,18 @@
         textarea#pasteInput {
             width: 100%;
             height: 80px;
+
             padding: 10px;
             padding-right: 36px;
+
             font-size: 12px;
+
             border: 1px solid #ccc;
             border-radius: 6px;
+
             resize: vertical;
             outline: none;
+
             font-family: inherit;
         }
 
@@ -131,13 +135,17 @@
         .config-body button {
             width: 100%;
             padding: 10px;
+
             font-size: 13px;
+            font-weight: bold;
+
             background-color: #007aff;
             color: white;
+
             border: none;
             border-radius: 6px;
+
             cursor: pointer;
-            font-weight: bold;
         }
 
         .config-body button:active {
@@ -170,17 +178,22 @@
         .input-wrapper {
             position: relative;
             flex: 1;
+
             display: flex;
             align-items: center;
         }
 
         .input-wrapper input {
             width: 100%;
+
             padding: 12px;
             padding-right: 36px;
+
             font-size: 15px;
+
             border: 1px solid #ccc;
             border-radius: 8px;
+
             outline: none;
         }
 
@@ -202,6 +215,7 @@
             height: 20px;
 
             border-radius: 50%;
+
             background-color: #ccc;
             color: white;
 
@@ -209,6 +223,7 @@
             font-weight: bold;
 
             display: none;
+
             align-items: center;
             justify-content: center;
 
@@ -236,12 +251,16 @@
 
         .btn-group button {
             flex: 1;
+
             padding: 12px;
+
             font-size: 15px;
+            font-weight: bold;
+
             border: none;
             border-radius: 8px;
+
             cursor: pointer;
-            font-weight: bold;
         }
 
         #searchBtn {
@@ -277,10 +296,14 @@
 
         .status-badge {
             display: inline-block;
+
             padding: 4px 8px;
+
             font-size: 12px;
-            border-radius: 4px;
             font-weight: bold;
+
+            border-radius: 4px;
+
             margin-bottom: 12px;
         }
 
@@ -301,8 +324,10 @@
 
         .result-item {
             background: #f8f9fa;
+
             border: 1px solid #e9ecef;
             border-radius: 8px;
+
             padding: 14px;
             margin-bottom: 10px;
         }
@@ -311,16 +336,21 @@
             font-size: 1.1rem;
             font-weight: bold;
             color: #212529;
+
             margin-bottom: 8px;
+
             word-break: break-all;
         }
 
         .detail-row {
             display: flex;
             justify-content: space-between;
+
             border-top: 1px solid #dee2e6;
+
             padding-top: 6px;
             margin-top: 6px;
+
             font-size: 13px;
             color: #495057;
         }
@@ -343,6 +373,7 @@
 
         .candidate-item {
             width: 100%;
+
             text-align: left;
 
             background: white;
@@ -379,29 +410,37 @@
         }
 
         /* ================================
-           商品一覧・確認済み
+           商品一覧
         ================================= */
 
-        .all-data-section,
-        .checked-section {
+        .all-data-section {
             margin-top: 30px;
+
             border-top: 2px solid #e9ecef;
+
             padding-top: 20px;
+
             text-align: center;
         }
 
         #toggleAllBtn {
             padding: 10px 20px;
+
             font-size: 14px;
+
             background-color: #6c757d;
             color: white;
+
             border: none;
             border-radius: 8px;
+
             cursor: pointer;
         }
 
         #allDataList,
         #checkedDataList {
+            display: none;
+
             margin-top: 20px;
 
             text-align: left;
@@ -414,16 +453,25 @@
             border-radius: 8px;
         }
 
-        #allDataList {
-            display: none;
-        }
-
-        #allDataList.active {
+        #allDataList.active,
+        #checkedDataList.active {
             display: block;
         }
 
+        /* ================================
+           確認済み
+        ================================= */
+
         .checked-section {
             display: none;
+
+            margin-top: 30px;
+
+            border-top: 2px solid #e9ecef;
+
+            padding-top: 20px;
+
+            text-align: center;
         }
 
         .checked-section.active {
@@ -437,27 +485,55 @@
             margin-bottom: 8px;
         }
 
+        /* ================================
+           テーブル
+        ================================= */
+
         table.data-table {
             width: 100%;
+
             border-collapse: collapse;
+
             font-size: 12px;
         }
 
         table.data-table th,
         table.data-table td {
             padding: 8px;
+
             border-bottom: 1px solid #eee;
         }
 
         table.data-table th {
             background-color: #f8f9fa;
+
             position: sticky;
+
             top: 0;
+
             z-index: 2;
         }
 
         .text-right {
             text-align: right;
+        }
+
+        /* ================================
+           確認済みグレーアウト
+        ================================= */
+
+        table.data-table tr.checked-row td {
+            background-color: #e5e5ea;
+            color: #6c757d;
+        }
+
+        table.data-table tr.checked-row td:first-child,
+        table.data-table tr.checked-row td:nth-child(2) {
+            font-weight: 600;
+        }
+
+        table.data-table tr.checked-row {
+            opacity: 0.82;
         }
 
         .empty-message {
@@ -493,9 +569,14 @@
             display: flex;
         }
 
+        /* ================================
+           スキャナー
+        ================================= */
+
         .scanner-container {
             width: 100%;
             max-width: 450px;
+
             position: relative;
         }
 
@@ -518,7 +599,9 @@
         #reader video {
             width: 100% !important;
             height: 100% !important;
+
             object-fit: cover;
+
             position: absolute;
             inset: 0;
         }
@@ -717,10 +800,7 @@
 
     </div>
 
-    <!-- ===============================
-         データ登録
-    ================================= -->
-
+    <!-- データ登録 -->
     <div class="config-section">
 
         <div class="config-header">
@@ -747,9 +827,7 @@
 
             </div>
 
-            <button
-                onclick="savePastedData()"
-            >
+            <button onclick="savePastedData()">
                 データを保存して取り込む
             </button>
 
@@ -804,10 +882,7 @@
 
     </div>
 
-    <!-- ===============================
-         検索
-    ================================= -->
-
+    <!-- 検索 -->
     <div class="search-box">
 
         <div class="input-wrapper">
@@ -859,7 +934,7 @@
     <!-- 検索結果 -->
     <div id="resultCard"></div>
 
-    <!-- 未確認一覧 -->
+    <!-- 未確認商品一覧 -->
     <div class="all-data-section">
 
         <button
@@ -889,11 +964,7 @@
 
 </div>
 
-
-<!-- ===============================
-     スキャナーモーダル
-================================= -->
-
+<!-- スキャナー -->
 <div
     id="scannerModal"
     class="modal-overlay"
@@ -925,11 +996,7 @@
 
 </div>
 
-
-<!-- ===============================
-     使い方ガイド
-================================= -->
-
+<!-- 使い方ガイド -->
 <div
     id="helpModal"
     class="modal-overlay"
@@ -940,7 +1007,6 @@
         <h2>
             使い方ガイド
         </h2>
-
 
         <h3>
             1. 商品データを準備する
@@ -965,18 +1031,17 @@
             JANコードがない商品は、A列を空欄にしてB列から商品名を入力してください。
         </div>
 
-
         <h3>
-            2. スプレッドシートをコピーする
+            2. スプレッドシートの内容をコピーする
         </h3>
 
         <ol>
             <li>
-                商品データを入力したスプレッドシートを開きます。
+                商品データを入力したGoogleスプレッドシートを開きます。
             </li>
 
             <li>
-                商品データが入っている表全体を選択します。
+                商品データが入力されている表全体を選択します。
             </li>
 
             <li>
@@ -984,11 +1049,15 @@
             </li>
 
             <li>
-                このアプリに戻り、画面上部の「データ登録」の入力欄をタップします。
+                このアプリに戻ります。
             </li>
 
             <li>
-                コピーした内容をそのまま貼り付けます。
+                画面上部の「データ登録」の大きな入力欄をタップします。
+            </li>
+
+            <li>
+                コピーしたスプレッドシートの内容をそのまま貼り付けます。
             </li>
 
             <li>
@@ -997,12 +1066,11 @@
         </ol>
 
         <p>
-            正常に取り込まれると、登録された商品が「全商品一覧」に表示されます。
+            正常に取り込まれると、登録した商品が商品一覧として読み込まれます。
         </p>
 
-
         <h3>
-            3. バーコードで確認する
+            3. バーコードで商品を確認する
         </h3>
 
         <ol>
@@ -1019,7 +1087,7 @@
             </li>
 
             <li>
-                JANコードが正常に読み取られると、自動的に商品データを検索します。
+                JANコードが読み取られると自動的に商品を検索します。
             </li>
         </ol>
 
@@ -1028,12 +1096,11 @@
         </p>
 
         <p>
-            同じJANコードで複数の商品が登録されている場合は、候補が一覧表示されます。実際に確認している商品をタップしてください。
+            同じJANコードで複数の商品が登録されている場合は候補が表示されるので、実際に確認している商品をタップしてください。
         </p>
 
-
         <h3>
-            4. JANコードを手入力して確認する
+            4. JANコードを手入力する
         </h3>
 
         <p>
@@ -1041,60 +1108,64 @@
         </p>
 
         <p>
-            同じJANコードの商品が複数登録されている場合は、バーコードスキャンと同様に候補から商品を選択します。
+            同じJANコードの商品が複数ある場合は、スキャン時と同じように候補から対象商品を選択します。
         </p>
-
 
         <h3>
             5. 商品名から確認する
         </h3>
 
         <p>
-            JANコードがない商品や、商品名から探したい場合は、検索欄に商品名の一部を入力して「検索」を押します。
+            JANコードがない商品や、商品名から検索したい場合は、検索欄に商品名の一部を入力して「検索」を押します。
         </p>
 
         <p>
-            商品名は部分一致で検索されるため、条件に一致した商品が候補として表示されます。
+            商品名は部分一致で検索されます。
         </p>
 
         <p>
-            候補の中から、実際に確認している商品をタップしてください。
+            検索条件に一致した商品が候補として表示されるので、実際に確認している商品をタップしてください。
         </p>
 
         <div class="guide-note">
             商品名検索では、検索にヒットしただけでは確認済みになりません。候補の商品をタップした時点で確認済みになります。
         </div>
 
-
         <h3>
-            6. 「該当あり」と「確認済み」について
+            6. 「該当あり」と確認済みについて
         </h3>
 
         <p>
-            商品を正常に確認すると、画面上部の検索結果に「該当あり」と商品情報が表示されます。
+            商品を確定すると、検索欄の下に「該当あり」と商品情報が表示されます。
         </p>
 
         <p>
-            同時に、その商品は「全商品一覧」から除外され、画面下部の「確認済み」に移動します。
+            同時に、その商品は未確認の商品一覧から除外され、「確認済み」に移動します。
         </p>
 
         <p>
-            確認済みの商品が1件もない間は、「確認済み」欄は表示されません。
+            確認済みの商品はグレー表示になるため、未確認の商品と見分けやすくなっています。
         </p>
-
 
         <h3>
-            7. 全商品一覧について
+            7. 商品一覧の表示について
         </h3>
 
         <p>
-            「全商品一覧」には、まだ確認されていない商品だけが表示されます。
+            「全商品一覧を表示」を押すと、未確認の商品一覧と確認済みの商品一覧が両方表示されます。
         </p>
 
         <p>
-            商品を確認するたびに一覧から商品が減っていき、すべて確認すると「未確認の商品はありません」と表示されます。
+            「一覧を閉じる」を押すと、未確認と確認済みの両方の一覧が閉じます。
         </p>
 
+        <p>
+            一覧を開いた状態で商品を確認した場合は開いたまま、閉じた状態で確認した場合は閉じたままになります。
+        </p>
+
+        <p>
+            すべての商品を確認すると、未確認の商品一覧には「未確認の商品はありません」と表示されます。
+        </p>
 
         <h3>
             8. URL連携について
@@ -1103,7 +1174,6 @@
         <p>
             GoogleスプレッドシートなどをWeb公開CSVとして利用している場合は、「URL連携」を開いてCSV URLから商品データを読み込むこともできます。
         </p>
-
 
         <button
             class="close-modal-btn"
@@ -1116,7 +1186,6 @@
 
 </div>
 
-
 <script>
 
 /* ===================================
@@ -1124,20 +1193,16 @@
 =================================== */
 
 let masterData = [];
-
 let checkedItems = [];
 
 
 /* ===================================
-   Quagga
+   Quagga状態
 =================================== */
 
 let scannerRunning = false;
-
 let lastDetectedCode = null;
-
 let detectionCount = 0;
-
 let detectionLocked = false;
 
 
@@ -1208,53 +1273,29 @@ function escapeHtml(value) {
 
     return String(value ?? '')
 
-        .replace(
-            /&/g,
-            '&amp;'
-        )
-
-        .replace(
-            /</g,
-            '&lt;'
-        )
-
-        .replace(
-            />/g,
-            '&gt;'
-        )
-
-        .replace(
-            /"/g,
-            '&quot;'
-        )
-
-        .replace(
-            /'/g,
-            '&#039;'
-        );
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 
 }
 
 
 /* ===================================
-   商品識別キー
+   商品識別
 =================================== */
 
 /*
- * 同一JAN・別商品にも対応するため、
- * JANだけではなく商品名・価格・税率まで含めて
- * 1商品を識別する。
+ * 同じJANでも名前等が違えば別商品扱い
  */
 function getItemKey(item) {
 
     return [
 
         item.jan || '-',
-
         item.name || '',
-
         item.price || '',
-
         item.tax || ''
 
     ].join('|');
@@ -1276,7 +1317,7 @@ function isChecked(item) {
 
 
 /* ===================================
-   貼り付けデータ保存
+   データ登録
 =================================== */
 
 function savePastedData() {
@@ -1299,9 +1340,7 @@ function savePastedData() {
 
     }
 
-    parseTextData(
-        text
-    );
+    parseTextData(text);
 
     checkedItems = [];
 
@@ -1314,23 +1353,20 @@ function savePastedData() {
             'active'
         );
 
-    updateDisplays();
-
     /*
-     * データ取り込み時は一覧を開く
+     * 新しいデータを取り込んだ時は
+     * 一覧を開く
      */
-    const list =
-        document.getElementById(
+    document
+        .getElementById(
             'allDataList'
+        )
+        .classList
+        .add(
+            'active'
         );
 
-    list.classList.add(
-        'active'
-    );
-
-    createUncheckedTable();
-
-    updateToggleButton();
+    updateDisplays();
 
     alert(
         `データを正常に取り込みました！（全 ${masterData.length} 件）`
@@ -1384,7 +1420,7 @@ function parseTextData(text) {
                 );
 
         /*
-         * ヘッダー
+         * ヘッダー判定
          */
         if (
             i === 0 &&
@@ -1400,13 +1436,9 @@ function parseTextData(text) {
         }
 
         let jan = '-';
-
         let name = '';
-
         let price = '';
-
         let tax = '';
-
 
         if (
             /^\d+$/.test(
@@ -1575,9 +1607,7 @@ function loadCSVData(url) {
 
 function handleLoadedCSV(text) {
 
-    parseTextData(
-        text
-    );
+    parseTextData(text);
 
     checkedItems = [];
 
@@ -1595,7 +1625,7 @@ function handleLoadedCSV(text) {
 
 
 /* ===================================
-   メイン検索
+   検索
 =================================== */
 
 function searchProduct() {
@@ -1618,11 +1648,6 @@ function searchProduct() {
 
     }
 
-    /*
-     * 数字だけ
-     * ↓
-     * JAN完全一致
-     */
     if (
         /^\d+$/.test(
             value
@@ -1637,11 +1662,6 @@ function searchProduct() {
 
     }
 
-    /*
-     * 数字以外を含む
-     * ↓
-     * 商品名部分一致
-     */
     searchByName(
         value
     );
@@ -1662,9 +1682,6 @@ function searchByJAN(jan) {
                 item.jan === jan
         );
 
-    /*
-     * 0件
-     */
     if (
         results.length === 0
     ) {
@@ -1675,11 +1692,6 @@ function searchByJAN(jan) {
 
     }
 
-    /*
-     * 1件のみ
-     *
-     * そのまま確定
-     */
     if (
         results.length === 1
     ) {
@@ -1692,11 +1704,6 @@ function searchByJAN(jan) {
 
     }
 
-    /*
-     * 同一JANが複数
-     *
-     * 選択式
-     */
     showCandidateSelection(
         results,
         `同じJANコードの商品が${results.length}件あります`
@@ -1706,7 +1713,7 @@ function searchByJAN(jan) {
 
 
 /* ===================================
-   商品名検索
+   名前検索
 =================================== */
 
 function searchByName(value) {
@@ -1735,10 +1742,6 @@ function searchByName(value) {
 
     }
 
-    /*
-     * 商品名は1件でも
-     * 必ずユーザーに選択してもらう。
-     */
     showCandidateSelection(
         results,
         `${results.length}件見つかりました`
@@ -1748,7 +1751,7 @@ function searchByName(value) {
 
 
 /* ===================================
-   候補一覧表示
+   候補一覧
 =================================== */
 
 function showCandidateSelection(
@@ -1848,9 +1851,7 @@ function showCandidateSelection(
 function selectCandidate(index) {
 
     const item =
-        masterData[
-            index
-        ];
+        masterData[index];
 
     if (!item) {
 
@@ -1871,10 +1872,6 @@ function selectCandidate(index) {
 
 function confirmItem(item) {
 
-    /*
-     * 未確認だった場合のみ
-     * 確認済みへ追加
-     */
     if (
         !isChecked(
             item
@@ -1887,15 +1884,12 @@ function confirmItem(item) {
 
     }
 
-    /*
-     * 元々の「該当あり」欄は維持
-     */
     showConfirmedResult(
         item
     );
 
     /*
-     * 全商品一覧・確認済み一覧を更新
+     * 一覧の開閉状態はそのまま維持
      */
     updateDisplays();
 
@@ -2001,7 +1995,7 @@ function showNotFound() {
 
 
 /* ===================================
-   各一覧更新
+   一覧全体更新
 =================================== */
 
 function updateDisplays() {
@@ -2010,15 +2004,17 @@ function updateDisplays() {
 
     createCheckedTable();
 
-    updateToggleButton();
-
     updateCheckedSection();
+
+    updateListVisibility();
+
+    updateToggleButton();
 
 }
 
 
 /* ===================================
-   未確認商品取得
+   未確認商品
 =================================== */
 
 function getUncheckedItems() {
@@ -2034,7 +2030,7 @@ function getUncheckedItems() {
 
 
 /* ===================================
-   未確認一覧生成
+   未確認一覧
 =================================== */
 
 function createUncheckedTable() {
@@ -2064,14 +2060,15 @@ function createUncheckedTable() {
 
     container.innerHTML =
         buildTable(
-            items
+            items,
+            false
         );
 
 }
 
 
 /* ===================================
-   確認済み一覧生成
+   確認済み一覧
 =================================== */
 
 function createCheckedTable() {
@@ -2094,14 +2091,15 @@ function createCheckedTable() {
 
     container.innerHTML =
         buildTable(
-            checkedItems
+            checkedItems,
+            true
         );
 
 }
 
 
 /* ===================================
-   確認済み欄表示
+   確認済みセクション
 =================================== */
 
 function updateCheckedSection() {
@@ -2141,10 +2139,102 @@ function updateCheckedSection() {
 
 
 /* ===================================
+   開閉状態同期
+=================================== */
+
+function updateListVisibility() {
+
+    const uncheckedList =
+        document.getElementById(
+            'allDataList'
+        );
+
+    const checkedList =
+        document.getElementById(
+            'checkedDataList'
+        );
+
+    /*
+     * 未確認一覧の active 状態を
+     * 一覧全体の開閉状態として使う
+     */
+    const isOpen =
+        uncheckedList
+            .classList
+            .contains(
+                'active'
+            );
+
+    if (
+        isOpen
+    ) {
+
+        /*
+         * 未確認は開いたまま
+         */
+        uncheckedList
+            .classList
+            .add(
+                'active'
+            );
+
+        /*
+         * 確認済みが存在する場合のみ開く
+         */
+        if (
+            checkedItems.length > 0
+        ) {
+
+            checkedList
+                .classList
+                .add(
+                    'active'
+                );
+
+        }
+
+        else {
+
+            checkedList
+                .classList
+                .remove(
+                    'active'
+                );
+
+        }
+
+    }
+
+    else {
+
+        /*
+         * 両方閉じる
+         */
+        uncheckedList
+            .classList
+            .remove(
+                'active'
+            );
+
+        checkedList
+            .classList
+            .remove(
+                'active'
+            );
+
+    }
+
+}
+
+
+/* ===================================
    テーブル共通
 =================================== */
 
-function buildTable(items) {
+function buildTable(
+    items,
+    isCheckedTable = false
+) {
 
     let html =
         `
@@ -2180,9 +2270,14 @@ function buildTable(items) {
     items.forEach(
         item => {
 
+            const rowClass =
+                isCheckedTable
+                    ? 'checked-row'
+                    : '';
+
             html +=
                 `
-                <tr>
+                <tr class="${rowClass}">
 
                     <td>
                         ${escapeHtml(item.jan)}
@@ -2219,24 +2314,86 @@ function buildTable(items) {
 
 
 /* ===================================
-   未確認一覧 開閉
+   一覧まとめて開閉
 =================================== */
 
 function toggleAllData() {
 
-    const list =
+    const uncheckedList =
         document.getElementById(
             'allDataList'
         );
 
-    list.classList.toggle(
-        'active'
-    );
+    const checkedList =
+        document.getElementById(
+            'checkedDataList'
+        );
+
+    const isOpen =
+        uncheckedList
+            .classList
+            .contains(
+                'active'
+            );
+
+    if (
+        isOpen
+    ) {
+
+        /*
+         * 両方閉じる
+         */
+        uncheckedList
+            .classList
+            .remove(
+                'active'
+            );
+
+        checkedList
+            .classList
+            .remove(
+                'active'
+            );
+
+    }
+
+    else {
+
+        /*
+         * 未確認一覧を開く
+         */
+        uncheckedList
+            .classList
+            .add(
+                'active'
+            );
+
+        /*
+         * 確認済みがある場合は
+         * 確認済み一覧も開く
+         */
+        if (
+            checkedItems.length > 0
+        ) {
+
+            checkedList
+                .classList
+                .add(
+                    'active'
+                );
+
+        }
+
+    }
 
     updateToggleButton();
 
 }
 
+
+/* ===================================
+   一覧ボタン
+=================================== */
 
 function updateToggleButton() {
 
@@ -2737,13 +2894,6 @@ function stopScanner(
         setTimeout(
             function() {
 
-                /*
-                 * スキャン後も
-                 * 通常JAN検索と同じ処理へ。
-                 *
-                 * 同一JANが複数なら
-                 * 自動的に選択画面になる。
-                 */
                 searchProduct();
 
                 detectionLocked =
