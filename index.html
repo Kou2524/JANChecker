@@ -14,7 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -40,7 +39,6 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
 
         /* ================================
            ヘッダー
@@ -89,7 +87,6 @@
             background-color: #0056b3;
         }
 
-
         /* ================================
            設定エリア
         ================================= */
@@ -114,7 +111,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
 
         /* ================================
            貼り付け
@@ -168,7 +164,6 @@
             background-color: #0056b3;
         }
 
-
         /* ================================
            URL設定
         ================================= */
@@ -187,7 +182,6 @@
             cursor: pointer;
             font-weight: bold;
         }
-
 
         /* ================================
            検索入力欄
@@ -232,7 +226,6 @@
             border-color: #007aff;
         }
 
-
         /* ================================
            クリアボタン
         ================================= */
@@ -270,7 +263,6 @@
             top: 10px;
         }
 
-
         /* ================================
            ボタン
         ================================= */
@@ -278,7 +270,6 @@
         .btn-group {
             display: flex;
             gap: 8px;
-
             margin-bottom: 20px;
         }
 
@@ -314,7 +305,6 @@
             background-color: #28a745;
         }
 
-
         /* ================================
            モーダル共通
         ================================= */
@@ -345,7 +335,6 @@
             display: flex;
         }
 
-
         /* ================================
            Quagga2 カメラ
         ================================= */
@@ -353,7 +342,6 @@
         .scanner-container {
             width: 100%;
             max-width: 450px;
-
             position: relative;
         }
 
@@ -369,7 +357,6 @@
             background-color: #000;
 
             border-radius: 12px;
-
             overflow: hidden;
         }
 
@@ -387,9 +374,6 @@
         #reader canvas {
             display: none !important;
         }
-
-
-        /* 読み取りガイド */
 
         .scan-guide {
             position: absolute;
@@ -413,9 +397,6 @@
                 0 0 0 9999px rgba(0,0,0,0.20);
         }
 
-
-        /* 赤いスキャンライン */
-
         .scan-line {
             position: absolute;
 
@@ -433,7 +414,6 @@
         }
 
         @keyframes scanMove {
-
             0% {
                 top: 15%;
             }
@@ -446,9 +426,6 @@
                 top: 15%;
             }
         }
-
-
-        /* スキャン説明 */
 
         .scanner-message {
             position: absolute;
@@ -473,7 +450,6 @@
 
             font-size: 13px;
         }
-
 
         /* ================================
            ヘルプモーダル
@@ -533,7 +509,6 @@
             padding-left: 20px;
         }
 
-
         /* ================================
            閉じるボタン
         ================================= */
@@ -557,14 +532,12 @@
             cursor: pointer;
         }
 
-
         /* ================================
            検索結果
         ================================= */
 
         #resultCard {
             display: none;
-
             margin-bottom: 20px;
         }
 
@@ -613,9 +586,7 @@
 
         .item-name {
             font-size: 1.1rem;
-
             font-weight: bold;
-
             color: #212529;
 
             margin-bottom: 8px;
@@ -625,7 +596,6 @@
 
         .detail-row {
             display: flex;
-
             justify-content: space-between;
 
             border-top: 1px solid #dee2e6;
@@ -640,12 +610,9 @@
 
         .detail-value {
             font-weight: bold;
-
             font-size: 1rem;
-
             color: #111;
         }
-
 
         /* ================================
            ローディング
@@ -662,7 +629,6 @@
 
             display: none;
         }
-
 
         /* ================================
            商品一覧
@@ -706,6 +672,8 @@
             border: 1px solid #dee2e6;
 
             border-radius: 8px;
+
+            scroll-behavior: smooth;
         }
 
         #allDataList.active {
@@ -714,9 +682,7 @@
 
         table.data-table {
             width: 100%;
-
             border-collapse: collapse;
-
             font-size: 12px;
         }
 
@@ -725,6 +691,10 @@
             padding: 8px;
 
             border-bottom: 1px solid #eee;
+
+            transition:
+                background-color 0.2s ease,
+                color 0.2s ease;
         }
 
         table.data-table th {
@@ -734,24 +704,38 @@
 
             top: 0;
 
-            z-index: 1;
+            z-index: 2;
         }
 
         .text-right {
             text-align: right;
         }
 
-    </style>
+        /* ================================
+           検索該当行
+        ================================= */
 
+        table.data-table tr.matched-row td {
+            background-color: #e5e5ea;
+            font-weight: bold;
+        }
+
+        table.data-table tr.matched-row {
+            box-shadow: inset 4px 0 0 #8e8e93;
+        }
+
+        table.data-table tr.matched-row td:first-child {
+            padding-left: 12px;
+        }
+
+    </style>
 </head>
 
 <body>
 
-
 <div class="container">
 
     <div class="header-area">
-
         <h1>商品登録チェック</h1>
 
         <div
@@ -760,25 +744,17 @@
         >
             ?
         </div>
-
     </div>
 
-
-    <!-- ===============================
-         データ登録
-    ================================= -->
-
+    <!-- データ登録 -->
     <div class="config-section">
 
         <div class="config-header">
-
             <span>
                 データ登録
                 (スプレッドシートデータ貼り付け)
             </span>
-
         </div>
-
 
         <div class="config-body">
 
@@ -800,11 +776,9 @@
 
             </div>
 
-
             <button onclick="savePastedData()">
                 データを保存して取り込む
             </button>
-
 
             <div class="sub-config">
 
@@ -814,7 +788,6 @@
                 >
                     ▼ URL連携（Web公開CSV）を使用する場合は開く
                 </div>
-
 
                 <div
                     id="urlArea"
@@ -840,7 +813,6 @@
 
                     </div>
 
-
                     <button
                         style="
                             margin-top:6px;
@@ -859,11 +831,7 @@
 
     </div>
 
-
-    <!-- ===============================
-         商品検索
-    ================================= -->
-
+    <!-- 商品検索 -->
     <div class="search-box">
 
         <div class="input-wrapper">
@@ -887,7 +855,6 @@
 
     </div>
 
-
     <div class="btn-group">
 
         <button
@@ -906,7 +873,6 @@
 
     </div>
 
-
     <div
         id="loading"
         class="loading"
@@ -914,14 +880,9 @@
         データ読み込み中...
     </div>
 
-
     <div id="resultCard"></div>
 
-
-    <!-- ===============================
-         全商品一覧
-    ================================= -->
-
+    <!-- 全商品一覧 -->
     <div class="all-data-section">
 
         <button
@@ -939,12 +900,7 @@
 
 </div>
 
-
-
-<!-- ===============================
-     スキャナーモーダル
-================================= -->
-
+<!-- スキャナーモーダル -->
 <div
     id="scannerModal"
     class="modal-overlay"
@@ -954,13 +910,9 @@
 
         <div id="reader"></div>
 
-
         <div class="scan-guide">
-
             <div class="scan-line"></div>
-
         </div>
-
 
         <div
             id="scannerMessage"
@@ -970,7 +922,6 @@
         </div>
 
     </div>
-
 
     <button
         class="close-modal-btn"
@@ -982,12 +933,7 @@
 
 </div>
 
-
-
-<!-- ===============================
-     ヘルプ
-================================= -->
-
+<!-- ヘルプ -->
 <div
     id="helpModal"
     class="modal-overlay"
@@ -996,7 +942,6 @@
     <div class="modal-card">
 
         <h2>使い方ガイド</h2>
-
 
         <h3>
             1. スプレッドシートの貼り付け登録
@@ -1007,7 +952,6 @@
         </p>
 
         <ul>
-
             <li>
                 Googleスプレッドシートを開き、
                 全選択（Ctrl+A / Cmd+A）して
@@ -1018,20 +962,13 @@
                 「データ登録」の枠にそのまま貼り付けて
                 「データを保存して取り込む」を押します。
             </li>
-
         </ul>
-
 
         <h3>
             2. 商品データの照会
         </h3>
 
-        <p>
-            登録されたデータから商品を検索・確認します。
-        </p>
-
         <ul>
-
             <li>
                 <strong>手入力検索:</strong>
                 JANコード（完全一致）または
@@ -1051,27 +988,21 @@
             </li>
 
             <li>
-                <strong>一括消去:</strong>
-                入力欄右端の「✕」で
-                入力内容を消去できます。
+                一覧が開いている場合は、
+                該当商品まで自動スクロールします。
             </li>
-
         </ul>
-
 
         <h3>
             3. URL連携機能（任意）
         </h3>
 
         <ul>
-
             <li>
                 Web公開したCSV URLから
                 商品データを読み込むこともできます。
             </li>
-
         </ul>
-
 
         <h3>
             4. スプレッドシートの列構造【必須】
@@ -1088,29 +1019,11 @@
         </p>
 
         <ul>
-
-            <li>
-                <strong>A列:</strong>
-                JANコード
-            </li>
-
-            <li>
-                <strong>B列:</strong>
-                商品名称
-            </li>
-
-            <li>
-                <strong>C列:</strong>
-                単価（数字）
-            </li>
-
-            <li>
-                <strong>D列:</strong>
-                消費税率（数字）
-            </li>
-
+            <li><strong>A列:</strong> JANコード</li>
+            <li><strong>B列:</strong> 商品名称</li>
+            <li><strong>C列:</strong> 単価（数字）</li>
+            <li><strong>D列:</strong> 消費税率（数字）</li>
         </ul>
-
 
         <button
             class="close-modal-btn"
@@ -1123,10 +1036,7 @@
 
 </div>
 
-
-
 <script>
-
 
 /* ===================================
    グローバル変数
@@ -1142,6 +1052,14 @@ let detectionCount = 0;
 
 let detectionLocked = false;
 
+/*
+ * 現在検索されている文字列
+ *
+ * 入力欄を消しても、
+ * 一覧の該当表示を制御しやすいよう
+ * 別変数として持つ。
+ */
+let currentSearchValue = '';
 
 
 /* ===================================
@@ -1163,7 +1081,6 @@ window.onload = function() {
 };
 
 
-
 /* ===================================
    単価表示
 =================================== */
@@ -1179,7 +1096,6 @@ function formatPrice(val) {
         return "-";
     }
 
-
     if (
         !isNaN(val) &&
         val !== ""
@@ -1190,10 +1106,8 @@ function formatPrice(val) {
 
     }
 
-
     return "¥" + val;
 }
-
 
 
 /* ===================================
@@ -1211,18 +1125,15 @@ function formatTax(val) {
         return "-";
     }
 
-
     const str =
         val
-        .toString()
-        .trim();
-
+            .toString()
+            .trim();
 
     return str.endsWith("%")
         ? str
         : str + "%";
 }
-
 
 
 /* ===================================
@@ -1231,30 +1142,28 @@ function formatTax(val) {
 
 function showAllDataListAuto() {
 
-    createDataTable();
-
+    createDataTable(
+        currentSearchValue
+    );
 
     const listContainer =
         document.getElementById(
             'allDataList'
         );
 
-
     const btn =
         document.getElementById(
             'toggleAllBtn'
         );
 
-
     listContainer.classList.add(
         'active'
     );
 
-
     btn.innerText =
         `一覧を閉じる`;
-}
 
+}
 
 
 /* ===================================
@@ -1265,12 +1174,11 @@ function savePastedData() {
 
     const text =
         document
-        .getElementById(
-            'pasteInput'
-        )
-        .value
-        .trim();
-
+            .getElementById(
+                'pasteInput'
+            )
+            .value
+            .trim();
 
     if (!text) {
 
@@ -1281,11 +1189,11 @@ function savePastedData() {
         return;
     }
 
-
     parseTextData(text);
 
-    updateItemCountDisplay();
+    currentSearchValue = '';
 
+    updateItemCountDisplay();
 
     document
         .getElementById(
@@ -1296,16 +1204,13 @@ function savePastedData() {
             'active'
         );
 
-
     showAllDataListAuto();
-
 
     alert(
         `データを正常に取り込みました！（全 ${masterData.length} 件）`
     );
 
 }
-
 
 
 /* ===================================
@@ -1316,10 +1221,8 @@ function parseTextData(text) {
 
     masterData = [];
 
-
     const lines =
         text.split(/\r?\n/);
-
 
     for (
         let i = 0;
@@ -1330,35 +1233,27 @@ function parseTextData(text) {
         const line =
             lines[i].trim();
 
-
         if (!line) {
             continue;
         }
-
 
         const sep =
             line.includes('\t')
                 ? '\t'
                 : ',';
 
-
         const cols =
             line
-            .split(sep)
-            .map(
-                c =>
-                    c
-                    .trim()
-                    .replace(
-                        /^"|"$/g,
-                        ''
-                    )
-            );
-
-
-        /*
-         * ヘッダー判定
-         */
+                .split(sep)
+                .map(
+                    c =>
+                        c
+                            .trim()
+                            .replace(
+                                /^"|"$/g,
+                                ''
+                            )
+                );
 
         if (
             i === 0 &&
@@ -1380,19 +1275,14 @@ function parseTextData(text) {
             continue;
         }
 
-
         if (
             cols.length >= 1
         ) {
 
             let jan = '-';
-
             let name = '';
-
             let price = '';
-
             let tax = '';
-
 
             if (
                 /^\d+$/.test(
@@ -1447,7 +1337,6 @@ function parseTextData(text) {
 
             }
 
-
             if (
                 name ||
                 jan !== '-'
@@ -1469,7 +1358,6 @@ function parseTextData(text) {
 }
 
 
-
 /* ===================================
    CSV URL読込
 =================================== */
@@ -1481,14 +1369,11 @@ function loadCSVData(url) {
             'loading'
         );
 
-
     loading.style.display =
         'block';
 
-
     loading.innerText =
         'データ読み込み中...';
-
 
     fetch(url)
 
@@ -1506,12 +1391,10 @@ function loadCSVData(url) {
 
                 }
 
-
                 return response.text();
 
             }
         )
-
 
         .then(
             text => {
@@ -1523,7 +1406,6 @@ function loadCSVData(url) {
             }
         )
 
-
         .catch(
             () => {
 
@@ -1532,7 +1414,6 @@ function loadCSVData(url) {
                     encodeURIComponent(
                         url
                     );
-
 
                 fetch(proxyUrl)
 
@@ -1550,12 +1431,10 @@ function loadCSVData(url) {
 
                             }
 
-
                             return response.text();
 
                         }
                     )
-
 
                     .then(
                         text => {
@@ -1566,7 +1445,6 @@ function loadCSVData(url) {
 
                         }
                     )
-
 
                     .catch(
                         () => {
@@ -1583,7 +1461,6 @@ function loadCSVData(url) {
 }
 
 
-
 /* ===================================
    CSV読込完了
 =================================== */
@@ -1592,6 +1469,7 @@ function handleLoadedCSV(text) {
 
     parseTextData(text);
 
+    currentSearchValue = '';
 
     document
         .getElementById(
@@ -1601,13 +1479,11 @@ function handleLoadedCSV(text) {
         .display =
         'none';
 
-
     updateItemCountDisplay();
 
     showAllDataListAuto();
 
 }
-
 
 
 /* ===================================
@@ -1621,7 +1497,6 @@ function updateItemCountDisplay() {
             'itemCount'
         );
 
-
     if (countSpan) {
 
         countSpan.innerText =
@@ -1629,25 +1504,22 @@ function updateItemCountDisplay() {
 
     }
 
-
     const listContainer =
         document.getElementById(
             'allDataList'
         );
-
 
     const btn =
         document.getElementById(
             'toggleAllBtn'
         );
 
-
     if (
         !listContainer
-        .classList
-        .contains(
-            'active'
-        )
+            .classList
+            .contains(
+                'active'
+            )
     ) {
 
         btn.innerText =
@@ -1656,7 +1528,6 @@ function updateItemCountDisplay() {
     }
 
 }
-
 
 
 /* ===================================
@@ -1676,7 +1547,6 @@ function openHelpModal() {
 
 }
 
-
 function closeHelpModal() {
 
     document
@@ -1691,7 +1561,6 @@ function closeHelpModal() {
 }
 
 
-
 /* ===================================
    JANチェックディジット検証
 =================================== */
@@ -1704,27 +1573,22 @@ function validateEAN(code) {
         return false;
     }
 
-
     /*
      * EAN-13 / JAN-13
      */
-
     if (
         code.length === 13
     ) {
 
         const digits =
             code
-            .split('')
-            .map(Number);
-
+                .split('')
+                .map(Number);
 
         const checkDigit =
             digits[12];
 
-
         let sum = 0;
-
 
         for (
             let i = 0;
@@ -1732,13 +1596,6 @@ function validateEAN(code) {
             i++
         ) {
 
-            /*
-             * 左から
-             *
-             * 奇数位置 × 1
-             * 偶数位置 × 3
-             */
-
             if (
                 i % 2 === 0
             ) {
@@ -1757,7 +1614,6 @@ function validateEAN(code) {
 
         }
 
-
         const calculated =
             (
                 10 -
@@ -1766,7 +1622,6 @@ function validateEAN(code) {
                 )
             ) % 10;
 
-
         return (
             calculated ===
             checkDigit
@@ -1774,27 +1629,22 @@ function validateEAN(code) {
 
     }
 
-
     /*
      * EAN-8
      */
-
     if (
         code.length === 8
     ) {
 
         const digits =
             code
-            .split('')
-            .map(Number);
-
+                .split('')
+                .map(Number);
 
         const checkDigit =
             digits[7];
 
-
         let sum = 0;
-
 
         for (
             let i = 0;
@@ -1802,13 +1652,6 @@ function validateEAN(code) {
             i++
         ) {
 
-            /*
-             * EAN-8
-             *
-             * 奇数位置 × 3
-             * 偶数位置 × 1
-             */
-
             if (
                 i % 2 === 0
             ) {
@@ -1827,7 +1670,6 @@ function validateEAN(code) {
 
         }
 
-
         const calculated =
             (
                 10 -
@@ -1836,7 +1678,6 @@ function validateEAN(code) {
                 )
             ) % 10;
 
-
         return (
             calculated ===
             checkDigit
@@ -1844,27 +1685,22 @@ function validateEAN(code) {
 
     }
 
-
     /*
      * UPC-A
      */
-
     if (
         code.length === 12
     ) {
 
         const digits =
             code
-            .split('')
-            .map(Number);
-
+                .split('')
+                .map(Number);
 
         const checkDigit =
             digits[11];
 
-
         let sum = 0;
-
 
         for (
             let i = 0;
@@ -1890,7 +1726,6 @@ function validateEAN(code) {
 
         }
 
-
         const calculated =
             (
                 10 -
@@ -1899,7 +1734,6 @@ function validateEAN(code) {
                 )
             ) % 10;
 
-
         return (
             calculated ===
             checkDigit
@@ -1907,11 +1741,9 @@ function validateEAN(code) {
 
     }
 
-
     return false;
 
 }
-
 
 
 /* ===================================
@@ -1932,44 +1764,29 @@ function startScanner() {
         return;
     }
 
-
     const modal =
         document.getElementById(
             'scannerModal'
         );
-
 
     const reader =
         document.getElementById(
             'reader'
         );
 
-
     const message =
         document.getElementById(
             'scannerMessage'
         );
 
-
-    /*
-     * 古い映像を削除
-     */
-
     reader.innerHTML = '';
-
 
     modal.classList.add(
         'active'
     );
 
-
     message.innerText =
         'カメラを起動しています...';
-
-
-    /*
-     * 状態初期化
-     */
 
     scannerRunning =
         false;
@@ -1982,11 +1799,6 @@ function startScanner() {
 
     detectionCount =
         0;
-
-
-    /*
-     * Quagga初期化
-     */
 
     Quagga.init({
 
@@ -2001,22 +1813,12 @@ function startScanner() {
             target:
                 reader,
 
-
             constraints: {
-
-                /*
-                 * 背面カメラ優先
-                 */
 
                 facingMode: {
                     ideal:
                         "environment"
                 },
-
-
-                /*
-                 * 高解像度を要求
-                 */
 
                 width: {
                     ideal:
@@ -2029,14 +1831,6 @@ function startScanner() {
                 }
 
             },
-
-
-            /*
-             * 中央付近を重点的に解析
-             *
-             * 上下を少し削るだけなので、
-             * ガイド枠より広く解析する。
-             */
 
             area: {
 
@@ -2056,65 +1850,34 @@ function startScanner() {
 
         },
 
-
         locator: {
-
-            /*
-             * 高精度優先
-             */
 
             patchSize:
                 "medium",
-
-
-            /*
-             * 解像度を半分にしない
-             */
 
             halfSample:
                 false
 
         },
 
-
-        /*
-         * JAN系だけに限定
-         */
-
         decoder: {
 
             readers: [
-
                 "ean_reader",
-
                 "ean_8_reader",
-
                 "upc_reader",
-
                 "upc_e_reader"
-
             ]
 
         },
 
-
-        /*
-         * バーコード位置を自動検出
-         */
-
         locate:
             true,
-
-
-        /*
-         * 解析頻度
-         */
 
         frequency:
             10
 
     },
-
 
     function(err) {
 
@@ -2125,10 +1888,8 @@ function startScanner() {
                 err
             );
 
-
             message.innerText =
                 'カメラの起動に失敗しました。';
-
 
             alert(
                 "カメラの起動に失敗しました。\n\n" +
@@ -2136,26 +1897,17 @@ function startScanner() {
                 String(err)
             );
 
-
             stopScanner();
 
             return;
         }
 
-
-        console.log(
-            "Quagga2 初期化成功"
-        );
-
-
         try {
 
             Quagga.start();
 
-
             scannerRunning =
                 true;
-
 
             message.innerText =
                 'バーコードを枠の中央に合わせてください';
@@ -2168,11 +1920,9 @@ function startScanner() {
                 error
             );
 
-
             alert(
                 'スキャナーを開始できませんでした。'
             );
-
 
             stopScanner();
 
@@ -2183,7 +1933,6 @@ function startScanner() {
 }
 
 
-
 /* ===================================
    Quagga2 検出処理
 =================================== */
@@ -2191,27 +1940,17 @@ function startScanner() {
 Quagga.onDetected(
     function(result) {
 
-        /*
-         * スキャナー停止中なら無視
-         */
-
         if (
             !scannerRunning
         ) {
             return;
         }
 
-
-        /*
-         * 確定済みなら無視
-         */
-
         if (
             detectionLocked
         ) {
             return;
         }
-
 
         if (
             !result ||
@@ -2221,23 +1960,11 @@ Quagga.onDetected(
             return;
         }
 
-
         const code =
             result
-            .codeResult
-            .code
-            .trim();
-
-
-        console.log(
-            "検出候補:",
-            code
-        );
-
-
-        /*
-         * 数字以外は拒否
-         */
+                .codeResult
+                .code
+                .trim();
 
         if (
             !/^\d+$/.test(
@@ -2246,11 +1973,6 @@ Quagga.onDetected(
         ) {
             return;
         }
-
-
-        /*
-         * JAN / EAN / UPC長以外は拒否
-         */
 
         if (
             code.length !== 13 &&
@@ -2262,30 +1984,15 @@ Quagga.onDetected(
 
         }
 
-
-        /*
-         * チェックディジット検証
-         */
-
         if (
             !validateEAN(
                 code
             )
         ) {
 
-            console.log(
-                "チェックディジット不一致:",
-                code
-            );
-
             return;
 
         }
-
-
-        /*
-         * 同一コードを連続検出したか確認
-         */
 
         if (
             code ===
@@ -2306,17 +2013,6 @@ Quagga.onDetected(
 
         }
 
-
-        console.log(
-            "一致回数:",
-            detectionCount
-        );
-
-
-        /*
-         * 2回連続で同じコードを検出するまで待つ
-         */
-
         if (
             detectionCount < 2
         ) {
@@ -2332,20 +2028,8 @@ Quagga.onDetected(
 
         }
 
-
-        /*
-         * ここで確定
-         */
-
         detectionLocked =
             true;
-
-
-        console.log(
-            "バーコード確定:",
-            code
-        );
-
 
         document
             .getElementById(
@@ -2353,11 +2037,6 @@ Quagga.onDetected(
             )
             .innerText =
             '読み取り成功！';
-
-
-        /*
-         * 振動
-         */
 
         if (
             navigator.vibrate
@@ -2369,11 +2048,6 @@ Quagga.onDetected(
 
         }
 
-
-        /*
-         * 入力欄へ反映
-         */
-
         document
             .getElementById(
                 'janInput'
@@ -2381,13 +2055,7 @@ Quagga.onDetected(
             .value =
             code;
 
-
         toggleClearBtn();
-
-
-        /*
-         * スキャナー停止 → 検索
-         */
 
         stopScanner(
             true
@@ -2395,7 +2063,6 @@ Quagga.onDetected(
 
     }
 );
-
 
 
 /* ===================================
@@ -2427,10 +2094,8 @@ function stopScanner(
 
     }
 
-
     scannerRunning =
         false;
-
 
     document
         .getElementById(
@@ -2441,7 +2106,6 @@ function stopScanner(
             'active'
         );
 
-
     document
         .getElementById(
             'reader'
@@ -2449,17 +2113,11 @@ function stopScanner(
         .innerHTML =
         '';
 
-
     lastDetectedCode =
         null;
 
     detectionCount =
         0;
-
-
-    /*
-     * 読み取り成功時だけ検索
-     */
 
     if (
         searchAfterStop
@@ -2489,7 +2147,6 @@ function stopScanner(
 }
 
 
-
 /* ===================================
    貼り付け欄クリア
 =================================== */
@@ -2501,12 +2158,10 @@ function togglePasteClearBtn() {
             'pasteInput'
         );
 
-
     const btn =
         document.getElementById(
             'pasteClearBtn'
         );
-
 
     btn.style.display =
         input.value.length > 0
@@ -2515,7 +2170,6 @@ function togglePasteClearBtn() {
 
 }
 
-
 function clearPasteInput() {
 
     const input =
@@ -2523,16 +2177,13 @@ function clearPasteInput() {
             'pasteInput'
         );
 
-
     input.value = '';
-
 
     togglePasteClearBtn();
 
     input.focus();
 
 }
-
 
 
 /* ===================================
@@ -2546,12 +2197,10 @@ function toggleUrlClearBtn() {
             'csvUrlInput'
         );
 
-
     const btn =
         document.getElementById(
             'urlClearBtn'
         );
-
 
     btn.style.display =
         input.value.length > 0
@@ -2560,7 +2209,6 @@ function toggleUrlClearBtn() {
 
 }
 
-
 function clearUrlInput() {
 
     const input =
@@ -2568,16 +2216,13 @@ function clearUrlInput() {
             'csvUrlInput'
         );
 
-
     input.value = '';
-
 
     toggleUrlClearBtn();
 
     input.focus();
 
 }
-
 
 
 /* ===================================
@@ -2591,12 +2236,10 @@ function toggleClearBtn() {
             'janInput'
         );
 
-
     const btn =
         document.getElementById(
             'clearBtn'
         );
-
 
     btn.style.display =
         input.value.length > 0
@@ -2605,7 +2248,6 @@ function toggleClearBtn() {
 
 }
 
-
 function clearInput() {
 
     const input =
@@ -2613,16 +2255,34 @@ function clearInput() {
             'janInput'
         );
 
-
     input.value = '';
 
+    currentSearchValue = '';
 
     toggleClearBtn();
+
+    /*
+     * 一覧が開いている場合は
+     * グレー表示を解除する
+     */
+    const listContainer =
+        document.getElementById(
+            'allDataList'
+        );
+
+    if (
+        listContainer
+            .classList
+            .contains('active')
+    ) {
+
+        createDataTable('');
+
+    }
 
     input.focus();
 
 }
-
 
 
 /* ===================================
@@ -2633,12 +2293,11 @@ function saveAndLoadUrl() {
 
     const inputUrl =
         document
-        .getElementById(
-            'csvUrlInput'
-        )
-        .value
-        .trim();
-
+            .getElementById(
+                'csvUrlInput'
+            )
+            .value
+            .trim();
 
     if (
         !inputUrl
@@ -2646,9 +2305,9 @@ function saveAndLoadUrl() {
 
         masterData = [];
 
+        currentSearchValue = '';
 
         updateItemCountDisplay();
-
 
         document
             .getElementById(
@@ -2656,7 +2315,6 @@ function saveAndLoadUrl() {
             )
             .innerHTML =
             '';
-
 
         document
             .getElementById(
@@ -2680,7 +2338,6 @@ function saveAndLoadUrl() {
 }
 
 
-
 /* ===================================
    URL設定開閉
 =================================== */
@@ -2692,14 +2349,12 @@ function toggleUrlArea() {
             'urlArea'
         );
 
-
     area.style.display =
         area.style.display === 'none'
             ? 'block'
             : 'none';
 
 }
-
 
 
 /* ===================================
@@ -2710,18 +2365,16 @@ function searchJAN() {
 
     const inputVal =
         document
-        .getElementById(
-            'janInput'
-        )
-        .value
-        .trim();
-
+            .getElementById(
+                'janInput'
+            )
+            .value
+            .trim();
 
     const card =
         document.getElementById(
             'resultCard'
         );
-
 
     if (
         !inputVal
@@ -2735,6 +2388,11 @@ function searchJAN() {
 
     }
 
+    /*
+     * 現在検索中の商品を保存
+     */
+    currentSearchValue =
+        inputVal;
 
     const results =
         masterData.filter(
@@ -2750,14 +2408,13 @@ function searchJAN() {
                 (
                     d.name &&
                     d.name
-                    .toLowerCase()
-                    .includes(
-                        inputVal
                         .toLowerCase()
-                    )
+                        .includes(
+                            inputVal
+                                .toLowerCase()
+                        )
                 )
         );
-
 
     if (
         results.length > 0
@@ -2769,7 +2426,6 @@ function searchJAN() {
                 ✅ 該当あり（${results.length}件見つかりました）
             </span>
             `;
-
 
         results.forEach(
             item => {
@@ -2794,7 +2450,6 @@ function searchJAN() {
 
                         </div>
 
-
                         <div class="detail-row">
 
                             <span>
@@ -2806,7 +2461,6 @@ function searchJAN() {
                             </span>
 
                         </div>
-
 
                         <div class="detail-row">
 
@@ -2825,7 +2479,6 @@ function searchJAN() {
 
             }
         );
-
 
         card.innerHTML =
             html;
@@ -2847,31 +2500,126 @@ function searchJAN() {
 
     }
 
-
     card.classList.add(
         'active'
     );
 
+    /*
+     * ================================
+     * 一覧の開閉状態は変更しない
+     * ================================
+     */
 
-    document
-        .getElementById(
+    const listContainer =
+        document.getElementById(
             'allDataList'
-        )
-        .classList
-        .remove(
-            'active'
         );
 
+    /*
+     * 一覧が開いていた場合のみ
+     * 再描画して該当商品を強調
+     */
+    if (
+        listContainer
+            .classList
+            .contains('active')
+    ) {
 
-    document
-        .getElementById(
-            'toggleAllBtn'
-        )
-        .innerText =
-        `全商品一覧を表示（全 ${masterData.length} 件）`;
+        createDataTable(
+            currentSearchValue
+        );
+
+        /*
+         * 該当行まで自動スクロール
+         */
+        if (
+            results.length > 0
+        ) {
+
+            scrollToMatchedRow();
+
+        }
+
+    }
 
 }
 
+
+/* ===================================
+   該当商品へ自動スクロール
+=================================== */
+
+function scrollToMatchedRow() {
+
+    /*
+     * テーブル描画が完了した後に実行
+     */
+    requestAnimationFrame(
+        function() {
+
+            requestAnimationFrame(
+                function() {
+
+                    const matchedRow =
+                        document.querySelector(
+                            '#allDataList .matched-row'
+                        );
+
+                    if (
+                        !matchedRow
+                    ) {
+                        return;
+                    }
+
+                    /*
+                     * 商品一覧のスクロール領域だけを移動
+                     *
+                     * scrollIntoViewよりも
+                     * ページ全体が勝手に動きにくい。
+                     */
+                    const listContainer =
+                        document.getElementById(
+                            'allDataList'
+                        );
+
+                    const rowTop =
+                        matchedRow.offsetTop;
+
+                    const rowHeight =
+                        matchedRow.offsetHeight;
+
+                    const containerHeight =
+                        listContainer.clientHeight;
+
+                    const targetScrollTop =
+                        rowTop
+                        -
+                        (
+                            containerHeight / 2
+                        )
+                        +
+                        (
+                            rowHeight / 2
+                        );
+
+                    listContainer.scrollTo({
+                        top:
+                            Math.max(
+                                0,
+                                targetScrollTop
+                            ),
+
+                        behavior:
+                            'smooth'
+                    });
+
+                }
+            );
+
+        }
+    );
+
+}
 
 
 /* ===================================
@@ -2898,7 +2646,6 @@ document
     );
 
 
-
 /* ===================================
    一覧開閉
 =================================== */
@@ -2910,27 +2657,23 @@ function toggleAllData() {
             'allDataList'
         );
 
-
     const btn =
         document.getElementById(
             'toggleAllBtn'
         );
 
-
     if (
         listContainer
-        .classList
-        .contains(
-            'active'
-        )
+            .classList
+            .contains('active')
     ) {
 
+        /*
+         * 一覧を閉じる
+         */
         listContainer
             .classList
-            .remove(
-                'active'
-            );
-
+            .remove('active');
 
         btn.innerText =
             `全商品一覧を表示（全 ${masterData.length} 件）`;
@@ -2939,23 +2682,54 @@ function toggleAllData() {
 
     else {
 
-        createDataTable();
-
+        /*
+         * 現在検索されている商品を反映した状態で
+         * 一覧を生成
+         */
+        createDataTable(
+            currentSearchValue
+        );
 
         listContainer
             .classList
-            .add(
-                'active'
-            );
-
+            .add('active');
 
         btn.innerText =
             `一覧を閉じる`;
 
+        /*
+         * 検索中の商品があれば
+         * 開いた瞬間にそこまで移動
+         */
+        if (
+            currentSearchValue
+        ) {
+
+            setTimeout(
+                function() {
+
+                    const matchedRow =
+                        document.querySelector(
+                            '#allDataList .matched-row'
+                        );
+
+                    if (
+                        matchedRow
+                    ) {
+
+                        scrollToMatchedRow();
+
+                    }
+
+                },
+                50
+            );
+
+        }
+
     }
 
 }
-
 
 
 /* ===================================
@@ -2968,46 +2742,53 @@ function escapeHtml(value) {
         value ?? ''
     )
 
-    .replace(
-        /&/g,
-        '&amp;'
-    )
+        .replace(
+            /&/g,
+            '&amp;'
+        )
 
-    .replace(
-        /</g,
-        '&lt;'
-    )
+        .replace(
+            /</g,
+            '&lt;'
+        )
 
-    .replace(
-        />/g,
-        '&gt;'
-    )
+        .replace(
+            />/g,
+            '&gt;'
+        )
 
-    .replace(
-        /"/g,
-        '&quot;'
-    )
+        .replace(
+            /"/g,
+            '&quot;'
+        )
 
-    .replace(
-        /'/g,
-        '&#039;'
-    );
+        .replace(
+            /'/g,
+            '&#039;'
+        );
 
 }
-
 
 
 /* ===================================
    商品一覧テーブル
 =================================== */
 
-function createDataTable() {
+function createDataTable(
+    searchValue = ''
+) {
 
     const listContainer =
         document.getElementById(
             'allDataList'
         );
 
+    const normalizedSearch =
+        String(
+            searchValue || ''
+        )
+            .trim()
+            .toLowerCase();
 
     let tableHtml =
         `
@@ -3040,13 +2821,43 @@ function createDataTable() {
             <tbody>
         `;
 
-
     masterData.forEach(
         item => {
 
+            let isMatched =
+                false;
+
+            if (
+                normalizedSearch
+            ) {
+
+                const janMatch =
+                    item.jan !== '-' &&
+                    item.jan ===
+                    searchValue;
+
+                const nameMatch =
+                    item.name &&
+                    item.name
+                        .toLowerCase()
+                        .includes(
+                            normalizedSearch
+                        );
+
+                isMatched =
+                    janMatch ||
+                    nameMatch;
+
+            }
+
+            const rowClass =
+                isMatched
+                    ? 'matched-row'
+                    : '';
+
             tableHtml +=
                 `
-                <tr>
+                <tr class="${rowClass}">
 
                     <td>
                         ${escapeHtml(item.jan)}
@@ -3070,7 +2881,6 @@ function createDataTable() {
         }
     );
 
-
     tableHtml +=
         `
             </tbody>
@@ -3078,26 +2888,19 @@ function createDataTable() {
         </table>
         `;
 
-
     listContainer.innerHTML =
         tableHtml;
 
 }
 
 
-
 /* ===================================
-   モーダル外タップ等の安全対策
+   Safariバックグラウンド対策
 =================================== */
 
 document.addEventListener(
     'visibilitychange',
     function() {
-
-        /*
-         * Safariをバックグラウンドにした場合、
-         * カメラを停止
-         */
 
         if (
             document.hidden &&
@@ -3111,9 +2914,7 @@ document.addEventListener(
     }
 );
 
-
 </script>
-
 
 </body>
 </html>
