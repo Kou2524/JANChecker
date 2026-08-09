@@ -3,7 +3,7 @@
    Service Worker v3
 ======================================== */
 
-const CACHE_NAME = 'product-checker-v3';
+const CACHE_NAME = 'product-checker-v4';
 
 /*
  * 完全オフラインでも必要なアプリ本体。
