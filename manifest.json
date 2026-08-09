@@ -1,6 +1,6 @@
 {
   "name": "商品登録チェック",
-  "short_name": "商品チェック",
+  "short_name": "商品登録チェック",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
