@@ -1,28 +1,20 @@
 /* ========================================
    商品登録チェック
-   Service Worker
+   Service Worker v3
 ======================================== */
 
-/*
- * キャッシュのバージョン
- *
- * 今後アプリを大きく更新したときは
- * v1 → v2 → v3
- * のように変更する
- */
-const CACHE_NAME = 'product-checker-v1';
-
+const CACHE_NAME = 'product-checker-v3';
 
 /*
- * オフラインでも使用したいファイル
+ * 完全オフラインでも必要なアプリ本体。
+ * URL連携先などの外部通信はキャッシュ対象外。
  */
 const APP_FILES = [
     './',
     './index.html',
     './manifest.json',
-
     './js/quagga.min.js',
-
+    './js/quagga.min.js?v=3',
     './icons/icon-192.png',
     './icons/icon-512.png',
     './icons/apple-touch-icon.png'
@@ -41,25 +33,15 @@ self.addEventListener(
 
             caches
                 .open(CACHE_NAME)
-
                 .then(cache => {
-
-                    console.log(
-                        'オフライン用ファイルをキャッシュします'
-                    );
 
                     return cache.addAll(
                         APP_FILES
                     );
 
                 })
-
                 .then(() => {
 
-                    /*
-                     * 新しいService Workerを
-                     * すぐ待機状態から進める
-                     */
                     return self.skipWaiting();
 
                 })
@@ -71,7 +53,7 @@ self.addEventListener(
 
 
 /* ========================================
-   有効化
+   有効化・旧キャッシュ削除
 ======================================== */
 
 self.addEventListener(
@@ -82,7 +64,6 @@ self.addEventListener(
 
             caches
                 .keys()
-
                 .then(cacheNames => {
 
                     return Promise.all(
@@ -90,21 +71,12 @@ self.addEventListener(
                         cacheNames.map(
                             cacheName => {
 
-                                /*
-                                 * 古いバージョンの
-                                 * キャッシュを削除
-                                 */
                                 if (
                                     cacheName !== CACHE_NAME &&
                                     cacheName.startsWith(
                                         'product-checker-'
                                     )
                                 ) {
-
-                                    console.log(
-                                        '古いキャッシュを削除:',
-                                        cacheName
-                                    );
 
                                     return caches.delete(
                                         cacheName
@@ -118,14 +90,8 @@ self.addEventListener(
                     );
 
                 })
-
                 .then(() => {
 
-                    /*
-                     * 開いているページを
-                     * 新しいService Workerで
-                     * すぐ制御する
-                     */
                     return self.clients.claim();
 
                 })
@@ -168,20 +134,12 @@ self.addEventListener(
 
         /*
          * =====================================
-         * 外部サイトへのアクセス
+         * 外部通信
          * =====================================
          *
-         * URL連携などは通常のネット通信へ任せる。
-         *
-         * つまり、
-         *
-         * オンライン
-         * → URL連携使用可能
-         *
-         * オフライン
-         * → URL連携使用不可
-         *
-         * という動きになる。
+         * URL連携やCDNなど、
+         * GitHub Pages以外への通信は
+         * 通常のネット通信に任せる。
          */
         if (
             requestUrl.origin !==
@@ -195,8 +153,16 @@ self.addEventListener(
 
         /*
          * =====================================
-         * ページそのものを開いた場合
+         * HTMLページ
          * =====================================
+         *
+         * Network First
+         *
+         * オンライン
+         * → 最新のindex.htmlを取得
+         *
+         * オフライン
+         * → キャッシュ済みindex.htmlを使用
          */
         if (
             request.mode === 'navigate'
@@ -205,40 +171,36 @@ self.addEventListener(
             event.respondWith(
 
                 fetch(request)
-
                     .then(response => {
 
-                        /*
-                         * オンラインなら
-                         * 最新ページを取得
-                         */
-                        const copy =
-                            response.clone();
+                        if (
+                            response &&
+                            response.ok
+                        ) {
+
+                            const copy =
+                                response.clone();
 
 
-                        caches
-                            .open(CACHE_NAME)
+                            caches
+                                .open(CACHE_NAME)
+                                .then(cache => {
 
-                            .then(cache => {
+                                    cache.put(
+                                        './index.html',
+                                        copy
+                                    );
 
-                                cache.put(
-                                    './index.html',
-                                    copy
-                                );
+                                });
 
-                            });
+                        }
 
 
                         return response;
 
                     })
-
                     .catch(() => {
 
-                        /*
-                         * 圏外なら
-                         * 保存済みindex.htmlを使用
-                         */
                         return caches.match(
                             './index.html'
                         );
@@ -255,18 +217,19 @@ self.addEventListener(
 
         /*
          * =====================================
-         * JS / manifest / アイコン等
+         * JS / manifest / アイコン
          * =====================================
          *
-         * まずキャッシュを探す。
+         * Cache First
          *
-         * 見つからなければネットから取得。
+         * ① キャッシュ確認
+         * ② なければネット取得
+         * ③ 取得できたものをキャッシュ
          */
         event.respondWith(
 
             caches
                 .match(request)
-
                 .then(cachedResponse => {
 
                     if (
@@ -278,9 +241,38 @@ self.addEventListener(
                     }
 
 
-                    return fetch(
-                        request
-                    );
+                    return fetch(request)
+                        .then(response => {
+
+                            if (
+                                !response ||
+                                !response.ok
+                            ) {
+
+                                return response;
+
+                            }
+
+
+                            const copy =
+                                response.clone();
+
+
+                            caches
+                                .open(CACHE_NAME)
+                                .then(cache => {
+
+                                    cache.put(
+                                        request,
+                                        copy
+                                    );
+
+                                });
+
+
+                            return response;
+
+                        });
 
                 })
 
