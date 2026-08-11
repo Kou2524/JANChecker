@@ -1,24 +1,40 @@
 /* =========================================================
    商品登録チェック
    Service Worker
-   オフライン対応版 v5
+   オフライン対応版 v6
 ========================================================= */
 
-const CACHE_NAME = 'jan-checker-v5';
+
+/* =========================================================
+   キャッシュバージョン
+
+   index.htmlを更新したため
+   v5 → v6 に変更
+========================================================= */
+
+const CACHE_NAME = 'jan-checker-v6';
 
 
 /* =========================================================
    オフラインで使用するファイル
 
-   ※ GitHub Pages の
-      JANChecker/
-   をルートとして想定
+   GitHub Pages：
+
+   JANChecker/
+   ├─ index.html
+   ├─ manifest.json
+   ├─ sw.js
+   ├─ js/
+   ├─ dict/
+   └─ icons/
+
+   の構成を想定
 ========================================================= */
 
 const CACHE_FILES = [
 
     /* ----------------------------------------
-       メイン
+       メインファイル
     ---------------------------------------- */
 
     './',
@@ -41,6 +57,7 @@ const CACHE_FILES = [
     './dict/base.dat.gz',
     './dict/cc.dat.gz',
     './dict/check.dat.gz',
+
     './dict/tid.dat.gz',
     './dict/tid_map.dat.gz',
     './dict/tid_pos.dat.gz',
@@ -54,7 +71,7 @@ const CACHE_FILES = [
 
 
     /* ----------------------------------------
-       アイコン
+       PWAアイコン
     ---------------------------------------- */
 
     './icons/icon-192.png',
@@ -65,9 +82,7 @@ const CACHE_FILES = [
 
 
 /* =========================================================
-   インストール
-
-   必要なファイルを端末へキャッシュする
+   Service Worker インストール
 ========================================================= */
 
 self.addEventListener(
@@ -75,7 +90,8 @@ self.addEventListener(
     event => {
 
         console.log(
-            '[Service Worker] Install'
+            '[Service Worker] Install:',
+            CACHE_NAME
         );
 
 
@@ -93,6 +109,11 @@ self.addEventListener(
                         );
 
 
+                        /*
+                         * オフライン動作に必要なファイルを
+                         * 一括でキャッシュ
+                         */
+
                         return cache.addAll(
                             CACHE_FILES
                         );
@@ -102,12 +123,36 @@ self.addEventListener(
                 .then(
                     () => {
 
+                        console.log(
+                            '[Service Worker] Cache completed'
+                        );
+
+
                         /*
-                         * 新しいService Workerを
-                         * 待機状態にせず即時有効化
+                         * 古いService Workerが終了するまで
+                         * 待機せず、新版を有効化
                          */
 
                         return self.skipWaiting();
+
+                    }
+                )
+                .catch(
+                    error => {
+
+                        console.error(
+                            '[Service Worker] Install / Cache failed:',
+                            error
+                        );
+
+
+                        /*
+                         * エラーを再throwすることで
+                         * 不完全なService Workerを
+                         * インストール済みにしない
+                         */
+
+                        throw error;
 
                     }
                 )
@@ -119,9 +164,7 @@ self.addEventListener(
 
 
 /* =========================================================
-   アクティベート
-
-   古いキャッシュを削除する
+   Service Worker 有効化
 ========================================================= */
 
 self.addEventListener(
@@ -129,7 +172,8 @@ self.addEventListener(
     event => {
 
         console.log(
-            '[Service Worker] Activate'
+            '[Service Worker] Activate:',
+            CACHE_NAME
         );
 
 
@@ -140,14 +184,15 @@ self.addEventListener(
                 .then(
                     cacheNames => {
 
+                        /*
+                         * 現在のv6以外の
+                         * 古いキャッシュを削除
+                         */
+
                         return Promise.all(
 
                             cacheNames.map(
                                 cacheName => {
-
-                                    /*
-                                     * 現在使用しているキャッシュ以外を削除
-                                     */
 
                                     if (
                                         cacheName !== CACHE_NAME
@@ -179,8 +224,8 @@ self.addEventListener(
                     () => {
 
                         /*
-                         * 開いているページを
-                         * 即座に新Service Workerの管理下へ
+                         * 現在開いているページを
+                         * 新Service Workerの管理下へ
                          */
 
                         return self.clients.claim();
@@ -196,15 +241,6 @@ self.addEventListener(
 
 /* =========================================================
    Fetch
-
-   基本動作：
-
-   1. キャッシュを確認
-   2. あればキャッシュを返す
-   3. なければネットワークへアクセス
-   4. 成功したデータはキャッシュへ追加
-
-   → オフラインでも動作可能
 ========================================================= */
 
 self.addEventListener(
@@ -215,9 +251,9 @@ self.addEventListener(
             event.request;
 
 
-        /*
-         * GET以外はキャッシュ処理しない
-         */
+        /* ----------------------------------------
+           GETリクエスト以外は処理しない
+        ---------------------------------------- */
 
         if (
             request.method !== 'GET'
@@ -228,15 +264,19 @@ self.addEventListener(
         }
 
 
-        /*
-         * http / https 以外は処理しない
-         */
+        /* ----------------------------------------
+           URLを取得
+        ---------------------------------------- */
 
         const url =
             new URL(
                 request.url
             );
 
+
+        /* ----------------------------------------
+           HTTP / HTTPS以外は処理しない
+        ---------------------------------------- */
 
         if (
             url.protocol !== 'http:' &&
@@ -257,9 +297,9 @@ self.addEventListener(
                 .then(
                     cachedResponse => {
 
-                        /*
-                         * キャッシュが存在する場合
-                         */
+                        /* --------------------------------
+                           キャッシュに存在する場合
+                        -------------------------------- */
 
                         if (
                             cachedResponse
@@ -270,10 +310,11 @@ self.addEventListener(
                         }
 
 
-                        /*
-                         * キャッシュに無ければ
-                         * ネットワークへアクセス
-                         */
+                        /* --------------------------------
+                           キャッシュに存在しない場合
+
+                           ネットワークへアクセス
+                        -------------------------------- */
 
                         return fetch(
                             request
@@ -282,12 +323,24 @@ self.addEventListener(
                                 networkResponse => {
 
                                     /*
-                                     * 正常レスポンス以外は
+                                     * レスポンスが存在しない場合
+                                     */
+
+                                    if (
+                                        !networkResponse
+                                    ) {
+
+                                        return networkResponse;
+
+                                    }
+
+
+                                    /*
+                                     * HTTP 200以外は
                                      * キャッシュしない
                                      */
 
                                     if (
-                                        !networkResponse ||
                                         networkResponse.status !== 200
                                     ) {
 
@@ -298,7 +351,7 @@ self.addEventListener(
 
                                     /*
                                      * opaqueレスポンスは
-                                     * 原則キャッシュ対象外
+                                     * キャッシュ対象外
                                      */
 
                                     if (
@@ -311,13 +364,18 @@ self.addEventListener(
 
 
                                     /*
-                                     * レスポンスは一度しか読めないため
-                                     * cloneしてキャッシュへ保存
+                                     * Responseは一度しか使用できないため
+                                     * cloneを作成
                                      */
 
                                     const responseClone =
                                         networkResponse.clone();
 
+
+                                    /*
+                                     * ネットワークから取得したファイルを
+                                     * 現在のキャッシュへ保存
+                                     */
 
                                     caches
                                         .open(
@@ -326,9 +384,20 @@ self.addEventListener(
                                         .then(
                                             cache => {
 
-                                                cache.put(
+                                                return cache.put(
                                                     request,
                                                     responseClone
+                                                );
+
+                                            }
+                                        )
+                                        .catch(
+                                            error => {
+
+                                                console.warn(
+                                                    '[Service Worker] Dynamic cache failed:',
+                                                    request.url,
+                                                    error
                                                 );
 
                                             }
@@ -343,16 +412,18 @@ self.addEventListener(
                                 error => {
 
                                     console.warn(
-                                        '[Service Worker] Offline fetch failed:',
+                                        '[Service Worker] Network unavailable:',
                                         request.url,
                                         error
                                     );
 
 
-                                    /*
-                                     * HTMLページへのアクセスだった場合は
-                                     * index.htmlへフォールバック
-                                     */
+                                    /* --------------------------------
+                                       ページ遷移の場合
+
+                                       オフライン時は
+                                       index.htmlを表示
+                                    -------------------------------- */
 
                                     if (
                                         request.mode === 'navigate'
@@ -365,20 +436,22 @@ self.addEventListener(
                                     }
 
 
-                                    /*
-                                     * その他のファイルで
-                                     * キャッシュにもネットにも無ければ
-                                     * エラーを返す
-                                     */
+                                    /* --------------------------------
+                                       キャッシュにもネットにも
+                                       ファイルが存在しない場合
+                                    -------------------------------- */
 
                                     return new Response(
                                         'Offline',
                                         {
                                             status: 503,
                                             statusText: 'Offline',
+
                                             headers: {
+
                                                 'Content-Type':
                                                     'text/plain; charset=UTF-8'
+
                                             }
                                         }
                                     );
@@ -396,20 +469,16 @@ self.addEventListener(
 
 
 /* =========================================================
-   メッセージ受信
-
-   index.htmlなどから
-
-   navigator.serviceWorker.controller.postMessage({
-       type: 'SKIP_WAITING'
-   });
-
-   と送れば即時更新できる
+   Service Worker メッセージ処理
 ========================================================= */
 
 self.addEventListener(
     'message',
     event => {
+
+        /*
+         * データが存在しない場合は終了
+         */
 
         if (
             !event.data
@@ -420,12 +489,23 @@ self.addEventListener(
         }
 
 
+        /*
+         * index.html側から
+
+         * {
+         *     type: 'SKIP_WAITING'
+         * }
+
+         * が送信された場合、
+         * 新Service Workerを即時有効化
+         */
+
         if (
             event.data.type === 'SKIP_WAITING'
         ) {
 
             console.log(
-                '[Service Worker] Skip waiting requested'
+                '[Service Worker] SKIP_WAITING received'
             );
 
 
