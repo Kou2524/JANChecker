@@ -1,50 +1,116 @@
-/* ========================================
+/* =========================================================
    商品登録チェック
-   Service Worker v3
-======================================== */
+   Service Worker
+   オフライン対応版 v5
+========================================================= */
 
-const CACHE_NAME = 'product-checker-v4';
+const CACHE_NAME = 'jan-checker-v5';
 
-/*
- * 完全オフラインでも必要なアプリ本体。
- * URL連携先などの外部通信はキャッシュ対象外。
- */
-const APP_FILES = [
+
+/* =========================================================
+   オフラインで使用するファイル
+
+   ※ GitHub Pages の
+      JANChecker/
+   をルートとして想定
+========================================================= */
+
+const CACHE_FILES = [
+
+    /* ----------------------------------------
+       メイン
+    ---------------------------------------- */
+
     './',
     './index.html',
     './manifest.json',
+
+
+    /* ----------------------------------------
+       JavaScript
+    ---------------------------------------- */
+
     './js/quagga.min.js',
-    './js/quagga.min.js?v=3',
+    './js/kuromoji.js',
+
+
+    /* ----------------------------------------
+       Kuromoji 辞書
+    ---------------------------------------- */
+
+    './dict/base.dat.gz',
+    './dict/cc.dat.gz',
+    './dict/check.dat.gz',
+    './dict/tid.dat.gz',
+    './dict/tid_map.dat.gz',
+    './dict/tid_pos.dat.gz',
+
+    './dict/unk.dat.gz',
+    './dict/unk_char.dat.gz',
+    './dict/unk_compat.dat.gz',
+    './dict/unk_invoke.dat.gz',
+    './dict/unk_map.dat.gz',
+    './dict/unk_pos.dat.gz',
+
+
+    /* ----------------------------------------
+       アイコン
+    ---------------------------------------- */
+
     './icons/icon-192.png',
     './icons/icon-512.png',
     './icons/apple-touch-icon.png'
+
 ];
 
 
-/* ========================================
+/* =========================================================
    インストール
-======================================== */
+
+   必要なファイルを端末へキャッシュする
+========================================================= */
 
 self.addEventListener(
     'install',
     event => {
 
+        console.log(
+            '[Service Worker] Install'
+        );
+
+
         event.waitUntil(
 
             caches
-                .open(CACHE_NAME)
-                .then(cache => {
+                .open(
+                    CACHE_NAME
+                )
+                .then(
+                    cache => {
 
-                    return cache.addAll(
-                        APP_FILES
-                    );
+                        console.log(
+                            '[Service Worker] Caching app files'
+                        );
 
-                })
-                .then(() => {
 
-                    return self.skipWaiting();
+                        return cache.addAll(
+                            CACHE_FILES
+                        );
 
-                })
+                    }
+                )
+                .then(
+                    () => {
+
+                        /*
+                         * 新しいService Workerを
+                         * 待機状態にせず即時有効化
+                         */
+
+                        return self.skipWaiting();
+
+                    }
+                )
 
         );
 
@@ -52,49 +118,75 @@ self.addEventListener(
 );
 
 
-/* ========================================
-   有効化・旧キャッシュ削除
-======================================== */
+/* =========================================================
+   アクティベート
+
+   古いキャッシュを削除する
+========================================================= */
 
 self.addEventListener(
     'activate',
     event => {
 
+        console.log(
+            '[Service Worker] Activate'
+        );
+
+
         event.waitUntil(
 
             caches
                 .keys()
-                .then(cacheNames => {
+                .then(
+                    cacheNames => {
 
-                    return Promise.all(
+                        return Promise.all(
 
-                        cacheNames.map(
-                            cacheName => {
+                            cacheNames.map(
+                                cacheName => {
 
-                                if (
-                                    cacheName !== CACHE_NAME &&
-                                    cacheName.startsWith(
-                                        'product-checker-'
-                                    )
-                                ) {
+                                    /*
+                                     * 現在使用しているキャッシュ以外を削除
+                                     */
 
-                                    return caches.delete(
-                                        cacheName
-                                    );
+                                    if (
+                                        cacheName !== CACHE_NAME
+                                    ) {
+
+                                        console.log(
+                                            '[Service Worker] Delete old cache:',
+                                            cacheName
+                                        );
+
+
+                                        return caches.delete(
+                                            cacheName
+                                        );
+
+                                    }
+
+
+                                    return Promise.resolve();
 
                                 }
+                            )
 
-                            }
-                        )
+                        );
 
-                    );
+                    }
+                )
+                .then(
+                    () => {
 
-                })
-                .then(() => {
+                        /*
+                         * 開いているページを
+                         * 即座に新Service Workerの管理下へ
+                         */
 
-                    return self.clients.claim();
+                        return self.clients.claim();
 
-                })
+                    }
+                )
 
         );
 
@@ -102,9 +194,18 @@ self.addEventListener(
 );
 
 
-/* ========================================
-   通信処理
-======================================== */
+/* =========================================================
+   Fetch
+
+   基本動作：
+
+   1. キャッシュを確認
+   2. あればキャッシュを返す
+   3. なければネットワークへアクセス
+   4. 成功したデータはキャッシュへ追加
+
+   → オフラインでも動作可能
+========================================================= */
 
 self.addEventListener(
     'fetch',
@@ -115,8 +216,9 @@ self.addEventListener(
 
 
         /*
-         * GET以外はService Workerで処理しない
+         * GET以外はキャッシュ処理しない
          */
+
         if (
             request.method !== 'GET'
         ) {
@@ -126,24 +228,19 @@ self.addEventListener(
         }
 
 
-        const requestUrl =
+        /*
+         * http / https 以外は処理しない
+         */
+
+        const url =
             new URL(
                 request.url
             );
 
 
-        /*
-         * =====================================
-         * 外部通信
-         * =====================================
-         *
-         * URL連携やCDNなど、
-         * GitHub Pages以外への通信は
-         * 通常のネット通信に任せる。
-         */
         if (
-            requestUrl.origin !==
-            self.location.origin
+            url.protocol !== 'http:' &&
+            url.protocol !== 'https:'
         ) {
 
             return;
@@ -151,132 +248,190 @@ self.addEventListener(
         }
 
 
-        /*
-         * =====================================
-         * HTMLページ
-         * =====================================
-         *
-         * Network First
-         *
-         * オンライン
-         * → 最新のindex.htmlを取得
-         *
-         * オフライン
-         * → キャッシュ済みindex.htmlを使用
-         */
-        if (
-            request.mode === 'navigate'
-        ) {
+        event.respondWith(
 
-            event.respondWith(
+            caches
+                .match(
+                    request
+                )
+                .then(
+                    cachedResponse => {
 
-                fetch(request)
-                    .then(response => {
+                        /*
+                         * キャッシュが存在する場合
+                         */
 
                         if (
-                            response &&
-                            response.ok
+                            cachedResponse
                         ) {
 
-                            const copy =
-                                response.clone();
-
-
-                            caches
-                                .open(CACHE_NAME)
-                                .then(cache => {
-
-                                    cache.put(
-                                        './index.html',
-                                        copy
-                                    );
-
-                                });
+                            return cachedResponse;
 
                         }
 
 
-                        return response;
+                        /*
+                         * キャッシュに無ければ
+                         * ネットワークへアクセス
+                         */
 
-                    })
-                    .catch(() => {
+                        return fetch(
+                            request
+                        )
+                            .then(
+                                networkResponse => {
 
-                        return caches.match(
-                            './index.html'
-                        );
+                                    /*
+                                     * 正常レスポンス以外は
+                                     * キャッシュしない
+                                     */
 
-                    })
+                                    if (
+                                        !networkResponse ||
+                                        networkResponse.status !== 200
+                                    ) {
 
-            );
+                                        return networkResponse;
 
+                                    }
+
+
+                                    /*
+                                     * opaqueレスポンスは
+                                     * 原則キャッシュ対象外
+                                     */
+
+                                    if (
+                                        networkResponse.type === 'opaque'
+                                    ) {
+
+                                        return networkResponse;
+
+                                    }
+
+
+                                    /*
+                                     * レスポンスは一度しか読めないため
+                                     * cloneしてキャッシュへ保存
+                                     */
+
+                                    const responseClone =
+                                        networkResponse.clone();
+
+
+                                    caches
+                                        .open(
+                                            CACHE_NAME
+                                        )
+                                        .then(
+                                            cache => {
+
+                                                cache.put(
+                                                    request,
+                                                    responseClone
+                                                );
+
+                                            }
+                                        );
+
+
+                                    return networkResponse;
+
+                                }
+                            )
+                            .catch(
+                                error => {
+
+                                    console.warn(
+                                        '[Service Worker] Offline fetch failed:',
+                                        request.url,
+                                        error
+                                    );
+
+
+                                    /*
+                                     * HTMLページへのアクセスだった場合は
+                                     * index.htmlへフォールバック
+                                     */
+
+                                    if (
+                                        request.mode === 'navigate'
+                                    ) {
+
+                                        return caches.match(
+                                            './index.html'
+                                        );
+
+                                    }
+
+
+                                    /*
+                                     * その他のファイルで
+                                     * キャッシュにもネットにも無ければ
+                                     * エラーを返す
+                                     */
+
+                                    return new Response(
+                                        'Offline',
+                                        {
+                                            status: 503,
+                                            statusText: 'Offline',
+                                            headers: {
+                                                'Content-Type':
+                                                    'text/plain; charset=UTF-8'
+                                            }
+                                        }
+                                    );
+
+                                }
+                            );
+
+                    }
+                )
+
+        );
+
+    }
+);
+
+
+/* =========================================================
+   メッセージ受信
+
+   index.htmlなどから
+
+   navigator.serviceWorker.controller.postMessage({
+       type: 'SKIP_WAITING'
+   });
+
+   と送れば即時更新できる
+========================================================= */
+
+self.addEventListener(
+    'message',
+    event => {
+
+        if (
+            !event.data
+        ) {
 
             return;
 
         }
 
 
-        /*
-         * =====================================
-         * JS / manifest / アイコン
-         * =====================================
-         *
-         * Cache First
-         *
-         * ① キャッシュ確認
-         * ② なければネット取得
-         * ③ 取得できたものをキャッシュ
-         */
-        event.respondWith(
+        if (
+            event.data.type === 'SKIP_WAITING'
+        ) {
 
-            caches
-                .match(request)
-                .then(cachedResponse => {
-
-                    if (
-                        cachedResponse
-                    ) {
-
-                        return cachedResponse;
-
-                    }
+            console.log(
+                '[Service Worker] Skip waiting requested'
+            );
 
 
-                    return fetch(request)
-                        .then(response => {
+            self.skipWaiting();
 
-                            if (
-                                !response ||
-                                !response.ok
-                            ) {
-
-                                return response;
-
-                            }
-
-
-                            const copy =
-                                response.clone();
-
-
-                            caches
-                                .open(CACHE_NAME)
-                                .then(cache => {
-
-                                    cache.put(
-                                        request,
-                                        copy
-                                    );
-
-                                });
-
-
-                            return response;
-
-                        });
-
-                })
-
-        );
+        }
 
     }
 );
